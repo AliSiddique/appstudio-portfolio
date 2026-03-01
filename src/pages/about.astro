@@ -1,0 +1,297 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const cvEntries = [
+  {
+    period: "2025 - now",
+    entries: [
+      { company: "SAP SE", role: "Working Student - UI/UX Design with Focus on UI Specification and Design" },
+      { company: "FH Potsdam", role: "Design as Strategy M.A." }
+    ]
+  },
+  {
+    period: "2022 - now",
+    entries: [
+      { company: "Self-employed", role: "Freelancing" }
+    ]
+  },
+  {
+    period: "2022 - 2025",
+    entries: [
+      { company: "Jung von Matt TECH", role: "Student Assistant UX" },
+      { company: "FH Potsdam", role: "Interfacedesign, B.A." }
+    ]
+  },
+  {
+    period: "2020 - 2021",
+    entries: [
+      { company: "VOLL digital GmbH", role: "Digital Product Design" }
+    ]
+  },
+  {
+    period: "2017 - 2020",
+    entries: [
+      { company: "VOLL digital GmbH", role: "Apprenticeship as media designer" }
+    ]
+  }
+];
+---
+
+<Layout
+  title="About — Jaqueline Grob – Designer, Digital & Brand"
+  description="Jaqueline Grob is a designer specialising in digital & brand, crafting individual digital experiences and identities."
+>
+  <Header activePage="about" />
+
+  <!-- About Hero -->
+  <section class="about-hero">
+    <h1 class="about-headline">
+      Jaqueline Grob is a designer specialising in digital &amp; brand, crafting individual digital experiences and identities. Systemised thinking, memorable narratives and distinctive visuals build the foundation for engaging solutions.
+    </h1>
+  </section>
+
+  <!-- Info Grid -->
+  <section class="info-section">
+    <div class="info-grid">
+      <div class="info-col">
+        <span class="info-label">/ CURRENTLY</span>
+        <div class="info-content">
+          <p>Working as Working Student @ SAP SE</p>
+          <p>Studying Design as Strategy M.A. @ FH Potsdam</p>
+        </div>
+      </div>
+      <div class="info-col">
+        <span class="info-label">/ CLIENTS</span>
+        <div class="info-content">
+          <p>Rewe</p>
+          <p>VisualVest</p>
+          <p>DocMorris</p>
+          <p>Jung von Matt</p>
+          <p>DFB</p>
+        </div>
+      </div>
+      <div class="info-col">
+        <span class="info-label">/ VALUES</span>
+        <div class="info-content">
+          <p>Collaboration</p>
+          <p>Creativity</p>
+          <p>Efficiency</p>
+          <p>Systematisation</p>
+          <p>Purpose</p>
+          <p>Trust</p>
+        </div>
+      </div>
+      <div class="info-col">
+        <span class="info-label">/ PEOPLE I ♥︎ WORKING WITH</span>
+        <div class="info-content">
+          <p><a href="https://nesim.de" target="_blank" rel="noopener" class="info-link">Nesim</a></p>
+          <p>Marie Grob</p>
+          <p>Vivien Serve</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CV Section -->
+  <section class="cv-section">
+    <h2 class="cv-title">C.V.</h2>
+    <div class="cv-table">
+      {cvEntries.map(entry => (
+        <div class="cv-row">
+          <div class="cv-period">{entry.period}</div>
+          <div class="cv-entries">
+            {entry.entries.map(e => (
+              <div class="cv-entry">
+                <span class="cv-company">{e.company}</span>
+                <span class="cv-role">{e.role}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* About Hero */
+  .about-hero {
+    padding: 3rem 1.25rem 3.5rem;
+    border-bottom: 1px solid var(--color-stroke);
+  }
+
+  .about-headline {
+    font-family: var(--font-sans);
+    font-size: clamp(1.5rem, 3.5vw, 3rem);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    max-width: 1100px;
+  }
+
+  /* Info Grid */
+  .info-section {
+    border-bottom: 1px solid var(--color-stroke);
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .info-col {
+    padding: 1.75rem 1.25rem;
+    border-right: 1px solid var(--color-stroke);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .info-col:last-child {
+    border-right: none;
+  }
+
+  .info-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-gray-700);
+  }
+
+  .info-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .info-content p {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+    color: var(--color-black);
+  }
+
+  .info-link {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: opacity 0.2s;
+  }
+
+  .info-link:hover {
+    opacity: 0.6;
+  }
+
+  /* CV Section */
+  .cv-section {
+    padding: 3rem 1.25rem 4rem;
+  }
+
+  .cv-title {
+    font-family: var(--font-sans);
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    margin-bottom: 2rem;
+  }
+
+  .cv-table {
+    border-top: 1px solid var(--color-stroke);
+  }
+
+  .cv-row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 2rem;
+    border-bottom: 1px solid var(--color-stroke);
+    padding: 1.25rem 0;
+    align-items: start;
+  }
+
+  .cv-period {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-gray-700);
+    padding-top: 0.125rem;
+  }
+
+  .cv-entries {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .cv-entry {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 1rem;
+    align-items: baseline;
+  }
+
+  .cv-company {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-black);
+  }
+
+  .cv-role {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-gray-700);
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .info-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .info-col:nth-child(2) {
+      border-right: none;
+    }
+
+    .info-col:nth-child(1),
+    .info-col:nth-child(2) {
+      border-bottom: 1px solid var(--color-stroke);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .info-col {
+      border-right: none;
+      border-bottom: 1px solid var(--color-stroke);
+    }
+
+    .cv-row {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+
+    .cv-entry {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+  }
+</style>

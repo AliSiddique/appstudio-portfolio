@@ -1,0 +1,160 @@
+---
+---
+
+<section class="cta-section">
+  <div class="cta-content">
+    <h2 class="cta-headline">
+      Wanna work together?<br />
+      Let's get in touch and chat.
+    </h2>
+    <p class="cta-sub">
+      Or reach out directly to <a href="mailto:hi@jackygrob.com" class="cta-email">hi@jackygrob.com</a>
+    </p>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <span class="footer-label">/CONTENT</span>
+      <ul>
+        <li><a href="/">Work</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/legal">Legal notice</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <span class="footer-label">/SOCIAL</span>
+      <ul>
+        <li><a href="https://www.behance.net/jackygrob" target="_blank" rel="noopener">Behance</a></li>
+        <li><a href="https://www.linkedin.com/in/jackygrob" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://www.xing.com/profile/Jaqueline_Grob" target="_blank" rel="noopener">Xing</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <span class="footer-label">/REALISATION</span>
+      <ul>
+        <li><a href="https://nesim.de" target="_blank" rel="noopener">Nesim (Development)</a></li>
+        <li><span>Marie Grob (Photography)</span></li>
+        <li><a href="/">Jaqueline Grob (Design)</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <span class="footer-label">/ABOUT</span>
+      <p class="footer-about-text">
+        Jaqueline Grob is a designer focussing on digital experiences and visual identities located in Potsdam, Germany.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  /* CTA Section */
+  .cta-section {
+    background-color: var(--color-dark);
+    color: var(--color-white);
+    padding: 5rem 1.25rem 6rem;
+  }
+
+  .cta-content {
+    max-width: 900px;
+  }
+
+  .cta-headline {
+    font-family: var(--font-sans);
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-sub {
+    font-family: var(--font-sans);
+    font-size: clamp(2rem, 4vw, 4rem);
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--color-gray-700);
+  }
+
+  .cta-email {
+    color: var(--color-white);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: opacity 0.2s;
+  }
+
+  .cta-email:hover {
+    opacity: 0.7;
+  }
+
+  /* Footer */
+  .site-footer {
+    background-color: var(--color-dark);
+    color: var(--color-white);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2.5rem 1.25rem 2.5rem;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .footer-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-gray-700);
+    margin-bottom: 0.25rem;
+  }
+
+  .footer-col ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .footer-col a,
+  .footer-col span {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    color: var(--color-white);
+    transition: opacity 0.2s;
+  }
+
+  .footer-col a:hover {
+    opacity: 0.6;
+  }
+
+  .footer-about-text {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--color-white);
+  }
+
+  @media (max-width: 768px) {
+    .footer-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

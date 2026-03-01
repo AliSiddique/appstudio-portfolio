@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Legal Notice — Jaqueline Grob – Designer, Digital & Brand">
+  <Header />
+  <section class="page-content">
+    <h1>Legal Notice</h1>
+    <p>Jaqueline Grob<br />Potsdam, Germany</p>
+    <p>Contact: <a href="mailto:hi@jackygrob.com">hi@jackygrob.com</a></p>
+  </section>
+  <Footer />
+</Layout>
+
+<style>
+  .page-content {
+    padding: 4rem 1.25rem;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  h1 {
+    font-family: var(--font-sans);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 500;
+    line-height: 1.1;
+  }
+
+  p {
+    font-family: var(--font-sans);
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+
+  a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

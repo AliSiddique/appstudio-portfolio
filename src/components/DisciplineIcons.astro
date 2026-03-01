@@ -1,0 +1,55 @@
+---
+interface Props {
+  type: 'print' | 'identity' | 'interaction' | 'data';
+}
+const { type } = Astro.props;
+---
+
+{type === 'print' && (
+  <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="discipline-icon">
+    <rect x="20" y="30" width="60" height="75" rx="2" stroke="currentColor" stroke-width="1.5" fill="none" transform="rotate(-8 50 67)"/>
+    <rect x="30" y="20" width="60" height="75" rx="2" stroke="currentColor" stroke-width="1.5" fill="none" transform="rotate(-3 60 57)"/>
+    <rect x="40" y="15" width="60" height="75" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+  </svg>
+)}
+
+{type === 'identity' && (
+  <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="discipline-icon">
+    <circle cx="60" cy="60" r="40" stroke="currentColor" stroke-width="1.5" fill="none"/>
+    <line x1="60" y1="20" x2="60" y2="100" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="20" y1="60" x2="100" y2="60" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="31" y1="31" x2="89" y2="89" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="89" y1="31" x2="31" y2="89" stroke="currentColor" stroke-width="1.5"/>
+    <circle cx="60" cy="60" r="5" fill="currentColor"/>
+  </svg>
+)}
+
+{type === 'interaction' && (
+  <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="discipline-icon">
+    <rect x="20" y="30" width="80" height="55" rx="4" stroke="currentColor" stroke-width="1.5" fill="none"/>
+    <line x1="20" y1="45" x2="100" y2="45" stroke="currentColor" stroke-width="1.5"/>
+    <rect x="30" y="52" width="25" height="18" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/>
+    <rect x="65" y="52" width="25" height="8" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/>
+    <line x1="60" y1="85" x2="60" y2="95" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="40" y1="95" x2="80" y2="95" stroke="currentColor" stroke-width="1.5"/>
+  </svg>
+)}
+
+{type === 'data' && (
+  <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="discipline-icon">
+    <circle cx="60" cy="60" r="35" stroke="currentColor" stroke-width="1.5" fill="none"/>
+    <circle cx="60" cy="60" r="22" stroke="currentColor" stroke-width="1.5" fill="none"/>
+    <circle cx="60" cy="60" r="10" stroke="currentColor" stroke-width="1.5" fill="none"/>
+    <line x1="60" y1="25" x2="60" y2="95" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+    <line x1="25" y1="60" x2="95" y2="60" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+  </svg>
+)}
+
+<style>
+  .discipline-icon {
+    width: 80px;
+    height: 80px;
+    color: var(--color-gray-200);
+    flex-shrink: 0;
+  }
+</style>

@@ -1,0 +1,77 @@
+---
+import WorkLayout from '../../layouts/WorkLayout.astro';
+---
+
+<WorkLayout
+  title="Website"
+  type="Web Design"
+  context="Freelance"
+  date="2024"
+  role="Web Design"
+  number="002"
+  metaDescription="A fully responsive website designed for a modern brand — editorial layout, accessibility-focused, designed for handoff."
+  nextProject={{ title: "Monday.com App", href: "/work/monday-app" }}
+>
+  <!-- Cover image -->
+  <section class="project-cover">
+    <div class="cover-img-wrap">
+      <img src="/images/vola-teaser.png" alt="Website — Cover" class="cover-img" loading="eager" />
+    </div>
+  </section>
+
+  <!-- Overview -->
+  <section class="project-overview">
+    <div class="overview-grid">
+      <div class="overview-left">
+        <span class="section-label">/ Overview</span>
+        <p class="overview-text">
+          A fully responsive web design crafted for a modern brand. The site communicates the brand identity through a clean, editorial layout — with deliberate use of whitespace, typography, and motion.
+        </p>
+        <p class="overview-text">
+          Designed with accessibility and performance as core principles, the project spanned from initial concept through to a developer-ready design system with documented components and interaction specs.
+        </p>
+      </div>
+      <div class="overview-right">
+        <div class="detail-block">
+          <span class="detail-block-label">/ Deliverables</span>
+          <ul class="detail-list">
+            <li>Art Direction</li>
+            <li>UI Design</li>
+            <li>Responsive Layouts</li>
+            <li>Component Library</li>
+            <li>Design Handoff</li>
+          </ul>
+        </div>
+        <div class="detail-block">
+          <span class="detail-block-label">/ Pages</span>
+          <ul class="detail-list">
+            <li>Home</li>
+            <li>About</li>
+            <li>Services</li>
+            <li>Contact</li>
+            <li>Blog</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="project-gallery">
+    <p class="gallery-label">/ Screens</p>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img src="/images/vola-teaser.png" alt="Website — Homepage" loading="lazy" class="gallery-img" />
+      </div>
+      <div class="gallery-item">
+        <img src="/images/hsn-teaser.png" alt="Website — About" loading="lazy" class="gallery-img" />
+      </div>
+      <div class="gallery-item">
+        <img src="/images/a-statement-teaser.png" alt="Website — Services" loading="lazy" class="gallery-img" />
+      </div>
+      <div class="gallery-item">
+        <img src="/images/status-growth-teaser.png" alt="Website — Contact" loading="lazy" class="gallery-img" />
+      </div>
+    </div>
+  </section>
+</WorkLayout>

@@ -13,121 +13,193 @@ const { title, type, context, date, image, imageAlt, href = '#' } = Astro.props;
 ---
 
 <a href={href} class="project-card" aria-label={`View project page for ${title}`}>
-  <div class="card-header">
-    <span class="card-title">{title}</span>
-    <div class="card-meta">
-      <div class="meta-item">
-        <span class="meta-label">Type</span>
-        <span class="meta-value">{type}</span>
-      </div>
-      <div class="meta-item">
-        <span class="meta-label">Context</span>
-        <span class="meta-value">{context}</span>
-      </div>
-      <div class="meta-item">
-        <span class="meta-label">Date</span>
-        <span class="meta-value">{date}</span>
+  <span class="corner corner-tl" aria-hidden="true"></span>
+  <span class="corner corner-tr" aria-hidden="true"></span>
+  <span class="corner corner-bl" aria-hidden="true"></span>
+  <span class="corner corner-br" aria-hidden="true"></span>
+
+  <div class="card-inner">
+    <div class="card-image-wrapper">
+      <img src={image} alt={imageAlt} class="card-image" loading="lazy" />
+      <span class="card-title-badge">{title}</span>
+    </div>
+
+    <div class="card-details">
+      <div class="details-inner">
+        <span class="details-heading">{title}</span>
+        <ul class="details-list">
+          <li>
+            <span class="detail-label">Type</span>
+            <span class="detail-value">{type}</span>
+          </li>
+          <li>
+            <span class="detail-label">Context</span>
+            <span class="detail-value">{context}</span>
+          </li>
+          <li>
+            <span class="detail-label">Date</span>
+            <span class="detail-value">{date}</span>
+          </li>
+        </ul>
       </div>
     </div>
-  </div>
-  <div class="card-image-wrapper">
-    <img src={image} alt={imageAlt} class="card-image" loading="lazy" />
   </div>
 </a>
 
 <style>
   .project-card {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--color-stroke);
-    overflow: hidden;
+    display: block;
     position: relative;
+    border: 1px solid var(--color-stroke);
     background-color: var(--color-white);
-    transition: border-color 0.25s;
     cursor: pointer;
+    transition: border-color 0.25s;
+    text-decoration: none;
+    color: inherit;
   }
 
   .project-card:hover {
     border-color: rgba(0, 0, 0, 0.3);
   }
 
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.625rem 0.75rem;
-    gap: 0.75rem;
-    min-height: 2.5rem;
+  /* Corner square decorations */
+  .corner {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background-color: var(--color-black);
+    z-index: 4;
+    pointer-events: none;
   }
 
-  .card-title {
-    font-family: var(--font-sans);
-    font-size: 0.9375rem;
-    font-weight: 400;
-    line-height: 1.2;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    background-color: var(--color-white);
-    border-radius: var(--radius-pill);
-    padding: 0.2rem 0.625rem;
-    border: 1.5px solid var(--color-black);
-  }
+  .corner-tl { top: -3px; left: -3px; }
+  .corner-tr { top: -3px; right: -3px; }
+  .corner-bl { bottom: -3px; left: -3px; }
+  .corner-br { bottom: -3px; right: -3px; }
 
-  .card-meta {
-    display: flex;
-    gap: 1.5rem;
-    flex-shrink: 0;
-  }
-
-  .meta-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.125rem;
-  }
-
-  .meta-label {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--color-gray-700);
-  }
-
-  .meta-value {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--color-black);
-  }
-
-  .card-image-wrapper {
-    flex: 1;
-    overflow: hidden;
+  /* Main content area */
+  .card-inner {
+    position: relative;
     aspect-ratio: 3 / 2;
-    background-color: var(--color-gray-100);
+    overflow: hidden;
+  }
+
+  /* Image layer (above details) */
+  .card-image-wrapper {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    clip-path: inset(0 0 0% 0);
+    transform: translateY(0);
+    transition:
+      clip-path 0.52s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.52s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .card-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.4s ease, clip-path 0.35s ease;
+    display: block;
   }
 
+  /* Title badge floating over image — always visible */
+  .card-title-badge {
+    position: absolute;
+    top: 0.625rem;
+    left: 0.625rem;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 400;
+    background-color: var(--color-white);
+    border: 1.5px solid var(--color-black);
+    border-radius: var(--radius-pill);
+    padding: 0.2rem 0.625rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 1.25rem);
+    z-index: 3;
+  }
+
+  /* Details panel (below image layer) */
+  .card-details {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-color: var(--color-white);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.25rem;
+  }
+
+  .details-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transform: translateY(0.75rem);
+    opacity: 0;
+    transition:
+      transform 0.38s 0.14s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.38s 0.14s ease;
+  }
+
+  .details-heading {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--color-black);
+  }
+
+  .details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .details-list li {
+    display: flex;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    position: relative;
+    padding-left: 1rem;
+    line-height: 1.4;
+  }
+
+  .details-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--color-gray-700);
+  }
+
+  .detail-label {
+    color: var(--color-gray-700);
+  }
+
+  .detail-value {
+    color: var(--color-black);
+  }
+
+  /* Hover — image slides up, details fade in */
   @media (pointer: fine) {
-    .project-card:hover .card-image {
-      clip-path: inset(0 0 9rem 0 round 0.5rem);
-      object-position: 50% calc(50% - 4.5rem);
+    .project-card:hover .card-image-wrapper {
+      clip-path: inset(0 0 50% 0);
+      transform: translateY(-4%);
     }
-  }
 
-  @media (max-width: 640px) {
-    .card-meta {
-      display: none;
+    .project-card:hover .details-inner {
+      transform: translateY(0);
+      opacity: 1;
     }
   }
 </style>

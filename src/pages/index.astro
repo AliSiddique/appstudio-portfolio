@@ -7,40 +7,31 @@ import DisciplineIcons from '../components/DisciplineIcons.astro';
 
 const mainProjects = [
   {
-    title: "Hochschule Nordhausen",
-    type: "Client based",
-    context: "Studies",
-    date: "Dec / 2024",
+    title: "iOS App",
+    type: "Product Design",
+    context: "Freelance",
+    date: "2024",
     image: "/images/hsn-teaser.png",
-    imageAlt: "Mock-up of business-cards showing new visual identity for HSN.",
-    href: "#"
+    imageAlt: "iOS app screens showing the main interface",
+    href: "/work/ios-app"
   },
   {
-    title: "vola",
-    type: "Client based",
+    title: "Website",
+    type: "Web Design",
     context: "Freelance",
-    date: "Apr / 2025",
+    date: "2024",
     image: "/images/vola-teaser.png",
-    imageAlt: "Product range of vola spice oils with new package design",
-    href: "#"
+    imageAlt: "Website design mockup showing homepage layout",
+    href: "/work/website"
   },
   {
-    title: "Weave Up!",
-    type: "Client based",
-    context: "Studies",
-    date: "Sep / 2019",
-    image: "/images/weave-up-teaser.png",
-    imageAlt: "Wooden stamps based on shapes found in the visual identity",
-    href: "#"
-  },
-  {
-    title: "MOSIDI",
-    type: "Client based",
+    title: "Monday.com App",
+    type: "App Design",
     context: "Freelance",
-    date: "Jan / 2023",
+    date: "2024",
     image: "/images/mosidi-teaser.png",
-    imageAlt: "Flat mock-up showing website with applied visual identity for MOSIDI",
-    href: "#"
+    imageAlt: "Monday.com app interface showing dashboard and workflows",
+    href: "/work/monday-app"
   }
 ];
 
@@ -308,6 +299,14 @@ const disciplines = [
     border-top: 1px solid var(--color-stroke);
   }
 
+  .projects-section .projects-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .projects-section .projects-grid > :global(.project-card:nth-child(3n)) {
+    border-right: none;
+  }
+
   .projects-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -318,7 +317,8 @@ const disciplines = [
     border-bottom: 1px solid var(--color-stroke);
   }
 
-  .projects-grid > :global(.project-card:nth-child(even)) {
+  /* More work 2-col: remove right border from even cards */
+  .more-work-section .projects-grid > :global(.project-card:nth-child(even)) {
     border-right: none;
   }
 
@@ -461,11 +461,14 @@ const disciplines = [
       border-bottom: 1px solid var(--color-stroke);
     }
 
-    .projects-grid {
+    .projects-grid,
+    .projects-section .projects-grid {
       grid-template-columns: 1fr;
     }
 
-    .projects-grid > :global(.project-card:nth-child(even)) {
+    /* Restore all right borders in single-column mobile layout */
+    .projects-grid > :global(.project-card),
+    .projects-section .projects-grid > :global(.project-card:nth-child(3n)) {
       border-right: 1px solid var(--color-stroke);
     }
 

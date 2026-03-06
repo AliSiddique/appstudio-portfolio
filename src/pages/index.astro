@@ -8,7 +8,7 @@ import DisciplineIcons from '../components/DisciplineIcons.astro';
 const mainProjects = [
   {
     title: "iOS App",
-    type: "Product Design",
+    type: "Mobile Development",
     context: "Freelance",
     date: "2024",
     image: "/images/hsn-teaser.png",
@@ -26,7 +26,7 @@ const mainProjects = [
   },
   {
     title: "Monday.com App",
-    type: "App Design",
+    type: "Platform Integration",
     context: "Freelance",
     date: "2024",
     image: "/images/mosidi-teaser.png",
@@ -37,54 +37,58 @@ const mainProjects = [
 
 const moreProjects = [
   {
-    title: "A Statement On Editorial Shooting",
-    type: "Client based",
-    context: "Studies",
-    date: "Aug / 2024",
+    title: "Framer Template",
+    type: "Web Design",
+    context: "Freelance",
+    date: "2024",
     image: "/images/a-statement-teaser.png",
-    imageAlt: "Flat mock-up of a double page of the book showing editorial content",
-    href: "#"
+    imageAlt: "Framer template preview",
+    href: "/work/framer-template"
   },
   {
-    title: "Status Growth",
-    type: "Fictional",
-    context: "Studies",
-    date: "Oct / 2024",
+    title: "Shopify App",
+    type: "App Development",
+    context: "Freelance",
+    date: "2024",
     image: "/images/status-growth-teaser.png",
-    imageAlt: "Flat mock-up showing screen of interactive data visualisation",
-    href: "#"
+    imageAlt: "Shopify app interface",
+    href: "/work/shopify-app"
   }
 ];
 
 const disciplines = [
   {
     number: "001",
-    title: "Print",
-    icon: "print" as const,
-    items: ["Graphic design", "Layout", "Production"]
+    title: "Cloud Engineering",
+    icon: "data" as const,
+    items: ["AWS / Azure / GCP", "Infrastructure as Code", "DevOps & CI/CD", "Architecture"]
   },
   {
     number: "002",
-    title: "Visual Identity",
-    icon: "identity" as const,
-    items: ["Concepting", "Visual systems", "Dynamic identity", "Documentation"]
+    title: "Mobile",
+    icon: "interaction" as const,
+    items: ["iOS App Development", "Swift & SwiftUI", "App Design", "App Store"]
   },
   {
     number: "003",
-    title: "Interaction",
-    icon: "interaction" as const,
-    items: ["Digital Design", "Design Systems", "Prototyping", "Documentation"]
+    title: "Web & E-commerce",
+    icon: "print" as const,
+    items: ["Framer Templates", "Job Board Websites", "Shopify Apps", "Web Design"]
   },
   {
     number: "004",
-    title: "Data Visualisation",
-    icon: "data" as const,
-    items: ["Dashboards", "Individual solutions", "Narratives"]
+    title: "Integrations",
+    icon: "identity" as const,
+    items: ["Monday.com Apps", "API Development", "Automation", "Platform SDKs"]
   }
 ];
 ---
 
-<Layout title="Work — Ali Siddique – Designer, Digital & Brand">
+<Layout
+  title="Work — Ali Siddique – Software & Cloud Engineer"
+  description="Ali Siddique runs Salinash Studio, building iOS apps, Monday.com integrations, Framer templates, job boards, and Shopify apps."
+  ogType="website"
+>
   <Header activePage="work" />
 
   <!-- Intro Section -->
@@ -93,7 +97,7 @@ const disciplines = [
       <div class="intro-empty"></div>
       <div class="intro-bio">
         <p>
-          Grounded on a systemizing approach, Ali Siddique is a London-based creative exploring design projects in the intersection of technology and brands.
+          Ali Siddique runs Salinash Studio — a software and cloud engineering practice building iOS apps, Monday.com integrations, Framer templates, job boards, and Shopify apps. Also into art, music, and guitar.
         </p>
       </div>
       <div class="intro-contact">
@@ -103,9 +107,10 @@ const disciplines = [
           <span class="contact-location">London, UK</span>
         </div>
         <div class="social-links">
-          <a href="https://www.behance.net/jackygrob" target="_blank" rel="noopener" class="social-link">Behance</a>
-          <a href="https://www.linkedin.com/in/jackygrob" target="_blank" rel="noopener" class="social-link">LinkedIn</a>
-          <a href="https://www.xing.com/profile/Jaqueline_Grob" target="_blank" rel="noopener" class="social-link">Xing</a>
+          <a href="https://github.com/alisiddique" target="_blank" rel="noopener" class="social-link">GitHub</a>
+          <a href="https://linkedin.com/in/alisiddique" target="_blank" rel="noopener" class="social-link">LinkedIn</a>
+          <a href="mailto:hi@salinash.studio" class="social-link">Email</a>
+          <a href="/blog" class="social-link">Blog</a>
         </div>
       </div>
     </div>
@@ -137,10 +142,10 @@ const disciplines = [
   <section class="disciplines-section">
     <div class="disciplines-header">
       <h2 class="disciplines-headline">
-        Exploring the intersection of brand experience and digital innovation – from webpages to visual systems.
+        Building at the intersection of cloud infrastructure, mobile, and the modern web — from apps to platforms.
       </h2>
       <p class="disciplines-sub">
-        Throughout my studies and recent projects, the following disciplines have emerged and evolved as key areas of focus.
+        Through freelance projects and Salinash Studio, the following disciplines have emerged as key areas of focus.
       </p>
     </div>
     <div class="disciplines-grid">

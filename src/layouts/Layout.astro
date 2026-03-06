@@ -4,9 +4,22 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  publishedDate?: string;
 }
 
-const { title, description = "Jaqueline Grob is a Potsdam-based creative exploring design projects in the intersection of technology and brands." } = Astro.props;
+const {
+  title,
+  description = "Ali Siddique runs Salinash Studio, building iOS apps, Monday.com integrations, Framer templates, job boards, and Shopify apps.",
+  ogImage = '/og-image.png',
+  ogType = 'website',
+  publishedDate,
+} = Astro.props;
+
+const siteOrigin = Astro.site?.origin ?? 'https://salinash.studio';
+const canonicalUrl = siteOrigin + Astro.url.pathname;
+const ogImageUrl = siteOrigin + ogImage;
 ---
 
 <!doctype html>
@@ -14,9 +27,35 @@ const { title, description = "Jaqueline Grob is a Potsdam-based creative explori
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Primary -->
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- OpenGraph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Salinash Studio" />
+    <meta property="og:locale" content="en_GB" />
+    {ogType === 'article' && publishedDate && (
+      <meta property="article:published_time" content={publishedDate} />
+    )}
+    {ogType === 'article' && (
+      <meta property="article:author" content="Ali Siddique" />
+    )}
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
   </head>
   <body>
     <slot />

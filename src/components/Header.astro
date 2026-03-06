@@ -1,18 +1,18 @@
 ---
 interface Props {
-  activePage?: 'work' | 'about';
+  activePage?: 'work' | 'about' | 'blog';
 }
 const { activePage = 'work' } = Astro.props;
-const currentPath = Astro.url?.pathname ?? '/';
 ---
 
 <header class="site-header">
   <nav class="nav-left">
     <a href="/" class:list={['nav-pill', { active: activePage === 'work' }]}>Work</a>
     <a href="/about" class:list={['nav-pill', { active: activePage === 'about' }]}>About</a>
+    <a href="/blog" class:list={['nav-pill', { active: activePage === 'blog' }]}>Blog</a>
   </nav>
   <div class="nav-center">
-    <a href="/" class="site-name">Jacky Grob</a>
+    <a href="/" class="site-name">Salinash Studio</a>
   </div>
   <div class="nav-right">
     <a href="mailto:hi@salinash.studio" class="nav-email">hi@salinash.studio</a>
@@ -28,7 +28,6 @@ const currentPath = Astro.url?.pathname ?? '/';
     grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
     padding: 0.625rem 1rem;
-    background-color: var(--color-white);
     border-bottom: 1px solid var(--color-stroke);
     backdrop-filter: blur(8px);
     background-color: rgba(255, 255, 255, 0.95);
@@ -95,14 +94,11 @@ const currentPath = Astro.url?.pathname ?? '/';
 
   @media (max-width: 640px) {
     .site-header {
-      grid-template-columns: auto 1fr auto;
+      grid-template-columns: auto auto;
       gap: 0.5rem;
     }
     .nav-center {
       display: none;
-    }
-    .site-header {
-      grid-template-columns: auto auto;
     }
     .nav-right {
       display: none;

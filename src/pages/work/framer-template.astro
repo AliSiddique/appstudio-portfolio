@@ -1,0 +1,77 @@
+---
+import WorkLayout from '../../layouts/WorkLayout.astro';
+---
+
+<WorkLayout
+  title="Framer Template"
+  type="Web Design"
+  context="Freelance"
+  date="2024"
+  role="Design & Development"
+  number="004"
+  metaDescription="A fully responsive Framer template built for creators and studios — clean layout, customisable components, and smooth interactions out of the box."
+  nextProject={{ title: "Shopify App", href: "/work/shopify-app" }}
+>
+  <!-- Cover image -->
+  <section class="project-cover">
+    <div class="cover-img-wrap">
+      <img src="/images/a-statement-teaser.png" alt="Framer Template — Cover" class="cover-img" loading="eager" />
+    </div>
+  </section>
+
+  <!-- Overview -->
+  <section class="project-overview">
+    <div class="overview-grid">
+      <div class="overview-left">
+        <span class="section-label">/ Overview</span>
+        <p class="overview-text">
+          A fully responsive Framer template designed for creators, studios, and agencies. The template features a clean typographic system, customisable component library, and smooth page transitions — all ready to publish straight from Framer.
+        </p>
+        <p class="overview-text">
+          Built with a modular section architecture so non-technical users can swap content and colours without touching any code. Available on the Framer Marketplace.
+        </p>
+      </div>
+      <div class="overview-right">
+        <div class="detail-block">
+          <span class="detail-block-label">/ Deliverables</span>
+          <ul class="detail-list">
+            <li>Framer Template</li>
+            <li>Component Library</li>
+            <li>Responsive Layout</li>
+            <li>CMS Integration</li>
+            <li>Documentation</li>
+          </ul>
+        </div>
+        <div class="detail-block">
+          <span class="detail-block-label">/ Sections</span>
+          <ul class="detail-list">
+            <li>Hero</li>
+            <li>Work / Portfolio Grid</li>
+            <li>About</li>
+            <li>Services</li>
+            <li>Contact</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="project-gallery">
+    <p class="gallery-label">/ Screens</p>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img src="/images/a-statement-teaser.png" alt="Framer Template — Hero" loading="lazy" class="gallery-img" />
+      </div>
+      <div class="gallery-item">
+        <img src="/images/vola-teaser.png" alt="Framer Template — Work Grid" loading="lazy" class="gallery-img" />
+      </div>
+      <div class="gallery-item">
+        <img src="/images/hsn-teaser.png" alt="Framer Template — About" loading="lazy" class="gallery-img" />
+      </div>
+      <div class="gallery-item">
+        <img src="/images/mosidi-teaser.png" alt="Framer Template — Contact" loading="lazy" class="gallery-img" />
+      </div>
+    </div>
+  </section>
+</WorkLayout>

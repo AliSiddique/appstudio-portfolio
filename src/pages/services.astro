@@ -1,0 +1,453 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { studio, services, process, projects } from '../data/studio';
+
+/** Map each service to the shipped work that proves it. */
+const proof: Record<string, string[]> = {
+  '01': ['npcmotion', 'convertpoly', 'ios-app-portfolio'],
+  '02': ['npcmotion', 'ai-audio-transcriber'],
+  '03': ['dicom-viewer-pro', 'ios-app-portfolio'],
+  '04': ['inventory-cloud-platform', 'npcmotion'],
+};
+
+const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
+---
+
+<Layout
+  title="Services — Salinash Studio"
+  description="What Salinash Studio builds: product builds, ML and GPU infrastructure, iOS and graphics engineering, and cloud platform work — each proven on shipped products."
+  ogType="website"
+>
+  <Header activePage="services" />
+
+  <!-- Hero -->
+  <section class="services-hero">
+    <span class="hero-tag">/ Services</span>
+    <h1 class="services-headline">
+      One engineer, the whole stack — architecture, infrastructure, interface, launch.
+    </h1>
+    <p class="services-sub">
+      {studio.name} works the way a small product team does, without the handoffs. Every engagement
+      below is something the studio has already shipped, not a capability list.
+    </p>
+  </section>
+
+  <!-- Services -->
+  <section class="services-section">
+    {services.map((service) => (
+      <article class="service-row">
+        <div class="service-head">
+          <span class="service-number">/ {service.number}</span>
+          <h2 class="service-title">{service.title}</h2>
+          <span class="service-tagline">{service.tagline}</span>
+        </div>
+        <div class="service-body">
+          <p class="service-text">{service.body}</p>
+          <ul class="service-includes">
+            {service.includes.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="service-proof">
+          <span class="proof-label">/ Proven on</span>
+          <div class="proof-links">
+            {(proof[service.number] ?? []).map((slug) => (
+              <a href={`/work/${slug}`} class="proof-link">{bySlug[slug].title} →</a>
+            ))}
+          </div>
+        </div>
+      </article>
+    ))}
+  </section>
+
+  <!-- Process -->
+  <section class="process-section">
+    <div class="process-header">
+      <span class="section-tag">/ How an engagement runs</span>
+      <h2 class="process-headline">
+        Four stages, in the same order every time.
+      </h2>
+    </div>
+    <div class="process-grid">
+      {process.map((step) => (
+        <div class="process-card">
+          <span class="process-number">{step.number}</span>
+          <h3 class="process-title">{step.title}</h3>
+          <p class="process-body">{step.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Working together -->
+  <section class="terms-section">
+    <span class="section-tag">/ Working together</span>
+    <div class="terms-grid">
+      <div class="term-card">
+        <h3 class="term-title">Direct access</h3>
+        <p class="term-body">
+          You work with the engineer building it. No account manager, no brief passed down a chain.
+        </p>
+      </div>
+      <div class="term-card">
+        <h3 class="term-title">Owned end to end</h3>
+        <p class="term-body">
+          Architecture, implementation, infrastructure and deployment come from one place, so nothing
+          falls between contractors.
+        </p>
+      </div>
+      <div class="term-card">
+        <h3 class="term-title">Shipped, not demoed</h3>
+        <p class="term-body">
+          Engagements end with something in the App Store or in production — the studio's own products
+          were built to the same bar.
+        </p>
+      </div>
+      <div class="term-card">
+        <h3 class="term-title">Based in {studio.location}</h3>
+        <p class="term-body">
+          Working with teams remotely and in person. Reach the studio at
+          <a href={`mailto:${studio.email}`} class="term-link">{studio.email}</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style>
+  .services-hero {
+    padding: 3rem 1.25rem 3.5rem;
+    border-bottom: 1px solid var(--color-stroke);
+  }
+
+  .hero-tag,
+  .section-tag {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-gray-700);
+    margin-bottom: 1rem;
+  }
+
+  .services-headline {
+    font-family: var(--font-sans);
+    font-size: clamp(1.75rem, 4vw, 3.25rem);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    max-width: 1000px;
+  }
+
+  .services-sub {
+    font-family: var(--font-sans);
+    font-size: clamp(1rem, 1.7vw, 1.25rem);
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--color-gray-700);
+    max-width: 700px;
+    margin-top: 1.5rem;
+  }
+
+  /* Service rows */
+  .services-section {
+    border-bottom: 1px solid var(--color-stroke);
+  }
+
+  .service-row {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr 1fr;
+    gap: 2rem;
+    padding: 2.5rem 1.25rem;
+    border-bottom: 1px solid var(--color-stroke);
+  }
+
+  .service-row:last-child {
+    border-bottom: none;
+  }
+
+  .service-head {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .service-number {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--color-gray-700);
+  }
+
+  .service-title {
+    font-family: var(--font-sans);
+    font-size: clamp(1.375rem, 2.4vw, 1.875rem);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .service-tagline {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-gray-700);
+  }
+
+  .service-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .service-text {
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--color-black);
+  }
+
+  .service-includes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .service-includes li {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    position: relative;
+    padding-left: 1rem;
+    line-height: 1.6;
+  }
+
+  .service-includes li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--color-gray-700);
+  }
+
+  .service-proof {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .proof-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-gray-700);
+  }
+
+  .proof-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: flex-start;
+  }
+
+  .proof-link {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: opacity 0.2s;
+  }
+
+  .proof-link:hover {
+    opacity: 0.6;
+  }
+
+  /* Process */
+  .process-section {
+    padding: 4rem 1.25rem;
+    background-color: var(--color-gray-50);
+    border-bottom: 1px solid var(--color-stroke);
+  }
+
+  .process-header {
+    max-width: 800px;
+    margin-bottom: 2.5rem;
+  }
+
+  .process-headline {
+    font-family: var(--font-sans);
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--color-stroke);
+    background-color: var(--color-white);
+  }
+
+  .process-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    padding: 1.75rem 1.5rem;
+    border-right: 1px solid var(--color-stroke);
+  }
+
+  .process-card:last-child {
+    border-right: none;
+  }
+
+  .process-number {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--color-gray-700);
+  }
+
+  .process-title {
+    font-family: var(--font-sans);
+    font-size: 1.1875rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .process-body {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--color-gray-700);
+  }
+
+  /* Terms */
+  .terms-section {
+    padding: 4rem 1.25rem;
+  }
+
+  .terms-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--color-stroke);
+    margin-top: 1rem;
+  }
+
+  .term-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    padding: 1.75rem 1.5rem;
+    border-right: 1px solid var(--color-stroke);
+  }
+
+  .term-card:last-child {
+    border-right: none;
+  }
+
+  .term-title {
+    font-family: var(--font-sans);
+    font-size: 1.1875rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .term-body {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--color-gray-700);
+  }
+
+  .term-link {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    color: var(--color-black);
+  }
+
+  /* Responsive */
+  @media (max-width: 1080px) {
+    .service-row {
+      grid-template-columns: 1fr 1.4fr;
+      row-gap: 1.75rem;
+    }
+
+    .service-proof {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      align-items: baseline;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      border-top: 1px solid var(--color-stroke);
+      padding-top: 1.25rem;
+    }
+
+    .proof-links {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .process-grid,
+    .terms-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .process-card:nth-child(even),
+    .term-card:nth-child(even) {
+      border-right: none;
+    }
+
+    .process-card:nth-child(-n + 2),
+    .term-card:nth-child(-n + 2) {
+      border-bottom: 1px solid var(--color-stroke);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .service-row {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .process-grid,
+    .terms-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .process-card,
+    .term-card,
+    .process-card:nth-child(even),
+    .term-card:nth-child(even) {
+      border-right: none;
+      border-bottom: 1px solid var(--color-stroke);
+    }
+
+    .process-card:last-child,
+    .term-card:last-child {
+      border-bottom: none;
+    }
+  }
+</style>

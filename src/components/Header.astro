@@ -1,6 +1,8 @@
 ---
+import { studio } from '../data/studio';
+
 interface Props {
-  activePage?: 'work' | 'about' | 'blog';
+  activePage?: 'work' | 'about' | 'services' | 'blog';
 }
 const { activePage = 'work' } = Astro.props;
 ---
@@ -8,14 +10,15 @@ const { activePage = 'work' } = Astro.props;
 <header class="site-header">
   <nav class="nav-left">
     <a href="/" class:list={['nav-pill', { active: activePage === 'work' }]}>Work</a>
+    <a href="/services" class:list={['nav-pill', { active: activePage === 'services' }]}>Services</a>
     <a href="/about" class:list={['nav-pill', { active: activePage === 'about' }]}>About</a>
     <a href="/blog" class:list={['nav-pill', { active: activePage === 'blog' }]}>Blog</a>
   </nav>
   <div class="nav-center">
-    <a href="/" class="site-name">Salinash Studio</a>
+    <a href="/" class="site-name">{studio.name}</a>
   </div>
   <div class="nav-right">
-    <a href="mailto:hi@salinash.studio" class="nav-email">hi@salinash.studio</a>
+    <a href={`mailto:${studio.email}`} class="nav-email">{studio.email}</a>
   </div>
 </header>
 
@@ -42,7 +45,8 @@ const { activePage = 'work' } = Astro.props;
   .nav-pill {
     display: inline-flex;
     align-items: center;
-    padding: 0.3rem 0.875rem;
+    padding: 0.3rem 0.75rem;
+    white-space: nowrap;
     border: 1.5px solid var(--color-black);
     border-radius: var(--radius-pill);
     font-family: var(--font-sans);
@@ -92,10 +96,28 @@ const { activePage = 'work' } = Astro.props;
     color: var(--color-white);
   }
 
+  @media (max-width: 1000px) {
+    .site-header {
+      grid-template-columns: auto 1fr auto;
+    }
+
+    .nav-center {
+      display: none;
+    }
+  }
+
   @media (max-width: 640px) {
     .site-header {
-      grid-template-columns: auto auto;
+      grid-template-columns: 1fr;
       gap: 0.5rem;
+    }
+
+    .nav-left {
+      flex-wrap: wrap;
+    }
+
+    .nav-pill {
+      font-size: 0.9375rem;
     }
     .nav-center {
       display: none;

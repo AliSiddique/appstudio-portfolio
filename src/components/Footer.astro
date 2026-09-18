@@ -1,15 +1,21 @@
 ---
+import { studio } from '../data/studio';
 ---
 
 <section class="cta-section">
   <div class="cta-content">
     <h2 class="cta-headline">
-      Wanna work together?<br />
-      Let's get in touch and chat.
+      Got something to build?<br />
+      Let's scope it properly.
     </h2>
     <p class="cta-sub">
-      Or reach out directly to <a href="mailto:hi@salinash.studio" class="cta-email">hi@salinash.studio</a>
+      Reach the studio at <a href={`mailto:${studio.email}`} class="cta-email">{studio.email}</a>
     </p>
+    <div class="cta-meta">
+      <span class="cta-meta-item">{studio.location}</span>
+      <span class="cta-meta-item">Est. {studio.founded}</span>
+      <a href={`tel:${studio.phoneHref}`} class="cta-meta-item cta-meta-link">{studio.phone}</a>
+    </div>
   </div>
 </section>
 
@@ -19,6 +25,7 @@
       <span class="footer-label">/CONTENT</span>
       <ul>
         <li><a href="/">Work</a></li>
+        <li><a href="/services">Services</a></li>
         <li><a href="/about">About</a></li>
         <li><a href="/blog">Blog</a></li>
         <li><a href="/privacy">Privacy</a></li>
@@ -28,24 +35,27 @@
     <div class="footer-col">
       <span class="footer-label">/SOCIAL</span>
       <ul>
-        <li><a href="https://github.com/alisiddique" target="_blank" rel="noopener">GitHub</a></li>
-        <li><a href="https://linkedin.com/in/alisiddique" target="_blank" rel="noopener">LinkedIn</a></li>
-        <li><a href="mailto:hi@salinash.studio">Email</a></li>
-        <li><a href="/blog">Blog</a></li>
+        <li><a href={studio.github} target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href={studio.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href={`mailto:${studio.email}`}>Email</a></li>
+        <li><a href={`tel:${studio.phoneHref}`}>{studio.phone}</a></li>
       </ul>
     </div>
     <div class="footer-col">
       <span class="footer-label">/STUDIO</span>
       <ul>
-        <li><a href="https://salinash.studio" target="_blank" rel="noopener">salinash.studio</a></li>
-        <li><span>Design & Development</span></li>
-        <li><span>London, UK</span></li>
+        <li><a href={studio.url} target="_blank" rel="noopener">{studio.domain}</a></li>
+        <li><span>Product Engineering</span></li>
+        <li><span>{studio.location}</span></li>
+        <li><span>Est. {studio.founded}</span></li>
       </ul>
     </div>
     <div class="footer-col">
       <span class="footer-label">/ABOUT</span>
       <p class="footer-about-text">
-        Ali Siddique runs Salinash Studio, building iOS apps, Monday.com integrations, Framer templates, job boards, and Shopify apps.
+        {studio.name} is the product engineering practice of {studio.principal} — ML inference
+        infrastructure, iOS and real-time graphics, and the cloud platforms underneath. One exit,
+        six shipped iOS apps, £50K+ in product revenue.
       </p>
     </div>
   </div>
@@ -88,6 +98,35 @@
   }
 
   .cta-email:hover {
+    opacity: 0.7;
+  }
+
+  .cta-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .cta-meta-item {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-gray-700);
+  }
+
+  .cta-meta-link {
+    color: var(--color-white);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: opacity 0.2s;
+  }
+
+  .cta-meta-link:hover {
     opacity: 0.7;
   }
 

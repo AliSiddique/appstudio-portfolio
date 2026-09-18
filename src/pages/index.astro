@@ -4,89 +4,21 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import DisciplineIcons from '../components/DisciplineIcons.astro';
-
-const mainProjects = [
-  {
-    title: "iOS App",
-    type: "Mobile Development",
-    context: "Freelance",
-    date: "2024",
-    image: "/images/ios.png",
-    imageAlt: "iOS app screens showing the main interface",
-    href: "/work/ios-app"
-  },
-  {
-    title: "Website",
-    type: "Web Design",
-    context: "Freelance",
-    date: "2024",
-    image: "/images/vola-teaser.png",
-    imageAlt: "Website design mockup showing homepage layout",
-    href: "/work/website"
-  },
-  {
-    title: "Monday.com App",
-    type: "Platform Integration",
-    context: "Freelance",
-    date: "2024",
-    image: "/images/monday.png",
-    imageAlt: "Monday.com app interface showing dashboard and workflows",
-    href: "/work/monday-app"
-  }
-];
-
-const moreProjects = [
-  {
-    title: "Framer Template",
-    type: "Web Design",
-    context: "Freelance",
-    date: "2024",
-    image: "/images/a-statement-teaser.png",
-    imageAlt: "Framer template preview",
-    href: "/work/framer-template"
-  },
-  {
-    title: "Shopify App",
-    type: "App Development",
-    context: "Freelance",
-    date: "2024",
-    image: "/images/status-growth-teaser.png",
-    imageAlt: "Shopify app interface",
-    href: "/work/shopify-app"
-  }
-];
-
-const disciplines = [
-  {
-    number: "001",
-    title: "Cloud Engineering",
-    icon: "data" as const,
-    items: ["AWS / Azure / GCP", "Infrastructure as Code", "DevOps & CI/CD", "Architecture"]
-  },
-  {
-    number: "002",
-    title: "Mobile",
-    icon: "interaction" as const,
-    items: ["iOS App Development", "Swift & SwiftUI", "App Design", "App Store"]
-  },
-  {
-    number: "003",
-    title: "Web & E-commerce",
-    icon: "print" as const,
-    items: ["Framer Templates", "Job Board Websites", "Shopify Apps", "Web Design"]
-  },
-  {
-    number: "004",
-    title: "Integrations",
-    icon: "identity" as const,
-    items: ["Monday.com Apps", "API Development", "Automation", "Platform SDKs"]
-  }
-];
+import {
+  studio,
+  metrics,
+  outcomes,
+  capabilities,
+  process,
+  stack,
+  featuredProjects,
+  moreProjects,
+} from '../data/studio';
 ---
 
 <Layout
-  title="Work — Ali Siddique – Software & Cloud Engineer"
-  description="Ali Siddique runs Salinash Studio, building iOS apps, Monday.com integrations, Framer templates, job boards, and Shopify apps."
+  title="Salinash Studio — Product Engineering by Ali Siddique"
+  description={studio.bio}
   ogType="website"
 >
   <Header activePage="work" />
@@ -94,45 +26,91 @@ const disciplines = [
   <!-- Intro Section -->
   <section class="intro-section">
     <div class="intro-grid">
-      <div class="intro-empty"></div>
+      <div class="intro-empty">
+        <span class="intro-stamp">Est. {studio.founded}</span>
+        <span class="intro-stamp">{studio.location}</span>
+      </div>
       <div class="intro-bio">
         <p>
-          Ali Siddique runs Salinash Studio — a software and cloud engineering practice building iOS apps, Monday.com integrations, Framer templates, job boards, and Shopify apps. Also into art, music, and guitar.
+          <strong>{studio.name}</strong> is the product engineering practice of {studio.principal} — designing,
+          building and operating production software end to end, from ML inference infrastructure
+          and GPU rendering to iOS apps and real-time web interfaces.
+        </p>
+        <p class="intro-bio-sub">
+          One exit via Acquire.com. Six iOS apps shipped. £50K+ in product revenue. AWS Certified
+          Solutions Architect.
         </p>
       </div>
       <div class="intro-contact">
         <div class="contact-block">
           <span class="contact-label">Contact</span>
-          <a href="mailto:hi@salinash.studio" class="contact-email">hi@salinash.studio</a>
-          <span class="contact-location">London, UK</span>
+          <a href={`mailto:${studio.email}`} class="contact-email">{studio.email}</a>
+          <a href={`tel:${studio.phoneHref}`} class="contact-email">{studio.phone}</a>
+          <span class="contact-location">{studio.location}</span>
         </div>
         <div class="social-links">
-          <a href="https://github.com/alisiddique" target="_blank" rel="noopener" class="social-link">GitHub</a>
-          <a href="https://linkedin.com/in/alisiddique" target="_blank" rel="noopener" class="social-link">LinkedIn</a>
-          <a href="mailto:hi@salinash.studio" class="social-link">Email</a>
+          <a href={studio.github} target="_blank" rel="noopener" class="social-link">GitHub</a>
+          <a href={studio.linkedin} target="_blank" rel="noopener" class="social-link">LinkedIn</a>
+          <a href="/services" class="social-link">Services</a>
           <a href="/blog" class="social-link">Blog</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Work Title -->
-  <section class="work-title-section">
-    <h1 class="work-title">WORK ( - 2025)</h1>
+  <!-- Proof band -->
+  <section class="proof-section">
+    <div class="proof-header">
+      <span class="proof-label">/ The studio in numbers</span>
+      <p class="proof-intro">
+        Three years of independent practice, measured by what shipped and what it did.
+      </p>
+    </div>
+    <div class="proof-grid">
+      {metrics.map(m => (
+        <div class="proof-cell">
+          <span class="proof-value">{m.value}</span>
+          <span class="proof-metric-label">{m.label}</span>
+          <span class="proof-detail">{m.detail}</span>
+        </div>
+      ))}
+    </div>
+    <div class="outcomes-row">
+      {outcomes.map(o => (
+        <div class="outcome-cell">
+          <span class="outcome-value">{o.value}</span>
+          <div class="outcome-text">
+            <span class="outcome-label">{o.label}</span>
+            <span class="outcome-detail">{o.detail}</span>
+          </div>
+        </div>
+      ))}
+    </div>
   </section>
 
-  <!-- Main Projects Grid -->
+  <!-- Work Title -->
+  <section class="work-title-section">
+    <h1 class="work-title">SELECTED WORK</h1>
+    <p class="work-subtitle">
+      {featuredProjects.length + moreProjects.length} case studies — ML infrastructure, iOS and
+      graphics, cloud platforms and products taken to exit.
+    </p>
+  </section>
+
+  <!-- Featured Projects Grid -->
   <section class="projects-section">
     <div class="projects-grid">
-      {mainProjects.map(project => (
+      {featuredProjects.map(project => (
         <ProjectCard
           title={project.title}
+          subtitle={project.subtitle}
           type={project.type}
           context={project.context}
           date={project.date}
-          image={project.image}
-          imageAlt={project.imageAlt}
-          href={project.href}
+          status={project.status}
+          summary={project.summary}
+          visual={project.visual}
+          href={`/work/${project.slug}`}
         />
       ))}
     </div>
@@ -142,19 +120,21 @@ const disciplines = [
   <section class="disciplines-section">
     <div class="disciplines-header">
       <h2 class="disciplines-headline">
-        Building at the intersection of cloud infrastructure, mobile, and the modern web — from apps to platforms.
+        Building at the intersection of ML infrastructure, real-time graphics and the modern web —
+        from the GPU up to the interface.
       </h2>
       <p class="disciplines-sub">
-        Through freelance projects and Salinash Studio, the following disciplines have emerged as key areas of focus.
+        Four disciplines, each proven on shipped work rather than listed on a skills page.
       </p>
     </div>
     <div class="disciplines-grid">
-      {disciplines.map(d => (
+      {capabilities.map(d => (
         <div class="discipline-card">
           <div class="discipline-card-inner">
             <div class="discipline-text">
               <span class="discipline-number">/ {d.number}</span>
               <h3 class="discipline-title">{d.title}</h3>
+              <p class="discipline-summary">{d.summary}</p>
               <ul class="discipline-list">
                 {d.items.map(item => (
                   <li>{item}</li>
@@ -170,6 +150,25 @@ const disciplines = [
     </div>
   </section>
 
+  <!-- Process Section -->
+  <section class="process-section">
+    <div class="process-header">
+      <span class="section-tag">/ How the studio works</span>
+      <h2 class="process-headline">
+        Architecture first, vertical slice second, and a launch that is measured.
+      </h2>
+    </div>
+    <div class="process-grid">
+      {process.map(step => (
+        <div class="process-card">
+          <span class="process-number">{step.number}</span>
+          <h3 class="process-title">{step.title}</h3>
+          <p class="process-body">{step.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
   <!-- More Work Section -->
   <section class="more-work-section">
     <h2 class="more-work-title">More work</h2>
@@ -177,13 +176,32 @@ const disciplines = [
       {moreProjects.map(project => (
         <ProjectCard
           title={project.title}
+          subtitle={project.subtitle}
           type={project.type}
           context={project.context}
           date={project.date}
-          image={project.image}
-          imageAlt={project.imageAlt}
-          href={project.href}
+          status={project.status}
+          summary={project.summary}
+          visual={project.visual}
+          href={`/work/${project.slug}`}
         />
+      ))}
+    </div>
+  </section>
+
+  <!-- Stack Section -->
+  <section class="stack-section">
+    <span class="section-tag">/ Stack</span>
+    <div class="stack-list">
+      {stack.map(group => (
+        <div class="stack-row">
+          <span class="stack-row-label">{group.label}</span>
+          <div class="stack-chips">
+            {group.items.map(item => (
+              <span class="stack-chip">{item}</span>
+            ))}
+          </div>
+        </div>
       ))}
     </div>
   </section>
@@ -211,6 +229,19 @@ const disciplines = [
 
   .intro-empty {
     border-right: 1px solid var(--color-stroke);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.25rem;
+  }
+
+  .intro-stamp {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-gray-700);
   }
 
   .intro-bio {
@@ -220,6 +251,19 @@ const disciplines = [
     font-weight: 400;
     line-height: 1.5;
     color: var(--color-black);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .intro-bio strong {
+    font-weight: 500;
+  }
+
+  .intro-bio-sub {
+    font-size: 0.9375rem;
+    color: var(--color-gray-700);
+    line-height: 1.6;
   }
 
   .intro-contact {
@@ -262,6 +306,7 @@ const disciplines = [
     font-size: 1rem;
     font-weight: 400;
     color: var(--color-black);
+    margin-top: 0.25rem;
   }
 
   .social-links {
@@ -283,20 +328,156 @@ const disciplines = [
     opacity: 0.6;
   }
 
+  /* Proof band */
+  .proof-section {
+    background-color: var(--color-dark);
+    color: var(--color-white);
+    padding: 3.5rem 1.25rem 3rem;
+  }
+
+  .proof-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2.75rem;
+    max-width: 640px;
+  }
+
+  .proof-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-gray-700);
+  }
+
+  .proof-intro {
+    font-family: var(--font-sans);
+    font-size: clamp(1.125rem, 2vw, 1.5rem);
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--color-white);
+  }
+
+  .proof-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .proof-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1.75rem 1.25rem 1.75rem 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .proof-cell:first-child {
+    padding-left: 0;
+  }
+
+  .proof-cell:not(:first-child) {
+    padding-left: 1.25rem;
+  }
+
+  .proof-cell:last-child {
+    border-right: none;
+  }
+
+  .proof-value {
+    font-family: var(--font-sans);
+    font-size: clamp(1.75rem, 3.4vw, 3rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .proof-metric-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-white);
+  }
+
+  .proof-detail {
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--color-gray-700);
+  }
+
+  .outcomes-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    padding-top: 1.75rem;
+  }
+
+  .outcome-cell {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+
+  .outcome-value {
+    font-family: var(--font-sans);
+    font-size: 1.375rem;
+    font-weight: 500;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  .outcome-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .outcome-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .outcome-detail {
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--color-gray-700);
+  }
+
   /* Work Title */
   .work-title-section {
-    padding: 1.5rem 0 0;
+    padding: 1.5rem 0 1.5rem;
     overflow: hidden;
   }
 
   .work-title {
     font-family: var(--font-sans);
-    font-size: clamp(4rem, 14vw, 13rem);
+    font-size: clamp(2.75rem, 11vw, 10rem);
     font-weight: 500;
     line-height: 1;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
     white-space: nowrap;
     padding: 0 0.5rem;
+  }
+
+  .work-subtitle {
+    font-family: var(--font-sans);
+    font-size: clamp(1rem, 1.6vw, 1.25rem);
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--color-gray-700);
+    padding: 0.75rem 1.25rem 0;
+    max-width: 680px;
   }
 
   /* Projects Section */
@@ -304,17 +485,9 @@ const disciplines = [
     border-top: 1px solid var(--color-stroke);
   }
 
-  .projects-section .projects-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .projects-section .projects-grid > :global(.project-card:nth-child(3n)) {
-    border-right: none;
-  }
-
   .projects-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .projects-grid > :global(.project-card) {
@@ -322,8 +495,7 @@ const disciplines = [
     border-bottom: 1px solid var(--color-stroke);
   }
 
-  /* More work 2-col: remove right border from even cards */
-  .more-work-section .projects-grid > :global(.project-card:nth-child(even)) {
+  .projects-grid > :global(.project-card:nth-child(even)) {
     border-right: none;
   }
 
@@ -351,9 +523,9 @@ const disciplines = [
 
   .disciplines-sub {
     font-family: var(--font-sans);
-    font-size: clamp(1.25rem, 2.5vw, 2rem);
+    font-size: clamp(1.125rem, 2vw, 1.5rem);
     font-weight: 400;
-    line-height: 1.3;
+    line-height: 1.4;
     color: var(--color-gray-700);
   }
 
@@ -384,6 +556,7 @@ const disciplines = [
     align-items: flex-start;
     padding: 1.75rem 1.5rem;
     min-height: 180px;
+    gap: 1rem;
   }
 
   .discipline-text {
@@ -406,7 +579,16 @@ const disciplines = [
     font-size: 1.375rem;
     font-weight: 500;
     line-height: 1.1;
+  }
+
+  .discipline-summary {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--color-gray-700);
     margin-bottom: 0.5rem;
+    max-width: 44ch;
   }
 
   .discipline-list {
@@ -416,12 +598,15 @@ const disciplines = [
   }
 
   .discipline-list li {
-    font-family: var(--font-sans);
-    font-size: 0.9375rem;
-    font-weight: 400;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
     color: var(--color-black);
     position: relative;
     padding-left: 1rem;
+    line-height: 1.6;
   }
 
   .discipline-list li::before {
@@ -436,10 +621,88 @@ const disciplines = [
     margin-left: 1rem;
   }
 
+  /* Process Section */
+  .process-section {
+    padding: 4.5rem 1.25rem;
+    border-bottom: 1px solid var(--color-stroke);
+  }
+
+  .section-tag {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-gray-700);
+    margin-bottom: 0.75rem;
+  }
+
+  .process-header {
+    max-width: 800px;
+    margin-bottom: 3rem;
+  }
+
+  .process-headline {
+    font-family: var(--font-sans);
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--color-stroke);
+  }
+
+  .process-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.75rem 1.5rem 1.75rem 0;
+    border-right: 1px solid var(--color-stroke);
+  }
+
+  .process-card:first-child {
+    padding-left: 0;
+  }
+
+  .process-card:not(:first-child) {
+    padding-left: 1.5rem;
+  }
+
+  .process-card:last-child {
+    border-right: none;
+  }
+
+  .process-number {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--color-gray-700);
+  }
+
+  .process-title {
+    font-family: var(--font-sans);
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .process-body {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--color-gray-700);
+  }
+
   /* More Work Section */
   .more-work-section {
     padding-top: 3rem;
-    border-top: 1px solid var(--color-stroke);
   }
 
   .more-work-title {
@@ -450,7 +713,94 @@ const disciplines = [
     padding: 0 1.25rem 1.5rem;
   }
 
+  /* Stack Section */
+  .stack-section {
+    padding: 3.5rem 1.25rem 4rem;
+    border-top: 1px solid var(--color-stroke);
+  }
+
+  .stack-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--color-stroke);
+  }
+
+  .stack-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    padding: 1.125rem 0;
+    border-bottom: 1px solid var(--color-stroke);
+  }
+
+  .stack-row-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-gray-700);
+    padding-top: 0.3rem;
+  }
+
+  .stack-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .stack-chip {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    border: 1px solid var(--color-stroke);
+    border-radius: var(--radius-pill);
+    padding: 0.25rem 0.75rem;
+    color: var(--color-black);
+    white-space: nowrap;
+  }
+
   /* Responsive */
+  @media (max-width: 1080px) {
+    .proof-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .proof-cell:nth-child(3n) {
+      border-right: none;
+    }
+
+    .proof-cell:nth-child(-n + 3) {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .outcomes-row {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .process-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .process-card:nth-child(even) {
+      border-right: none;
+    }
+
+    .process-card:nth-child(odd) {
+      padding-left: 0;
+    }
+
+    .process-card:nth-child(even) {
+      padding-left: 1.5rem;
+    }
+
+    .process-card:nth-child(-n + 2) {
+      border-bottom: 1px solid var(--color-stroke);
+    }
+  }
+
   @media (max-width: 768px) {
     .intro-grid {
       grid-template-columns: 1fr;
@@ -466,14 +816,41 @@ const disciplines = [
       border-bottom: 1px solid var(--color-stroke);
     }
 
-    .projects-grid,
-    .projects-section .projects-grid {
+    .proof-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .proof-cell:nth-child(3n) {
+      border-right: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .proof-cell:nth-child(even) {
+      border-right: none;
+    }
+
+    .proof-cell:nth-child(odd) {
+      padding-left: 0;
+    }
+
+    .proof-cell:nth-child(even) {
+      padding-left: 1.25rem;
+    }
+
+    .proof-cell:not(:nth-last-child(-n + 2)) {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .outcomes-row {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .projects-grid {
       grid-template-columns: 1fr;
     }
 
-    /* Restore all right borders in single-column mobile layout */
     .projects-grid > :global(.project-card),
-    .projects-section .projects-grid > :global(.project-card:nth-child(3n)) {
+    .projects-grid > :global(.project-card:nth-child(even)) {
       border-right: 1px solid var(--color-stroke);
     }
 
@@ -491,6 +868,33 @@ const disciplines = [
     }
 
     .discipline-card:last-child {
+      border-bottom: none;
+    }
+
+    .discipline-icon-wrap {
+      display: none;
+    }
+
+    .stack-row {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .process-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .process-card,
+    .process-card:nth-child(even),
+    .process-card:nth-child(odd) {
+      border-right: none;
+      border-bottom: 1px solid var(--color-stroke);
+      padding-left: 0;
+    }
+
+    .process-card:last-child {
       border-bottom: none;
     }
   }

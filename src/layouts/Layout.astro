@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Analytics from '@vercel/analytics/astro'
+import { studio } from '../data/studio';
 
 interface Props {
   title: string;
@@ -12,15 +13,68 @@ interface Props {
 
 const {
   title,
-  description = "Ali Siddique runs Salinash Studio, building iOS apps, Monday.com integrations, Framer templates, job boards, and Shopify apps.",
+  description = studio.bio,
   ogImage = '/og-image.png',
   ogType = 'website',
   publishedDate,
 } = Astro.props;
 
-const siteOrigin = Astro.site?.origin ?? 'https://salinash.studio';
+const siteOrigin = Astro.site?.origin ?? studio.url;
 const canonicalUrl = siteOrigin + Astro.url.pathname;
 const ogImageUrl = siteOrigin + ogImage;
+
+// Organization + Person schema so the studio is understood as an entity, not just a page.
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'ProfessionalService',
+      '@id': `${siteOrigin}/#studio`,
+      name: studio.name,
+      description: studio.bio,
+      url: siteOrigin,
+      email: studio.email,
+      telephone: studio.phone,
+      foundingDate: String(studio.founded),
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'London',
+        addressCountry: 'GB',
+      },
+      founder: { '@id': `${siteOrigin}/#ali` },
+      knowsAbout: [
+        'ML inference infrastructure',
+        'Serverless GPU computing',
+        'iOS development',
+        'Metal GPU rendering',
+        '3D geometry processing',
+        'Cloud architecture',
+        'Kubernetes',
+      ],
+      areaServed: 'Worldwide',
+    },
+    {
+      '@type': 'Person',
+      '@id': `${siteOrigin}/#ali`,
+      name: studio.principal,
+      jobTitle: studio.role,
+      email: studio.email,
+      telephone: studio.phone,
+      url: siteOrigin + '/about',
+      worksFor: { '@id': `${siteOrigin}/#studio` },
+      sameAs: [studio.github, studio.linkedin],
+      alumniOf: {
+        '@type': 'CollegeOrUniversity',
+        name: 'City, University of London',
+      },
+      hasCredential: {
+        '@type': 'EducationalOccupationalCredential',
+        credentialCategory: 'certification',
+        name: 'AWS Certified Solutions Architect',
+      },
+    },
+  ],
+};
 ---
 
 <!doctype html>
@@ -43,7 +97,7 @@ const ogImageUrl = siteOrigin + ogImage;
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:site_name" content="Salinash Studio" />
+    <meta property="og:site_name" content={studio.name} />
     <meta property="og:locale" content="en_GB" />
     {ogType === 'article' && publishedDate && (
       <meta property="article:published_time" content={publishedDate} />
@@ -57,6 +111,9 @@ const ogImageUrl = siteOrigin + ogImage;
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- Structured data -->
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
         <Analytics />
 
   </head>

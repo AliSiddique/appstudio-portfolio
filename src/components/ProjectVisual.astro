@@ -1,0 +1,324 @@
+---
+import type { VisualVariant } from '../data/studio';
+
+interface Props {
+  variant: VisualVariant;
+  class?: string;
+  /** 'slice' fills the box (cards, whose 3:2 matches the viewBox); 'meet' fits the whole
+      drawing inside a wider band without cropping (case study covers). */
+  fit?: 'slice' | 'meet';
+}
+
+const { variant, class: className = '', fit = 'slice' } = Astro.props;
+---
+
+<svg
+  class:list={['project-visual', className]}
+  viewBox="0 0 1200 800"
+  preserveAspectRatio={`xMidYMid ${fit}`}
+  xmlns="http://www.w3.org/2000/svg"
+  role="presentation"
+  aria-hidden="true"
+>
+  <rect width="1200" height="800" fill="var(--color-gray-50)" />
+
+  {/* Shared background grid */}
+  <g stroke="currentColor" stroke-width="1" opacity="0.07">
+    {Array.from({ length: 11 }, (_, i) => (
+      <line x1={i * 120} y1="0" x2={i * 120} y2="800" />
+    ))}
+    {Array.from({ length: 7 }, (_, i) => (
+      <line x1="0" y1={i * 120} x2="1200" y2={i * 120} />
+    ))}
+  </g>
+
+  {variant === 'motion' && (
+    <g stroke="currentColor" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      {/* Timeline */}
+      <line x1="120" y1="640" x2="1080" y2="640" stroke-width="2" opacity="0.35" />
+      {[0, 1, 2, 3, 4].map((i) => (
+        <line x1={160 + i * 220} y1="628" x2={160 + i * 220} y2="652" stroke-width="2" opacity="0.5" />
+      ))}
+      {/* Keyframe figures: a walk cycle sampled across the timeline */}
+      {[
+        { x: 160, la: -28, ra: 26, ll: 22, rl: -20 },
+        { x: 380, la: -14, ra: 14, ll: 10, rl: -8 },
+        { x: 600, la: 6, ra: -8, ll: -8, rl: 10 },
+        { x: 820, la: 22, ra: -24, ll: -20, rl: 22 },
+        { x: 1040, la: 30, ra: -30, ll: -26, rl: 28 },
+      ].map((p, i) => (
+        <g opacity={0.3 + i * 0.175}>
+          <circle cx={p.x} cy="300" r="26" />
+          <line x1={p.x} y1="326" x2={p.x} y2="450" />
+          <line x1={p.x} y1="360" x2={p.x + p.la * 2.2} y2="430" />
+          <line x1={p.x} y1="360" x2={p.x + p.ra * 2.2} y2="430" />
+          <line x1={p.x} y1="450" x2={p.x + p.ll * 2.2} y2="560" />
+          <line x1={p.x} y1="450" x2={p.x + p.rl * 2.2} y2="560" />
+        </g>
+      ))}
+      {/* GPU inference block feeding the rig */}
+      <rect x="120" y="110" width="250" height="90" rx="4" stroke-width="2.5" />
+      <line x1="150" y1="140" x2="150" y2="170" stroke-width="2" />
+      <line x1="172" y1="140" x2="172" y2="170" stroke-width="2" />
+      <line x1="194" y1="140" x2="194" y2="170" stroke-width="2" />
+      <rect x="830" y="110" width="250" height="90" rx="4" stroke-width="2.5" opacity="0.55" />
+      <path d="M 380 155 L 810 155" stroke-width="2" stroke-dasharray="10 10" opacity="0.5" />
+      <path d="M 795 143 L 815 155 L 795 167" stroke-width="2" opacity="0.5" />
+    </g>
+  )}
+
+  {variant === 'imaging' && (
+    <g stroke="currentColor" fill="none" stroke-width="2.5">
+      {/* Stacked scan slices in perspective */}
+      {[0, 1, 2, 3].map((i) => (
+        <g opacity={0.25 + i * 0.25} transform={`translate(${i * 56} ${-i * 34})`}>
+          <rect x="180" y="300" width="330" height="330" rx="3" />
+        </g>
+      ))}
+      {/* Foreground slice content: an axial cross-section */}
+      <g transform="translate(168 -102)">
+        <ellipse cx="345" cy="465" rx="128" ry="150" stroke-width="3" />
+        <ellipse cx="345" cy="465" rx="84" ry="102" opacity="0.6" />
+        <ellipse cx="308" cy="440" rx="26" ry="34" opacity="0.45" />
+        <ellipse cx="384" cy="440" rx="26" ry="34" opacity="0.45" />
+        <line x1="345" y1="300" x2="345" y2="630" stroke-width="1.5" opacity="0.4" />
+        <line x1="185" y1="465" x2="505" y2="465" stroke-width="1.5" opacity="0.4" />
+      </g>
+      {/* Window/level intensity ramp */}
+      <rect x="820" y="560" width="280" height="44" rx="2" stroke-width="2" opacity="0.6" />
+      {Array.from({ length: 14 }, (_, i) => (
+        <line
+          x1={828 + i * 20}
+          y1="560"
+          x2={828 + i * 20}
+          y2="604"
+          stroke-width={1 + i * 0.55}
+          opacity="0.32"
+        />
+      ))}
+      {/* Series index markers */}
+      {[0, 1, 2, 3, 4, 5].map((i) => (
+        <rect x={820 + i * 48} y="180" width="34" height="34" rx="2" opacity={i === 2 ? 1 : 0.28} stroke-width="2" />
+      ))}
+    </g>
+  )}
+
+  {variant === 'geometry' && (
+    <g stroke="currentColor" fill="none" stroke-width="2.5" stroke-linejoin="round">
+      {/* Wireframe polyhedron */}
+      <g transform="translate(600 400)">
+        <polygon points="0,-210 182,-105 182,105 0,210 -182,105 -182,-105" stroke-width="3" />
+        <polygon points="0,-120 104,-60 104,60 0,120 -104,60 -104,-60" opacity="0.65" />
+        <line x1="0" y1="-210" x2="0" y2="-120" opacity="0.5" />
+        <line x1="182" y1="-105" x2="104" y2="-60" opacity="0.5" />
+        <line x1="182" y1="105" x2="104" y2="60" opacity="0.5" />
+        <line x1="0" y1="210" x2="0" y2="120" opacity="0.5" />
+        <line x1="-182" y1="105" x2="-104" y2="60" opacity="0.5" />
+        <line x1="-182" y1="-105" x2="-104" y2="-60" opacity="0.5" />
+        {/* Triangulated faces */}
+        <line x1="0" y1="-210" x2="182" y2="105" opacity="0.28" stroke-width="1.5" />
+        <line x1="182" y1="-105" x2="0" y2="210" opacity="0.28" stroke-width="1.5" />
+        <line x1="-182" y1="-105" x2="182" y2="-105" opacity="0.28" stroke-width="1.5" />
+        <line x1="-182" y1="105" x2="182" y2="105" opacity="0.28" stroke-width="1.5" />
+      </g>
+      {/* Vertex handles */}
+      {[
+        [600, 190], [782, 295], [782, 505], [600, 610], [418, 505], [418, 295],
+      ].map(([cx, cy]) => (
+        <rect x={cx - 7} y={cy - 7} width="14" height="14" fill="currentColor" stroke="none" />
+      ))}
+      {/* Format exchange nodes */}
+      {[
+        { x: 150, y: 190 }, { x: 150, y: 590 }, { x: 1050, y: 190 }, { x: 1050, y: 590 },
+      ].map((n) => (
+        <rect x={n.x - 68} y={n.y - 30} width="136" height="60" rx="3" stroke-width="2" opacity="0.45" />
+      ))}
+      <path d="M 286 205 L 400 280" stroke-width="2" stroke-dasharray="8 8" opacity="0.4" />
+      <path d="M 286 575 L 400 510" stroke-width="2" stroke-dasharray="8 8" opacity="0.4" />
+      <path d="M 914 205 L 800 280" stroke-width="2" stroke-dasharray="8 8" opacity="0.4" />
+      <path d="M 914 575 L 800 510" stroke-width="2" stroke-dasharray="8 8" opacity="0.4" />
+    </g>
+  )}
+
+  {variant === 'landscape' && (
+    <g stroke="currentColor" fill="none" stroke-width="2.5">
+      {/* Topographic contours */}
+      {[0, 1, 2, 3, 4, 5].map((i) => (
+        <path
+          d={`M 100 ${640 - i * 34} C 320 ${560 - i * 50}, 480 ${700 - i * 30}, 660 ${590 - i * 46} S 980 ${470 - i * 36}, 1100 ${540 - i * 40}`}
+          opacity={0.9 - i * 0.12}
+          stroke-width={i === 0 ? 3 : 2}
+        />
+      ))}
+      {/* Planting plot grid */}
+      <g opacity="0.55">
+        {[0, 1, 2].map((r) =>
+          [0, 1, 2, 3].map((c) => (
+            <circle cx={250 + c * 120} cy={220 + r * 84} r="17" stroke-width="2" />
+          ))
+        )}
+      </g>
+      {/* Boundary */}
+      <rect x="180" y="150" width="560" height="290" rx="3" stroke-width="2" stroke-dasharray="12 8" opacity="0.5" />
+      {/* Acquired stamp */}
+      <g transform="translate(940 250)">
+        <circle cx="0" cy="0" r="104" stroke-width="3" opacity="0.8" />
+        <circle cx="0" cy="0" r="86" stroke-width="1.5" opacity="0.45" />
+        <path d="M -40 4 L -12 34 L 42 -28" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+      </g>
+    </g>
+  )}
+
+  {variant === 'assessment' && (
+    <g stroke="currentColor" fill="none" stroke-width="2.5">
+      {/* Pattern-recognition tile grid */}
+      {[0, 1, 2].map((r) =>
+        [0, 1, 2, 3].map((c) => (
+          <rect x={200 + c * 210} y={180 + r * 160} width="160" height="120" rx="4" opacity="0.5" stroke-width="2" />
+        ))
+      )}
+      {/* Tile contents */}
+      <circle cx="280" cy="240" r="34" stroke-width="3" />
+      <rect x="456" y="206" width="68" height="68" stroke-width="3" />
+      <polygon points="700,206 734,274 666,274" stroke-width="3" />
+      <rect x="876" y="206" width="68" height="68" rx="34" stroke-width="3" />
+
+      <circle cx="280" cy="400" r="26" stroke-width="3" opacity="0.75" />
+      <rect x="466" y="374" width="52" height="52" stroke-width="3" opacity="0.75" />
+      <polygon points="700,374 726,426 674,426" stroke-width="3" opacity="0.75" />
+      <rect x="886" y="374" width="52" height="52" rx="26" stroke-width="3" opacity="0.75" />
+
+      <circle cx="280" cy="560" r="18" stroke-width="3" opacity="0.5" />
+      <rect x="474" y="542" width="36" height="36" stroke-width="3" opacity="0.5" />
+      <polygon points="700,542 718,578 682,578" stroke-width="3" opacity="0.5" />
+      {/* The answer slot */}
+      <rect x="830" y="500" width="160" height="120" rx="4" stroke-width="3" stroke-dasharray="10 8" />
+      <line x1="892" y1="560" x2="928" y2="560" stroke-width="3" />
+      <line x1="910" y1="542" x2="910" y2="578" stroke-width="3" />
+      {/* Timer bar */}
+      <rect x="200" y="672" width="790" height="20" rx="10" stroke-width="2" opacity="0.4" />
+      <rect x="200" y="672" width="470" height="20" rx="10" fill="currentColor" stroke="none" opacity="0.55" />
+    </g>
+  )}
+
+  {variant === 'portfolio' && (
+    <g stroke="currentColor" fill="none" stroke-width="2.5">
+      {/* Six devices, one per shipped app */}
+      {[0, 1, 2].map((r) =>
+        [0, 1, 2].map((c) => {
+          if (r > 1) return null;
+          const x = 230 + c * 260;
+          const y = 130 + r * 300;
+          return (
+            <g opacity={0.45 + (r * 3 + c) * 0.09}>
+              <rect x={x} y={y} width="170" height="260" rx="22" stroke-width="3" />
+              <rect x={x + 58} y={y + 12} width="54" height="10" rx="5" stroke-width="2" opacity="0.6" />
+              <line x1={x + 22} y1={y + 56} x2={x + 118} y2={y + 56} stroke-width="3" />
+              <line x1={x + 22} y1={y + 84} x2={x + 148} y2={y + 84} stroke-width="2" opacity="0.5" />
+              <rect x={x + 22} y={y + 108} width="126" height="74" rx="4" stroke-width="2" opacity="0.5" />
+              <line x1={x + 22} y1={y + 204} x2={x + 92} y2={y + 204} stroke-width="2" opacity="0.5" />
+              <rect x={x + 54} y={y + 226} width="62" height="8" rx="4" fill="currentColor" stroke="none" opacity="0.4" />
+            </g>
+          );
+        })
+      )}
+      {/* Revenue trend */}
+      <polyline
+        points="1010,650 1040,600 1070,612 1100,520 1130,470 1160,360"
+        stroke-width="3.5"
+      />
+      {[[1010, 650], [1040, 600], [1070, 612], [1100, 520], [1130, 470], [1160, 360]].map(([cx, cy]) => (
+        <circle cx={cx} cy={cy} r="6" fill="currentColor" stroke="none" />
+      ))}
+      <line x1="1000" y1="690" x2="1180" y2="690" stroke-width="2" opacity="0.35" />
+    </g>
+  )}
+
+  {variant === 'audio' && (
+    <g stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round">
+      {/* Waveform */}
+      <g>
+        {Array.from({ length: 44 }, (_, i) => {
+          const h = [26, 58, 96, 142, 72, 34, 110, 168, 88, 48, 132, 190, 104, 60, 84, 150, 196, 118, 66, 38][i % 20] * 0.82;
+          return (
+            <line
+              x1={140 + i * 22}
+              y1={300 - h / 2}
+              x2={140 + i * 22}
+              y2={300 + h / 2}
+              stroke-width="6"
+              opacity={i < 26 ? 0.85 : 0.28}
+            />
+          );
+        })}
+      </g>
+      {/* Playhead */}
+      <line x1="690" y1="170" x2="690" y2="430" stroke-width="3" opacity="0.6" />
+      {/* Embedding space: transcript segments as points, with a query neighbourhood */}
+      <g transform="translate(0 130)">
+        <circle cx="600" cy="420" r="150" stroke-width="2" stroke-dasharray="10 9" opacity="0.4" />
+        {[
+          [600, 420], [548, 372], [664, 392], [572, 470], [652, 468], [510, 432], [690, 448],
+        ].map(([cx, cy], i) => (
+          <circle cx={cx} cy={cy} r={i === 0 ? 13 : 8} fill="currentColor" stroke="none" opacity={i === 0 ? 1 : 0.55} />
+        ))}
+        {[[548, 372], [664, 392], [572, 470], [652, 468]].map(([x2, y2]) => (
+          <line x1="600" y1="420" x2={x2} y2={y2} stroke-width="1.8" opacity="0.4" />
+        ))}
+        {[[300, 380], [250, 466], [356, 300], [900, 400], [960, 480], [850, 320]].map(([cx, cy]) => (
+          <circle cx={cx} cy={cy} r="7" fill="currentColor" stroke="none" opacity="0.2" />
+        ))}
+      </g>
+    </g>
+  )}
+
+  {variant === 'platform' && (
+    <g stroke="currentColor" fill="none" stroke-width="2.5">
+      {/* Ingress */}
+      <rect x="100" y="360" width="150" height="80" rx="4" stroke-width="3" />
+      {/* Service mesh */}
+      {[
+        { x: 400, y: 200 }, { x: 400, y: 400 }, { x: 400, y: 600 },
+        { x: 700, y: 300 }, { x: 700, y: 500 },
+      ].map((n) => (
+        <rect x={n.x - 75} y={n.y - 42} width="150" height="84" rx="4" stroke-width="2.5" opacity="0.8" />
+      ))}
+      {/* Edges */}
+      {[
+        [250, 400, 325, 200], [250, 400, 325, 400], [250, 400, 325, 600],
+        [475, 200, 625, 300], [475, 400, 625, 300], [475, 400, 625, 500], [475, 600, 625, 500],
+      ].map(([x1, y1, x2, y2]) => (
+        <line x1={x1} y1={y1} x2={x2} y2={y2} stroke-width="2" opacity="0.4" />
+      ))}
+      {/* Cache + queue */}
+      <g transform="translate(940 250)">
+        <ellipse cx="0" cy="-34" rx="72" ry="22" stroke-width="2.5" />
+        <path d="M -72 -34 L -72 44" stroke-width="2.5" />
+        <path d="M 72 -34 L 72 44" stroke-width="2.5" />
+        <ellipse cx="0" cy="44" rx="72" ry="22" stroke-width="2.5" />
+        <ellipse cx="0" cy="6" rx="72" ry="22" stroke-width="1.5" opacity="0.4" />
+      </g>
+      <g transform="translate(940 520)">
+        <rect x="-78" y="-34" width="156" height="68" rx="4" stroke-width="2.5" />
+        {[0, 1, 2].map((i) => (
+          <rect x={-62 + i * 44} y="-16" width="32" height="32" rx="2" stroke-width="2" opacity={0.85 - i * 0.22} />
+        ))}
+      </g>
+      <line x1="775" y1="300" x2="862" y2="270" stroke-width="2" opacity="0.4" />
+      <line x1="775" y1="500" x2="858" y2="520" stroke-width="2" opacity="0.4" />
+      {/* Metrics readout */}
+      <polyline points="120,660 190,660 220,612 260,690 300,640 350,655 420,655" stroke-width="3" opacity="0.7" />
+      <line x1="100" y1="710" x2="440" y2="710" stroke-width="2" opacity="0.3" />
+    </g>
+  )}
+</svg>
+
+<style>
+  .project-visual {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: var(--color-black);
+    background-color: var(--color-gray-50);
+  }
+</style>

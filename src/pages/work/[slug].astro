@@ -1,0 +1,109 @@
+---
+import WorkLayout from '../../layouts/WorkLayout.astro';
+import ProjectVisual from '../../components/ProjectVisual.astro';
+import { projects, nextProject } from '../../data/studio';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+---
+
+<WorkLayout
+  title={project.title}
+  subtitle={project.subtitle}
+  type={project.type}
+  context={project.context}
+  date={project.date}
+  role={project.role}
+  status={project.status}
+  headline={project.headline}
+  results={project.results}
+  number={project.number}
+  metaDescription={project.summary}
+  nextProject={nextProject(project.slug)}
+>
+  <!-- Cover visual -->
+  <section class="project-cover">
+    <div class="cover-img-wrap">
+      <ProjectVisual variant={project.visual} class="cover-img" fit="meet" />
+    </div>
+  </section>
+
+  <!-- Overview -->
+  <section class="project-overview">
+    <div class="overview-grid">
+      <div class="overview-left">
+        <span class="section-label">/ Overview</span>
+        {project.overview.map((para) => (
+          <p class="overview-text">{para}</p>
+        ))}
+      </div>
+      <div class="overview-right">
+        <div class="detail-block">
+          <span class="detail-block-label">/ Deliverables</span>
+          <ul class="detail-list">
+            {project.deliverables.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="detail-block">
+          <span class="detail-block-label">/ Role</span>
+          <ul class="detail-list">
+            <li>{project.role}</li>
+            <li>{project.context}</li>
+            <li>{project.status}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The problem -->
+  <section class="case-section">
+    <div class="case-header">
+      <span class="section-label">/ The problem</span>
+      <h2 class="case-heading">What made this hard</h2>
+    </div>
+    <div class="case-body">
+      {project.challenge.map((para) => (
+        <p>{para}</p>
+      ))}
+    </div>
+  </section>
+
+  <!-- Approach -->
+  <section class="case-section case-section-gray">
+    <div class="case-header">
+      <span class="section-label">/ Approach</span>
+      <h2 class="case-heading">How it was built</h2>
+    </div>
+    <div class="approach-grid">
+      {project.approach.map((step, i) => (
+        <div class="approach-card">
+          <span class="approach-number">/ {String(i + 1).padStart(2, '0')}</span>
+          <h3 class="approach-title">{step.title}</h3>
+          <p class="approach-body">{step.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Stack -->
+  <section class="case-section">
+    <div class="case-header">
+      <span class="section-label">/ Stack</span>
+      <h2 class="case-heading">What it runs on</h2>
+    </div>
+    <div class="case-chips">
+      {project.stack.map((tech) => (
+        <span class="case-chip">{tech}</span>
+      ))}
+    </div>
+  </section>
+</WorkLayout>

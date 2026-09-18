@@ -5,10 +5,14 @@ import Footer from '../components/Footer.astro';
 
 interface Props {
   title: string;
+  subtitle?: string;
   type: string;
   context: string;
   date: string;
   role: string;
+  status?: string;
+  headline?: string;
+  results?: { value: string; label: string }[];
   number?: string;
   metaDescription?: string;
   nextProject?: { title: string; href: string };
@@ -16,10 +20,14 @@ interface Props {
 
 const {
   title,
+  subtitle,
   type,
   context,
   date,
   role,
+  status,
+  headline,
+  results = [],
   number = '001',
   metaDescription,
   nextProject,
@@ -37,7 +45,10 @@ const {
 
   <!-- Project hero -->
   <section class="project-hero">
+    {status && <span class="project-status">{status}</span>}
     <h1 class="project-title">{title}</h1>
+    {subtitle && <p class="project-subtitle">{subtitle}</p>}
+    {headline && <p class="project-headline">{headline}</p>}
     <div class="project-meta-bar">
       <div class="meta-col">
         <span class="meta-label">Type</span>
@@ -57,6 +68,20 @@ const {
       </div>
     </div>
   </section>
+
+  {results.length > 0 && (
+    <section class="results-band">
+      <span class="results-label">/ Outcomes</span>
+      <div class="results-grid">
+        {results.map((r) => (
+          <div class="result-cell">
+            <span class="result-value">{r.value}</span>
+            <span class="result-label">{r.label}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
 
   <!-- Page content from child -->
   <slot />
@@ -118,18 +143,111 @@ const {
     border-bottom: 1px solid var(--color-stroke);
   }
 
+  .project-status {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background-color: var(--color-black);
+    color: var(--color-white);
+    border-radius: var(--radius-pill);
+    padding: 0.25rem 0.75rem;
+    margin-bottom: 1rem;
+  }
+
   .project-title {
     font-family: var(--font-sans);
-    font-size: clamp(3rem, 10vw, 8rem);
+    font-size: clamp(2.5rem, 8vw, 6.5rem);
     font-weight: 500;
     line-height: 1;
     letter-spacing: -0.02em;
-    margin-bottom: 2.5rem;
+  }
+
+  .project-subtitle {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-gray-700);
+    margin-top: 0.875rem;
+  }
+
+  .project-headline {
+    font-family: var(--font-sans);
+    font-size: clamp(1.25rem, 2.4vw, 1.875rem);
+    font-weight: 400;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: var(--color-black);
+    max-width: 44ch;
+    margin-top: 1.75rem;
+  }
+
+  /* Results band */
+  .results-band {
+    background-color: var(--color-dark);
+    color: var(--color-white);
+    padding: 2.5rem 1.25rem;
+  }
+
+  .results-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-gray-700);
+    margin-bottom: 1.75rem;
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .result-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.5rem 1.25rem 0 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .result-cell:last-child {
+    border-right: none;
+  }
+
+  .result-cell:not(:first-child) {
+    padding-left: 1.25rem;
+  }
+
+  .result-value {
+    font-family: var(--font-sans);
+    font-size: clamp(1.75rem, 3.2vw, 2.75rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .result-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-gray-700);
+    line-height: 1.5;
   }
 
   .project-meta-bar {
     display: flex;
     border-top: 1px solid var(--color-stroke);
+    margin-top: 2.5rem;
   }
 
   .meta-col {
@@ -213,9 +331,9 @@ const {
   }
 
   :global(.cover-img-wrap) {
-    aspect-ratio: 16 / 9;
+    height: clamp(230px, 34vw, 520px);
     overflow: hidden;
-    background-color: var(--color-gray-100);
+    background-color: var(--color-gray-50);
   }
 
   :global(.cover-img) {
@@ -312,6 +430,111 @@ const {
     color: var(--color-gray-700);
   }
 
+  /* Case study body — challenge, approach, stack */
+  :global(.case-section) {
+    padding: 4rem 1.25rem;
+    border-bottom: 1px solid var(--color-stroke);
+  }
+
+  :global(.case-section-gray) {
+    background-color: var(--color-gray-50);
+  }
+
+  :global(.case-header) {
+    max-width: 800px;
+    margin-bottom: 2.5rem;
+  }
+
+  :global(.case-heading) {
+    font-family: var(--font-sans);
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-top: 0.75rem;
+  }
+
+  :global(.case-body) {
+    display: flex;
+    flex-direction: column;
+    gap: 1.125rem;
+    max-width: 68ch;
+  }
+
+  :global(.case-body p) {
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--color-gray-700);
+  }
+
+  :global(.approach-grid) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border: 1px solid var(--color-stroke);
+    background-color: var(--color-white);
+  }
+
+  :global(.approach-card) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    padding: 1.75rem 1.5rem;
+    border-right: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--color-stroke);
+  }
+
+  :global(.approach-card:nth-child(even)) {
+    border-right: none;
+  }
+
+  :global(.approach-card:nth-last-child(-n + 2):nth-child(odd)),
+  :global(.approach-card:last-child) {
+    border-bottom: none;
+  }
+
+  :global(.approach-number) {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--color-gray-700);
+  }
+
+  :global(.approach-title) {
+    font-family: var(--font-sans);
+    font-size: 1.1875rem;
+    font-weight: 500;
+    line-height: 1.25;
+  }
+
+  :global(.approach-body) {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--color-gray-700);
+  }
+
+  :global(.case-chips) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  :global(.case-chip) {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    border: 1px solid var(--color-stroke);
+    border-radius: var(--radius-pill);
+    padding: 0.25rem 0.75rem;
+    background-color: var(--color-white);
+    white-space: nowrap;
+  }
+
   :global(.project-gallery) {
     border-bottom: 1px solid var(--color-stroke);
   }
@@ -362,6 +585,20 @@ const {
   }
 
   @media (max-width: 768px) {
+    :global(.approach-grid) {
+      grid-template-columns: 1fr;
+    }
+
+    :global(.approach-card),
+    :global(.approach-card:nth-child(even)) {
+      border-right: none;
+      border-bottom: 1px solid var(--color-stroke);
+    }
+
+    :global(.approach-card:last-child) {
+      border-bottom: none;
+    }
+
     :global(.overview-grid) {
       grid-template-columns: 1fr;
     }

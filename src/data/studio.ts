@@ -8,15 +8,8 @@ export const studio = {
   principal: 'Ali Siddique',
   role: 'Full-Stack & Product Engineer',
   founded: 2023,
-  location: 'London, UK',
   email: 'hi@salinash.studio',
-  personalEmail: 'alisiddique10@hotmail.com',
-  phone: '+44 7479 865538',
-  phoneHref: '+447479865538',
-  domain: 'salinash.studio',
   url: 'https://salinash.studio',
-  github: 'https://github.com/AliSiddique',
-  linkedin: 'https://www.linkedin.com/in/alihsiddique/',
   /** Short bio — used in the intro block and meta descriptions. */
   bio:
     'Salinash Studio is the product engineering practice of Ali Siddique — designing, building and operating production software end to end, from ML inference infrastructure and GPU rendering to iOS apps and real-time web interfaces.',
@@ -738,8 +731,8 @@ export const timeline: TimelineEntry[] = [
     period: '2021 — 2024',
     entries: [
       {
-        company: 'City, University of London',
-        role: 'BSc Computer Science (2:1)',
+        company: 'BSc Computer Science',
+        role: 'Graduated with a 2:1',
         detail: 'CS Best Student Prize, Years 1 & 2. Cloud Computing, Computer Vision, Networks.',
       },
     ],
@@ -755,7 +748,7 @@ export const credentials = [
   {
     label: 'Education',
     title: 'BSc Computer Science (2:1)',
-    detail: 'City, University of London — 2021 to 2024.',
+    detail: 'Studied 2021 to 2024.',
   },
   {
     label: 'Recognition',

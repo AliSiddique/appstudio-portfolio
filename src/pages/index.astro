@@ -28,7 +28,6 @@ import {
     <div class="intro-grid">
       <div class="intro-empty">
         <span class="intro-stamp">Est. {studio.founded}</span>
-        <span class="intro-stamp">{studio.location}</span>
       </div>
       <div class="intro-bio">
         <p>
@@ -45,12 +44,8 @@ import {
         <div class="contact-block">
           <span class="contact-label">Contact</span>
           <a href={`mailto:${studio.email}`} class="contact-email">{studio.email}</a>
-          <a href={`tel:${studio.phoneHref}`} class="contact-email">{studio.phone}</a>
-          <span class="contact-location">{studio.location}</span>
         </div>
         <div class="social-links">
-          <a href={studio.github} target="_blank" rel="noopener" class="social-link">GitHub</a>
-          <a href={studio.linkedin} target="_blank" rel="noopener" class="social-link">LinkedIn</a>
           <a href="/services" class="social-link">Services</a>
           <a href="/blog" class="social-link">Blog</a>
         </div>
@@ -299,14 +294,6 @@ import {
 
   .contact-email:hover {
     opacity: 0.6;
-  }
-
-  .contact-location {
-    font-family: var(--font-sans);
-    font-size: 1rem;
-    font-weight: 400;
-    color: var(--color-black);
-    margin-top: 0.25rem;
   }
 
   .social-links {

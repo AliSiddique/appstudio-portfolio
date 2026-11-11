@@ -3,12 +3,10 @@
 The portfolio site for **Salinash Studio** — the product engineering practice of Ali Siddique.
 Built with **Astro** and **Tailwind CSS v4**, deployed as a static site.
 
-Live at [salinash.studio](https://salinash.studio).
-
 ## Tech Stack
 
-- [Astro v5](https://astro.build) — static site generator
-- [Tailwind CSS v4](https://tailwindcss.com) — via `@tailwindcss/vite`
+- **Astro v5** — static site generator
+- **Tailwind CSS v4** — via `@tailwindcss/vite`
 - **Neue Montreal** / Neue Montreal Mono typography
 - Vanilla scoped component CSS — no UI framework
 - `@astrojs/sitemap` for sitemap generation, Vercel Analytics for traffic
@@ -20,7 +18,7 @@ Pages read from it; none of them hard-code copy about projects, metrics or the s
 
 | Export | What it drives |
 | --- | --- |
-| `studio` | Name, contact details, location, social links, bio |
+| `studio` | Name, studio email, bio |
 | `metrics` / `outcomes` | The proof bands on the home and about pages |
 | `capabilities` | The four disciplines on the home page |
 | `process` | The four-stage engagement model (home + services) |

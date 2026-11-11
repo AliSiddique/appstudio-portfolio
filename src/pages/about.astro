@@ -7,14 +7,14 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
 
 <Layout
   title="About — Salinash Studio | Ali Siddique"
-  description={`${studio.principal} is a full-stack and product engineer running ${studio.name} in ${studio.location} — ML infrastructure, iOS and graphics, and cloud platform engineering.`}
+  description={`${studio.principal} is a full-stack and product engineer running ${studio.name} — ML infrastructure, iOS and graphics, and cloud platform engineering.`}
   ogType="website"
 >
   <Header activePage="about" />
 
   <!-- About Hero -->
   <section class="about-hero">
-    <span class="hero-tag">/ {studio.name} — Est. {studio.founded}, {studio.location}</span>
+    <span class="hero-tag">/ {studio.name} — Est. {studio.founded}</span>
     <h1 class="about-headline">
       {studio.principal} is a full-stack and product engineer with 3+ years designing, building and
       operating production software end to end — from system architecture and infrastructure through
@@ -162,18 +162,6 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
       <a href={`mailto:${studio.email}`} class="contact-item">
         <span class="contact-item-label">Studio</span>
         <span class="contact-item-value">{studio.email}</span>
-      </a>
-      <a href={`tel:${studio.phoneHref}`} class="contact-item">
-        <span class="contact-item-label">Phone</span>
-        <span class="contact-item-value">{studio.phone}</span>
-      </a>
-      <a href={studio.github} target="_blank" rel="noopener" class="contact-item">
-        <span class="contact-item-label">GitHub</span>
-        <span class="contact-item-value">github.com/AliSiddique</span>
-      </a>
-      <a href={studio.linkedin} target="_blank" rel="noopener" class="contact-item">
-        <span class="contact-item-label">LinkedIn</span>
-        <span class="contact-item-value">in/alihsiddique</span>
       </a>
     </div>
   </section>
@@ -569,27 +557,16 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
   }
 
   .contact-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
     border-top: 1px solid var(--color-stroke);
     margin-top: 1.5rem;
   }
 
   .contact-item {
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     gap: 0.4rem;
-    padding: 1.5rem 1.25rem 1.5rem 0;
-    border-right: 1px solid var(--color-stroke);
+    padding: 1.5rem 0;
     transition: opacity 0.2s;
-  }
-
-  .contact-item:not(:first-child) {
-    padding-left: 1.25rem;
-  }
-
-  .contact-item:last-child {
-    border-right: none;
   }
 
   .contact-item:hover {
@@ -616,27 +593,16 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
 
   /* Responsive */
   @media (max-width: 1080px) {
-    .credentials-grid,
-    .contact-grid {
+    .credentials-grid {
       grid-template-columns: repeat(2, 1fr);
     }
 
-    .credential-card:nth-child(even),
-    .contact-item:nth-child(even) {
+    .credential-card:nth-child(even) {
       border-right: none;
     }
 
-    .credential-card:nth-child(-n + 2),
-    .contact-item:nth-child(-n + 2) {
+    .credential-card:nth-child(-n + 2) {
       border-bottom: 1px solid var(--color-stroke);
-    }
-
-    .contact-item:nth-child(odd) {
-      padding-left: 0;
-    }
-
-    .contact-item:nth-child(even) {
-      padding-left: 1.25rem;
     }
   }
 
@@ -708,22 +674,18 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
       gap: 0.75rem;
     }
 
-    .credentials-grid,
-    .contact-grid {
+    .credentials-grid {
       grid-template-columns: 1fr;
     }
 
     .credential-card,
-    .contact-item,
-    .credential-card:nth-child(even),
-    .contact-item:nth-child(even) {
+    .credential-card:nth-child(even) {
       border-right: none;
       border-bottom: 1px solid var(--color-stroke);
       padding-left: 0;
     }
 
-    .credential-card:last-child,
-    .contact-item:last-child {
+    .credential-card:last-child {
       border-bottom: none;
     }
   }

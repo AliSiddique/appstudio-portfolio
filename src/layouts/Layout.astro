@@ -34,13 +34,7 @@ const structuredData = {
       description: studio.bio,
       url: siteOrigin,
       email: studio.email,
-      telephone: studio.phone,
       foundingDate: String(studio.founded),
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'London',
-        addressCountry: 'GB',
-      },
       founder: { '@id': `${siteOrigin}/#ali` },
       knowsAbout: [
         'ML inference infrastructure',
@@ -59,14 +53,8 @@ const structuredData = {
       name: studio.principal,
       jobTitle: studio.role,
       email: studio.email,
-      telephone: studio.phone,
       url: siteOrigin + '/about',
       worksFor: { '@id': `${siteOrigin}/#studio` },
-      sameAs: [studio.github, studio.linkedin],
-      alumniOf: {
-        '@type': 'CollegeOrUniversity',
-        name: 'City, University of London',
-      },
       hasCredential: {
         '@type': 'EducationalOccupationalCredential',
         credentialCategory: 'certification',

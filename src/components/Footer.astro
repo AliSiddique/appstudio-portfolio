@@ -12,9 +12,7 @@ import { studio } from '../data/studio';
       Reach the studio at <a href={`mailto:${studio.email}`} class="cta-email">{studio.email}</a>
     </p>
     <div class="cta-meta">
-      <span class="cta-meta-item">{studio.location}</span>
       <span class="cta-meta-item">Est. {studio.founded}</span>
-      <a href={`tel:${studio.phoneHref}`} class="cta-meta-item cta-meta-link">{studio.phone}</a>
     </div>
   </div>
 </section>
@@ -33,20 +31,15 @@ import { studio } from '../data/studio';
       </ul>
     </div>
     <div class="footer-col">
-      <span class="footer-label">/SOCIAL</span>
+      <span class="footer-label">/CONTACT</span>
       <ul>
-        <li><a href={studio.github} target="_blank" rel="noopener">GitHub</a></li>
-        <li><a href={studio.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
         <li><a href={`mailto:${studio.email}`}>Email</a></li>
-        <li><a href={`tel:${studio.phoneHref}`}>{studio.phone}</a></li>
       </ul>
     </div>
     <div class="footer-col">
       <span class="footer-label">/STUDIO</span>
       <ul>
-        <li><a href={studio.url} target="_blank" rel="noopener">{studio.domain}</a></li>
         <li><span>Product Engineering</span></li>
-        <li><span>{studio.location}</span></li>
         <li><span>Est. {studio.founded}</span></li>
       </ul>
     </div>
@@ -117,17 +110,6 @@ import { studio } from '../data/studio';
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--color-gray-700);
-  }
-
-  .cta-meta-link {
-    color: var(--color-white);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    transition: opacity 0.2s;
-  }
-
-  .cta-meta-link:hover {
-    opacity: 0.7;
   }
 
   /* Footer */

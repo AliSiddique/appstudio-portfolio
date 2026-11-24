@@ -2,42 +2,82 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import SectionHead from '../components/sections/SectionHead.astro';
+import { studio } from '../data/studio';
+
+const rows: { label: string; value: string; href?: string }[] = [
+  { label: 'Operator', value: `This website is operated by ${studio.principal}.` },
+  { label: 'Contact', value: studio.email, href: `mailto:${studio.email}` },
+];
 ---
 
-<Layout title="Privacy — Ali Siddique" ogType="website">
+<Layout title="Privacy — Salinash Studio" ogType="website">
   <Header activePage="none" />
-  <section class="page-content">
-    <h1>Privacy Policy</h1>
-    <p>This website is operated by Ali Siddique.</p>
-    <p>Contact: <a href="mailto:hi@salinash.studio">hi@salinash.studio</a></p>
-  </section>
+  <main>
+    <SectionHead eyebrow="/ Privacy" align="left" as="h1" size="xl">Privacy policy.</SectionHead>
+    <dl class="rows" data-reveal-stagger="80">
+      {rows.map((r) => (
+        <div class="row">
+          <dt>{r.label}</dt>
+          <dd>{r.href ? <a href={r.href}>{r.value}</a> : r.value}</dd>
+        </div>
+      ))}
+    </dl>
+  </main>
   <Footer />
 </Layout>
 
 <style>
-  .page-content {
-    padding: 4rem 1.25rem;
-    max-width: 800px;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+  .rows {
+    border-bottom: 1px solid var(--line);
   }
 
-  h1 {
-    font-family: var(--font-sans);
-    font-size: clamp(2rem, 4vw, 3.5rem);
+  .row {
+    display: grid;
+    grid-template-columns: 26% 1fr;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .row:last-child {
+    border-bottom: none;
+  }
+
+  dt {
+    padding: 1.75rem clamp(1.25rem, 3.5vw, 3.5rem);
+    border-right: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  dd {
+    padding: 1.5rem clamp(1.25rem, 3.5vw, 3.5rem);
+    font-size: clamp(1.125rem, 1.8vw, 1.5rem);
     font-weight: 500;
-    line-height: 1.1;
+    line-height: 1.4;
+    letter-spacing: -0.015em;
   }
 
-  p {
-    font-family: var(--font-sans);
-    font-size: 1.125rem;
-    line-height: 1.6;
-  }
-
-  a {
+  dd a {
     text-decoration: underline;
-    text-underline-offset: 3px;
+    text-decoration-color: var(--px-orange);
+    text-underline-offset: 5px;
+  }
+
+  @media (max-width: 700px) {
+    .row {
+      grid-template-columns: 1fr;
+    }
+
+    dt {
+      padding: 1.5rem 1rem 0;
+      border-right: none;
+    }
+
+    dd {
+      padding: 0.5rem 1rem 1.5rem;
+    }
   }
 </style>

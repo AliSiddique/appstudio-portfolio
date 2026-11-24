@@ -1,6 +1,7 @@
 ---
 import WorkLayout from '../../layouts/WorkLayout.astro';
 import ProjectVisual from '../../components/ProjectVisual.astro';
+import SectionHead from '../../components/sections/SectionHead.astro';
 import { projects, nextProject } from '../../data/studio';
 
 export function getStaticPaths() {
@@ -11,6 +12,7 @@ export function getStaticPaths() {
 }
 
 const { project } = Astro.props;
+const [leadParagraph, ...overviewRest] = project.overview;
 ---
 
 <WorkLayout
@@ -30,48 +32,40 @@ const { project } = Astro.props;
 >
   <!-- Cover visual -->
   <section class="project-cover">
-    <div class="cover-img-wrap">
+    <div class="cover-img-wrap" data-reveal>
       <ProjectVisual variant={project.visual} class="cover-img" fit="meet" />
     </div>
   </section>
 
   <!-- Overview -->
-  <section class="project-overview">
-    <div class="overview-grid">
-      <div class="overview-left">
-        <span class="section-label">/ Overview</span>
-        {project.overview.map((para) => (
-          <p class="overview-text">{para}</p>
+  <section class="overview">
+    <div class="overview-main">
+      <span class="eyebrow" data-reveal>/ Overview</span>
+      <p class="overview-lead" data-reveal>{leadParagraph}</p>
+      {overviewRest.map((para) => (
+        <p class="overview-text" data-reveal>{para}</p>
+      ))}
+    </div>
+    <aside class="overview-side">
+      <div class="detail-block" data-reveal-stagger="60">
+        <span class="eyebrow">/ Deliverables</span>
+        {project.deliverables.map((item) => (
+          <span class="square-item">{item}</span>
         ))}
       </div>
-      <div class="overview-right">
-        <div class="detail-block">
-          <span class="detail-block-label">/ Deliverables</span>
-          <ul class="detail-list">
-            {project.deliverables.map((item) => (
-              <li>{item}</li>
-            ))}
-          </ul>
-        </div>
-        <div class="detail-block">
-          <span class="detail-block-label">/ Role</span>
-          <ul class="detail-list">
-            <li>{project.role}</li>
-            <li>{project.context}</li>
-            <li>{project.status}</li>
-          </ul>
-        </div>
+      <div class="detail-block" data-reveal-stagger="60">
+        <span class="eyebrow">/ Role</span>
+        <span class="square-item">{project.role}</span>
+        <span class="square-item">{project.context}</span>
+        <span class="square-item">{project.status}</span>
       </div>
-    </div>
+    </aside>
   </section>
 
   <!-- The problem -->
   <section class="case-section">
-    <div class="case-header">
-      <span class="section-label">/ The problem</span>
-      <h2 class="case-heading">What made this hard</h2>
-    </div>
-    <div class="case-body">
+    <SectionHead eyebrow="/ The problem" align="left">What made this hard.</SectionHead>
+    <div class="case-body" data-reveal-stagger="120">
       {project.challenge.map((para) => (
         <p>{para}</p>
       ))}
@@ -79,14 +73,16 @@ const { project } = Astro.props;
   </section>
 
   <!-- Approach -->
-  <section class="case-section case-section-gray">
-    <div class="case-header">
-      <span class="section-label">/ Approach</span>
-      <h2 class="case-heading">How it was built</h2>
-    </div>
-    <div class="approach-grid">
+  <section class="case-section">
+    <SectionHead eyebrow="/ Approach" align="left">How it was built.</SectionHead>
+    <div class="approach-grid" data-reveal-stagger="100">
       {project.approach.map((step, i) => (
-        <div class="approach-card">
+        <div class="approach-cell">
+          <span class="approach-meter" aria-hidden="true">
+            {project.approach.map((_, j) => (
+              <i class:list={[{ on: j <= i }]} style={`--j:${j}`}></i>
+            ))}
+          </span>
           <span class="approach-number">/ {String(i + 1).padStart(2, '0')}</span>
           <h3 class="approach-title">{step.title}</h3>
           <p class="approach-body">{step.body}</p>
@@ -97,14 +93,231 @@ const { project } = Astro.props;
 
   <!-- Stack -->
   <section class="case-section">
-    <div class="case-header">
-      <span class="section-label">/ Stack</span>
-      <h2 class="case-heading">What it runs on</h2>
-    </div>
-    <div class="case-chips">
+    <SectionHead eyebrow="/ Stack" align="left">What it runs on.</SectionHead>
+    <div class="case-tags" data-reveal-stagger="45">
       {project.stack.map((tech) => (
-        <span class="case-chip">{tech}</span>
+        <span class="node-tag">{tech}</span>
       ))}
     </div>
   </section>
 </WorkLayout>
+
+<style>
+  /* Cover */
+  .project-cover {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .cover-img-wrap {
+    height: clamp(300px, 42vw, 640px);
+    overflow: hidden;
+  }
+
+  .cover-img-wrap :global(.cover-img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Overview */
+  .overview {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .overview-main {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: clamp(2.5rem, 5vw, 4.5rem) clamp(1.25rem, 3.5vw, 3.5rem);
+    border-right: 1px solid var(--line);
+  }
+
+  .overview-lead {
+    max-width: 30ch;
+    font-size: clamp(1.5rem, 2.6vw, 2.5rem);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    text-wrap: pretty;
+  }
+
+  .overview-text {
+    max-width: 62ch;
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--fg-soft);
+  }
+
+  .overview-side {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    padding: clamp(2.5rem, 5vw, 4.5rem) clamp(1.25rem, 3.5vw, 3.5rem);
+  }
+
+  .detail-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.55rem;
+  }
+
+  .detail-block .eyebrow {
+    margin-bottom: 0.5rem;
+  }
+
+  .square-item {
+    position: relative;
+    padding-left: 1.1rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.6;
+    color: var(--fg-soft);
+  }
+
+  .square-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 5px;
+    height: 5px;
+    background-color: var(--px-orange);
+  }
+
+  /* Case sections */
+  .case-section {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .case-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: calc(68ch + 7rem);
+    padding: clamp(2.25rem, 4vw, 3.5rem) clamp(1.25rem, 3.5vw, 3.5rem) clamp(3rem, 5vw, 4.5rem);
+  }
+
+  .case-body p {
+    max-width: 68ch;
+    font-size: 1.1875rem;
+    line-height: 1.7;
+    color: var(--fg-soft);
+  }
+
+  .case-body p:first-child {
+    color: var(--fg);
+  }
+
+  .approach-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .approach-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 2rem clamp(1.25rem, 3.5vw, 3.5rem) 2.75rem;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .approach-cell:nth-child(2n) {
+    border-right: none;
+  }
+
+  .approach-cell:nth-last-child(-n + 2):nth-child(odd),
+  .approach-cell:last-child {
+    border-bottom: none;
+  }
+
+  .approach-meter {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 0.75rem;
+  }
+
+  .approach-meter i {
+    width: 12px;
+    height: 12px;
+    background-color: #222226;
+    transition: background-color 0.2s steps(1);
+    transition-delay: calc(var(--delay, 0s) + 350ms + var(--j) * 120ms);
+  }
+
+  .approach-meter i.on:nth-child(4n + 1) { background-color: var(--px-yellow); }
+  .approach-meter i.on:nth-child(4n + 2) { background-color: var(--px-amber); }
+  .approach-meter i.on:nth-child(4n + 3) { background-color: var(--px-orange); }
+  .approach-meter i.on:nth-child(4n + 4) { background-color: var(--px-red); }
+
+  :global(html.js-motion) .approach-grid:not(.is-in) .approach-meter i {
+    background-color: #222226;
+  }
+
+  .approach-number {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--dim);
+  }
+
+  .approach-title {
+    font-size: clamp(1.375rem, 2vw, 1.875rem);
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+  }
+
+  .approach-body {
+    max-width: 56ch;
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  .case-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    padding: clamp(2.25rem, 4vw, 3.5rem) clamp(1.25rem, 3.5vw, 3.5rem) clamp(3rem, 5vw, 4.5rem);
+  }
+
+  .case-tags :global(.node-tag) {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.9rem;
+  }
+
+  @media (max-width: 900px) {
+    .overview {
+      grid-template-columns: 1fr;
+    }
+
+    .overview-main {
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .approach-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .approach-cell,
+    .approach-cell:nth-child(2n) {
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .approach-cell:nth-last-child(-n + 2):nth-child(odd) {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .approach-cell:last-child {
+      border-bottom: none;
+    }
+  }
+</style>

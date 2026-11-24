@@ -6,12 +6,12 @@ const { title } = Astro.props;
 ---
 
 <div class="share-section">
-  <span class="share-label">/ SHARE</span>
+  <span class="eyebrow">/ Share</span>
   <div class="share-buttons">
     <a id="share-x" href="#" target="_blank" rel="noopener" class="share-btn">X</a>
     <a id="share-linkedin" href="#" target="_blank" rel="noopener" class="share-btn">LinkedIn</a>
     <a id="share-reddit" href="#" target="_blank" rel="noopener" class="share-btn">Reddit</a>
-    <button id="share-copy" class="share-btn" data-title={title}>Copy link</button>
+    <button id="share-copy" class="share-btn" type="button" data-title={title}>Copy link</button>
   </div>
 </div>
 
@@ -32,56 +32,43 @@ const { title } = Astro.props;
   copyBtn?.addEventListener('click', async () => {
     await navigator.clipboard.writeText(window.location.href);
     copyBtn.textContent = 'Copied!';
-    setTimeout(() => { copyBtn.textContent = 'Copy link'; }, 2000);
+    setTimeout(() => {
+      copyBtn.textContent = 'Copy link';
+    }, 2000);
   });
 </script>
 
 <style>
   .share-section {
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding-top: 2.5rem;
-    margin-top: 2.5rem;
-    border-top: 1px solid var(--line);
-    flex-wrap: wrap;
-  }
-
-  .share-label {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--muted);
-    white-space: nowrap;
+    flex-direction: column;
+    gap: 0.75rem;
   }
 
   .share-buttons {
     display: flex;
-    gap: 0.375rem;
     flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
   .share-btn {
     display: inline-flex;
     align-items: center;
-    padding: 0.3rem 0.875rem;
+    padding: 0.5rem 0.8rem;
     border: 1px solid var(--line-strong);
     border-radius: var(--radius);
+    background-color: var(--bg-card);
     font-family: var(--font-sans);
     font-size: 0.9375rem;
-    font-weight: 400;
+    font-weight: 500;
     line-height: 1.2;
-    background: none;
-    cursor: pointer;
-    text-decoration: none;
     color: var(--fg);
-    transition: background-color 0.2s, color 0.2s;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
   }
 
   .share-btn:hover {
     background-color: var(--bg-hover);
-    border-color: #4a4a52;
+    border-color: var(--px-orange);
   }
 </style>

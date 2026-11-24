@@ -38,100 +38,113 @@ const {
 } = Astro.props;
 
 const icon = slug ? projectIcon[slug] : undefined;
+const nextIcon = nextProject ? projectIcon[nextProject.href.split('/').pop() ?? ''] : undefined;
+
+/* Only values that start with a number (optionally after a symbol) count up — "R15" and
+   "Metal" stay as they are. */
+const countable = (value: string) => /^[^A-Za-z\d]*\d/.test(value);
+
+const meta = [
+  { label: 'Type', value: type },
+  { label: 'Context', value: context },
+  { label: 'Date', value: date },
+  { label: 'Role', value: role },
+];
 ---
 
-<Layout title={`${title} — Ali Siddique`} description={metaDescription} ogType="website">
-  <Header />
+<Layout title={`${title} — Salinash Studio`} description={metaDescription} ogType="website">
+  <Header activePage="work" />
 
-  <!-- Back nav bar -->
-  <div class="project-back-bar">
-    <a href="/#work" class="back-link">
-      <PixelArt name="chev" scale={2} class="chev chev-back" />
-      Work
-    </a>
-    <span class="project-index">/ {number}</span>
-  </div>
-
-  <!-- Project hero -->
-  <section class="project-hero">
-    <div class="project-kicker">
-      {icon && <PixelArt name={icon} scale={5} />}
-      {status && <span class="project-status">{status}</span>}
-    </div>
-    <h1 class="project-title">{title}</h1>
-    {subtitle && <p class="project-subtitle">{subtitle}</p>}
-    {headline && <p class="project-headline">{headline}</p>}
-    <div class="project-meta-bar">
-      <div class="meta-col">
-        <span class="meta-label">Type</span>
-        <span class="meta-value">{type}</span>
-      </div>
-      <div class="meta-col">
-        <span class="meta-label">Context</span>
-        <span class="meta-value">{context}</span>
-      </div>
-      <div class="meta-col">
-        <span class="meta-label">Date</span>
-        <span class="meta-value">{date}</span>
-      </div>
-      <div class="meta-col">
-        <span class="meta-label">Role</span>
-        <span class="meta-value">{role}</span>
-      </div>
-    </div>
-  </section>
-
-  {results.length > 0 && (
-    <section class="results-band">
-      <span class="results-label">/ Outcomes</span>
-      <div class="results-grid">
-        {results.map((r) => (
-          <div class="result-cell">
-            <span class="result-value">{r.value}</span>
-            <span class="result-label">{r.label}</span>
-          </div>
-        ))}
-      </div>
-    </section>
-  )}
-
-  <!-- Page content from child -->
-  <slot />
-
-  <!-- Next project -->
-  {nextProject && (
-    <section class="next-project-section">
-      <a href={nextProject.href} class="next-project-link">
-        <span class="next-label">/ Next Project</span>
-        <span class="next-title">{nextProject.title}</span>
-        <span class="next-arrow"><PixelArt name="arrow" scale={5} /></span>
+  <main>
+    <!-- Back bar -->
+    <div class="back-bar">
+      <a href="/#work" class="back-link">
+        <PixelArt name="chev" scale={2} class="chev chev-back" />
+        Work
       </a>
+      <span class="back-meta">Case study / {number}</span>
+    </div>
+
+    <!-- Hero -->
+    <section class="project-hero">
+      <div class="project-kicker" data-reveal>
+        {icon && <PixelArt name={icon} scale={6} />}
+        {status && <span class="project-status">{status}</span>}
+      </div>
+      <h1 class="project-title" data-reveal="wipe">{title}</h1>
+      <div class="project-intro">
+        {subtitle && <p class="project-subtitle" data-reveal>{subtitle}</p>}
+        {headline && (
+          <p class="project-headline" data-reveal style="--delay:200ms">
+            {headline}
+          </p>
+        )}
+      </div>
     </section>
-  )}
+
+    <dl class="meta-bar" data-reveal-stagger="80">
+      {meta.map((m) => (
+        <div class="meta-cell">
+          <dt>{m.label}</dt>
+          <dd>{m.value}</dd>
+        </div>
+      ))}
+    </dl>
+
+    {results.length > 0 && (
+      <section class="results-band" aria-label="Outcomes">
+        <span class="results-label" data-reveal>/ Outcomes</span>
+        <div class="results-grid" data-reveal-stagger="100">
+          {results.map((r) => (
+            <div class="result-cell">
+              <span class="result-value" data-count={countable(r.value) ? '' : undefined}>{r.value}</span>
+              <span class="result-label">{r.label}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <slot />
+
+    {nextProject && (
+      <section class="next-project" aria-label="Next project">
+        <a href={nextProject.href} class="next-link" data-reveal>
+          <span class="eyebrow next-eyebrow">/ Next project</span>
+          <span class="next-row">
+            {nextIcon && <PixelArt name={nextIcon} scale={6} class="next-icon" />}
+            <span class="next-title">{nextProject.title}</span>
+            <span class="next-arrow"><PixelArt name="arrow" scale={6} /></span>
+          </span>
+        </a>
+      </section>
+    )}
+  </main>
 
   <Footer />
 </Layout>
 
 <style>
-  /* Back nav */
-  .project-back-bar {
+  /* Back bar */
+  .back-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem 1.25rem;
+    padding: 0.75rem clamp(1.25rem, 3.5vw, 3.5rem);
     border-bottom: 1px solid var(--line);
   }
 
   .back-link {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--fg);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.75rem;
     border: 1px solid var(--line-strong);
     border-radius: var(--radius);
-    padding: 0.45rem 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
     transition: background-color 0.2s, border-color 0.2s;
   }
 
@@ -140,89 +153,116 @@ const icon = slug ? projectIcon[slug] : undefined;
     border-color: #4a4a52;
   }
 
-  .back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
   .back-link :global(.chev-back) {
     transform: rotate(180deg);
+  }
+
+  .back-meta {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  /* Hero */
+  .project-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    padding: clamp(3rem, 6vw, 5.5rem) clamp(1.25rem, 3.5vw, 3.5rem) clamp(2.5rem, 4vw, 3.5rem);
   }
 
   .project-kicker {
     display: flex;
     align-items: center;
     gap: 1.25rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .project-kicker .project-status {
-    margin-bottom: 0;
-  }
-
-  .project-index {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--muted);
-  }
-
-  /* Hero */
-  .project-hero {
-    padding: 3rem 1.25rem 0;
-    border-bottom: 1px solid var(--line);
   }
 
   .project-status {
-    display: inline-block;
     font-family: var(--font-mono);
     font-size: 0.6875rem;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     background-color: var(--px-amber);
     color: var(--bg);
-    padding: 0.4rem 0.7rem;
-    margin-bottom: 1.25rem;
+    padding: 0.45rem 0.7rem;
   }
 
   .project-title {
-    font-family: var(--font-sans);
-    font-size: clamp(3rem, 9vw, 8.5rem);
+    font-size: clamp(3.25rem, 11vw, 11rem);
     font-weight: 500;
-    line-height: 0.95;
-    letter-spacing: -0.045em;
+    line-height: 0.88;
+    letter-spacing: -0.055em;
+  }
+
+  .project-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 0.6fr) minmax(0, 1.4fr);
+    gap: 1.5rem 3rem;
+    align-items: start;
   }
 
   .project-subtitle {
+    padding-top: 0.6rem;
     font-family: var(--font-mono);
     font-size: 0.8125rem;
-    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     color: var(--muted);
-    margin-top: 0.875rem;
   }
 
   .project-headline {
-    font-family: var(--font-sans);
-    font-size: clamp(1.25rem, 2.4vw, 1.875rem);
-    font-weight: 400;
+    grid-column: 2;
+    max-width: 34ch;
+    font-size: clamp(1.5rem, 2.8vw, 2.625rem);
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+    text-wrap: pretty;
+  }
+
+  /* Meta bar */
+  .meta-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .meta-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.25rem clamp(1.25rem, 3.5vw, 3.5rem) 1.5rem;
+    border-right: 1px solid var(--line);
+  }
+
+  .meta-cell:last-child {
+    border-right: none;
+  }
+
+  .meta-cell dt {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .meta-cell dd {
+    font-size: 1.0625rem;
+    font-weight: 500;
     line-height: 1.35;
     letter-spacing: -0.01em;
-    color: var(--fg);
-    max-width: 44ch;
-    margin-top: 1.75rem;
   }
 
   /* Results band */
   .results-band {
     background-color: var(--px-crimson);
     color: #ffffff;
-    padding: 2.5rem 1.25rem;
+    padding: 2.5rem clamp(1.25rem, 3.5vw, 3.5rem) 3rem;
   }
 
   .results-label {
@@ -231,22 +271,22 @@ const icon = slug ? projectIcon[slug] : undefined;
     font-size: 0.6875rem;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     color: rgba(255, 255, 255, 0.8);
     margin-bottom: 1.75rem;
   }
 
   .results-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     border-top: 1px solid rgba(255, 255, 255, 0.28);
   }
 
   .result-cell {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 1.5rem 1.25rem 0 0;
+    gap: 0.75rem;
+    padding: 1.75rem 1.5rem 0 0;
     border-right: 1px solid rgba(255, 255, 255, 0.28);
   }
 
@@ -255,15 +295,14 @@ const icon = slug ? projectIcon[slug] : undefined;
   }
 
   .result-cell:not(:first-child) {
-    padding-left: 1.25rem;
+    padding-left: 1.5rem;
   }
 
   .result-value {
-    font-family: var(--font-sans);
-    font-size: clamp(1.75rem, 3.2vw, 2.75rem);
+    font-size: clamp(2.5rem, 5.4vw, 5.5rem);
     font-weight: 500;
-    line-height: 1;
-    letter-spacing: -0.02em;
+    line-height: 0.9;
+    letter-spacing: -0.05em;
   }
 
   .result-label {
@@ -271,405 +310,102 @@ const icon = slug ? projectIcon[slug] : undefined;
     font-size: 0.6875rem;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 0.07em;
     line-height: 1.5;
-  }
-
-  .project-meta-bar {
-    display: flex;
-    border-top: 1px solid var(--line);
-    margin-top: 2.5rem;
-  }
-
-  .meta-col {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    padding: 0.875rem 1rem;
-    border-right: 1px solid var(--line);
-  }
-
-  .meta-col:last-child {
-    border-right: none;
-  }
-
-  .meta-label {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--muted);
-  }
-
-  .meta-value {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--fg);
+    color: rgba(255, 255, 255, 0.85);
   }
 
   /* Next project */
-  .next-project-section {
+  .next-project {
     border-top: 1px solid var(--line);
   }
 
-  .next-project-link {
+  .next-link {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 2rem 1.25rem;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: clamp(2.5rem, 5vw, 4rem) clamp(1.25rem, 3.5vw, 3.5rem);
     transition: background-color 0.25s, color 0.25s;
-    text-decoration: none;
-    color: inherit;
-    gap: 1rem;
   }
 
-  .next-project-link:hover {
+  .next-row {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 2.5vw, 2rem);
+  }
+
+  .next-title {
+    flex: 1;
+    font-size: clamp(2.5rem, 7.5vw, 7.5rem);
+    font-weight: 500;
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+  }
+
+  .next-arrow {
+    display: inline-flex;
+    transition: transform 0.25s;
+  }
+
+  .next-link:hover {
     background-color: var(--px-orange);
     color: var(--bg);
   }
 
-  .next-label {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    opacity: 0.5;
-    white-space: nowrap;
+  .next-link:hover .next-eyebrow {
+    color: var(--bg);
   }
 
-  .next-title {
-    font-family: var(--font-sans);
-    font-size: clamp(1.5rem, 4vw, 3rem);
-    font-weight: 500;
-    line-height: 1;
+  .next-link:hover .next-arrow {
+    transform: translateX(8px);
   }
 
-  .next-arrow {
-    font-size: clamp(1.5rem, 3vw, 2.5rem);
-    line-height: 1;
-    flex-shrink: 0;
-  }
-
-  /* Shared project content styles (applied globally for slot content) */
-  :global(.project-cover) {
-    border-bottom: 1px solid var(--line);
-  }
-
-  :global(.cover-img-wrap) {
-    height: clamp(230px, 34vw, 520px);
-    overflow: hidden;
-    background-color: var(--bg-raised);
-  }
-
-  :global(.cover-img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  :global(.project-overview) {
-    border-bottom: 1px solid var(--line);
-  }
-
-  :global(.overview-grid) {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  :global(.overview-left) {
-    padding: 2.5rem 1.5rem;
-    border-right: 1px solid var(--line);
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-  }
-
-  :global(.overview-right) {
-    padding: 2.5rem 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  :global(.section-label) {
-    display: block;
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--muted);
-    margin-bottom: 0.5rem;
-  }
-
-  :global(.overview-text) {
-    font-family: var(--font-sans);
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.65;
-    color: var(--fg);
-  }
-
-  :global(.detail-block) {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  :global(.detail-block-label) {
-    display: block;
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--muted);
-  }
-
-  :global(.detail-list) {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  :global(.detail-list li) {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--fg);
-    position: relative;
-    padding-left: 1rem;
-    line-height: 1.6;
-  }
-
-  :global(.detail-list li::before) {
-    content: "•";
-    position: absolute;
-    left: 0;
-    color: var(--muted);
-  }
-
-  /* Case study body — challenge, approach, stack */
-  :global(.case-section) {
-    padding: 4rem 1.25rem;
-    border-bottom: 1px solid var(--line);
-  }
-
-  :global(.case-section-gray) {
-    background-color: var(--bg-raised);
-  }
-
-  :global(.case-header) {
-    max-width: 800px;
-    margin-bottom: 2.5rem;
-  }
-
-  :global(.case-heading) {
-    font-family: var(--font-sans);
-    font-size: clamp(1.5rem, 3vw, 2.25rem);
-    font-weight: 500;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-    margin-top: 0.75rem;
-  }
-
-  :global(.case-body) {
-    display: flex;
-    flex-direction: column;
-    gap: 1.125rem;
-    max-width: 68ch;
-  }
-
-  :global(.case-body p) {
-    font-family: var(--font-sans);
-    font-size: 1.0625rem;
-    font-weight: 400;
-    line-height: 1.7;
-    color: var(--muted);
-  }
-
-  :global(.approach-grid) {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    border: 1px solid var(--line);
-    background-color: var(--bg);
-  }
-
-  :global(.approach-card) {
-    display: flex;
-    flex-direction: column;
-    gap: 0.625rem;
-    padding: 1.75rem 1.5rem;
-    border-right: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-  }
-
-  :global(.approach-card:nth-child(even)) {
-    border-right: none;
-  }
-
-  :global(.approach-card:nth-last-child(-n + 2):nth-child(odd)),
-  :global(.approach-card:last-child) {
-    border-bottom: none;
-  }
-
-  :global(.approach-number) {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    color: var(--muted);
-  }
-
-  :global(.approach-title) {
-    font-family: var(--font-sans);
-    font-size: 1.1875rem;
-    font-weight: 500;
-    line-height: 1.25;
-  }
-
-  :global(.approach-body) {
-    font-family: var(--font-sans);
-    font-size: 0.9375rem;
-    font-weight: 400;
-    line-height: 1.65;
-    color: var(--muted);
-  }
-
-  :global(.case-chips) {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-  }
-
-  :global(.case-chip) {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.03em;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 0.25rem 0.75rem;
-    background-color: var(--bg);
-    white-space: nowrap;
-  }
-
-  :global(.project-gallery) {
-    border-bottom: 1px solid var(--line);
-  }
-
-  :global(.gallery-label) {
-    padding: 1.25rem 1.5rem 0;
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--muted);
-    border-bottom: 1px solid var(--line);
-    padding-bottom: 1.25rem;
-  }
-
-  :global(.gallery-grid) {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  :global(.gallery-item) {
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-    background-color: var(--bg-raised);
-    border-right: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-  }
-
-  :global(.gallery-item:nth-child(even)) {
-    border-right: none;
-  }
-
-  :global(.gallery-item:nth-last-child(-n+2)) {
-    border-bottom: none;
-  }
-
-  :global(.gallery-img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.45s ease;
-  }
-
-  :global(.gallery-item:hover .gallery-img) {
-    transform: scale(1.03);
-  }
-
-  @media (max-width: 768px) {
-    :global(.approach-grid) {
+  @media (max-width: 900px) {
+    .project-intro {
       grid-template-columns: 1fr;
     }
 
-    :global(.approach-card),
-    :global(.approach-card:nth-child(even)) {
+    .project-headline {
+      grid-column: 1;
+    }
+
+    .meta-bar {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .meta-cell:nth-child(2n) {
       border-right: none;
+    }
+
+    .meta-cell:nth-child(-n + 2) {
       border-bottom: 1px solid var(--line);
-    }
-
-    :global(.approach-card:last-child) {
-      border-bottom: none;
-    }
-
-    :global(.overview-grid) {
-      grid-template-columns: 1fr;
-    }
-
-    :global(.overview-left) {
-      border-right: none;
-      border-bottom: 1px solid var(--line);
-    }
-
-    :global(.gallery-grid) {
-      grid-template-columns: 1fr;
-    }
-
-    :global(.gallery-item) {
-      border-right: none;
-      border-bottom: 1px solid var(--line);
-    }
-
-    :global(.gallery-item:last-child) {
-      border-bottom: none;
     }
   }
 
   @media (max-width: 640px) {
-    .project-meta-bar {
-      flex-wrap: wrap;
+    .results-grid {
+      grid-template-columns: 1fr;
     }
 
-    .meta-col {
-      flex: 1 1 45%;
-    }
-
-    .meta-col:nth-child(2) {
+    .result-cell,
+    .result-cell:not(:first-child) {
+      padding: 1.5rem 0;
       border-right: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.28);
     }
 
-    .meta-col:nth-child(1),
-    .meta-col:nth-child(2) {
-      border-bottom: 1px solid var(--line);
+    .result-cell:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .next-row :global(.next-icon) {
+      display: none;
+    }
+
+    .next-arrow :global(svg) {
+      width: 28px;
+      height: auto;
     }
   }
 </style>

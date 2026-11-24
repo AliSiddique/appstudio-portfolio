@@ -1,0 +1,172 @@
+---
+/** Headline metrics in giant type (counting up on scroll), with the outcomes row beneath. */
+import { metrics, outcomes } from '../../data/studio';
+
+const ramp = ['#ffd21f', '#ffaf02', '#ff8103', '#ff5228', '#d3290f', '#ffaf02'];
+---
+
+<div class="numbers-grid" data-reveal-stagger="90">
+  {metrics.map((m, i) => (
+    <div class="number" data-reveal-hook>
+      <span class="number-value" data-count>{m.value}</span>
+      <span class="number-label">
+        <i style={`background-color:${ramp[i]}`}></i>
+        {m.label}
+      </span>
+      <span class="number-detail">{m.detail}</span>
+    </div>
+  ))}
+</div>
+<div class="outcomes-grid" data-reveal-stagger="90">
+  {outcomes.map((o) => (
+    <div class="outcome" data-reveal-hook>
+      <span class="outcome-value" data-count>{o.value}</span>
+      <span class="outcome-label">{o.label}</span>
+      <span class="outcome-detail">{o.detail}</span>
+    </div>
+  ))}
+</div>
+
+<style>
+  .numbers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .number {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: clamp(2rem, 3.5vw, 3.25rem) clamp(1.25rem, 3vw, 3rem);
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .number:nth-child(3n) {
+    border-right: none;
+  }
+
+  .number-value {
+    font-size: clamp(3.5rem, 7.2vw, 8rem);
+    font-weight: 500;
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+    white-space: nowrap;
+  }
+
+  .number-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .number-label i {
+    width: 10px;
+    height: 10px;
+    animation: px-blink 1.4s steps(1) 3;
+    animation-delay: calc(var(--delay, 0s) + 0.6s);
+    animation-play-state: paused;
+  }
+
+  .number.is-in .number-label i {
+    animation-play-state: running;
+  }
+
+  .number-detail {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .outcomes-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .outcome {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.75rem clamp(1.25rem, 3vw, 3rem) 2.25rem;
+    border-right: 1px solid var(--line);
+  }
+
+  .outcome:last-child {
+    border-right: none;
+  }
+
+  .outcome-value {
+    font-size: clamp(2rem, 3.4vw, 3.5rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    color: var(--px-amber);
+  }
+
+  .outcome-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .outcome-detail {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  @media (max-width: 1100px) {
+    .numbers-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .number:nth-child(3n) {
+      border-right: 1px solid var(--line);
+    }
+
+    .number:nth-child(2n) {
+      border-right: none;
+    }
+
+    .outcomes-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .outcome:nth-child(2n) {
+      border-right: none;
+    }
+
+    .outcome:nth-child(-n + 2) {
+      border-bottom: 1px solid var(--line);
+    }
+  }
+
+  @media (max-width: 700px) {
+    .numbers-grid,
+    .outcomes-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .number,
+    .number:nth-child(3n),
+    .outcome,
+    .outcome:nth-child(2n) {
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .outcome:last-child {
+      border-bottom: none;
+    }
+
+    .number-value {
+      font-size: clamp(3.5rem, 18vw, 5rem);
+    }
+  }
+</style>

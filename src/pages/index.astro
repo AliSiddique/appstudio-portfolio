@@ -5,13 +5,13 @@ import Footer from '../components/Footer.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import PixelArt from '../components/PixelArt.astro';
 import CapabilityVisual from '../components/CapabilityVisual.astro';
+import SectionHead from '../components/sections/SectionHead.astro';
+import NumbersGrid from '../components/sections/NumbersGrid.astro';
+import ProcessGrid from '../components/sections/ProcessGrid.astro';
+import StackList from '../components/sections/StackList.astro';
 import {
   studio,
-  metrics,
-  outcomes,
   capabilities,
-  process,
-  stack,
   projects,
   credentials,
 } from '../data/studio';
@@ -44,7 +44,6 @@ const facts: { label: string; value: string; href?: string }[] = [
   { label: 'Credentials', value: credentials.slice(0, 3).map((c) => c.title).join(' · ') },
   { label: 'Contact', value: studio.email, href: `mailto:${studio.email}` },
 ];
-const ramp = ['#ffd21f', '#ffaf02', '#ff8103', '#ff5228', '#d3290f', '#ffaf02'];
 
 /* "Strings" graph: lit nodes are the disciplines, dim ones the work underneath them. */
 const strings: { label: string; icon?: SpriteName }[][] = [
@@ -116,16 +115,16 @@ const showcase = [
       </div>
 
       <div class="hero-stage">
-        <span class="eyebrow hero-eyebrow">{studio.name} · Independent product engineering · Est. {studio.founded}</span>
-        <h1 class="hero-title">
+        <span class="eyebrow hero-eyebrow" data-reveal>{studio.name} · Independent product engineering · Est. {studio.founded}</span>
+        <h1 class="hero-title" data-reveal="wipe">
           Salinash <PixelArt name="boat" scale={8} class="hero-boat" /> ships<br />
           whole products.
         </h1>
-        <p class="hero-lede">
+        <p class="hero-lede" data-reveal style="--delay:250ms">
           The product engineering studio of {studio.principal}, from GPU inference to App Store
           launch. One exit. Six iOS apps. £50K+ in product revenue.
         </p>
-        <div class="hero-actions">
+        <div class="hero-actions" data-reveal style="--delay:400ms">
           <a href="#work" class="hero-pill">
             <span class="hero-pill-icon"><PixelArt name="logo" scale={3} /></span>
             See the work
@@ -173,19 +172,19 @@ const showcase = [
 
     <!-- Studio -->
     <section class="studio" id="studio" aria-labelledby="studio-title">
-      <div class="studio-mark" aria-hidden="true" data-reveal>
+      <div class="studio-mark" aria-hidden="true" data-reveal-hook>
         <div class="studio-logo-wrap">
           <PixelArt name="logo" scale={40} class="studio-logo" />
         </div>
         <span class="studio-mark-caption">{studio.name} — Est. {studio.founded}</span>
       </div>
       <div class="studio-main">
-        <span class="eyebrow">/ The studio</span>
-        <h2 class="studio-statement" id="studio-title">
+        <span class="eyebrow" data-reveal>/ The studio</span>
+        <h2 class="studio-statement" id="studio-title" data-reveal="wipe">
           {studio.name} is a product studio that ships whole products —
           <span class="studio-dim">architecture, infrastructure, interface, launch and growth.</span>
         </h2>
-        <dl class="studio-facts">
+        <dl class="studio-facts" data-reveal-stagger="80">
           {facts.map((f) => (
             <div class="fact">
               <dt>{f.label}</dt>
@@ -193,7 +192,7 @@ const showcase = [
             </div>
           ))}
         </dl>
-        <div class="studio-actions">
+        <div class="studio-actions" data-reveal>
           <a href="/about" class="btn">
             About the studio
             <PixelArt name="chev" scale={2} class="chev" />
@@ -208,33 +207,10 @@ const showcase = [
 
     <!-- Numbers -->
     <section class="numbers" aria-labelledby="numbers-title">
-      <div class="numbers-head">
-        <span class="eyebrow">/ The studio in numbers</span>
-        <h2 class="statement numbers-title" id="numbers-title">
-          Three years of independent practice,<br /> measured by what shipped.
-        </h2>
-      </div>
-      <div class="numbers-grid">
-        {metrics.map((m, i) => (
-          <div class="number">
-            <span class="number-value">{m.value}</span>
-            <span class="number-label">
-              <i style={`background-color:${ramp[i]}`}></i>
-              {m.label}
-            </span>
-            <span class="number-detail">{m.detail}</span>
-          </div>
-        ))}
-      </div>
-      <div class="outcomes-grid">
-        {outcomes.map((o) => (
-          <div class="outcome">
-            <span class="outcome-value">{o.value}</span>
-            <span class="outcome-label">{o.label}</span>
-            <span class="outcome-detail">{o.detail}</span>
-          </div>
-        ))}
-      </div>
+      <SectionHead eyebrow="/ The studio in numbers" id="numbers-title">
+        Three years of independent practice,<br /> measured by what shipped.
+      </SectionHead>
+      <NumbersGrid />
     </section>
 
     <!-- Strings -->
@@ -252,6 +228,7 @@ const showcase = [
 
       <h2
         class="statement strings-title"
+        data-reveal="wipe"
         aria-label={`One studio, every layer of your ${typedWords.join(' ').replace(/\./g, ',').replace(/,$/, '.')}`}
       >
         <span aria-hidden="true">One studio, every layer<br /> of your </span><span
@@ -263,7 +240,7 @@ const showcase = [
 
       <div class="strings-graph" aria-label="What the studio covers">
         {strings.map((row) => (
-          <div class="strings-row">
+          <div class="strings-row" data-reveal-stagger="90">
             {row.map((node, n) => (
               <>
                 {n > 0 && <i class="wire" aria-hidden="true"></i>}
@@ -280,9 +257,9 @@ const showcase = [
 
     <!-- Capabilities -->
     <section class="layers" aria-labelledby="layers-title">
-      <h2 class="statement layers-title" id="layers-title">
+      <SectionHead id="layers-title">
         Salinash builds every layer<br /> your product runs on.
-      </h2>
+      </SectionHead>
 
       <div class="layers-body">
         <aside class="layers-aside">
@@ -301,7 +278,7 @@ const showcase = [
             const cap = capabilities[i];
             return (
               <article class="layer" id={`layer-${l.id}`} data-layer={l.id}>
-                <div class="layer-text">
+                <div class="layer-text" data-reveal-stagger="80">
                   <span class="eyebrow">/ {cap.number} — {cap.title}</span>
                   <h3 class="layer-heading">{l.heading}</h3>
                   <p class="layer-body">{cap.summary}</p>
@@ -319,7 +296,7 @@ const showcase = [
                     ))}
                   </div>
                 </div>
-                <div class="layer-visual">
+                <div class="layer-visual" data-reveal style="--delay:150ms">
                   <CapabilityVisual variant={l.id} />
                 </div>
               </article>
@@ -332,15 +309,15 @@ const showcase = [
     <!-- Showcase -->
     <section class="showcase" aria-labelledby="showcase-title">
       <div class="showcase-head">
-        <h2 class="statement showcase-title" id="showcase-title">See the work in production.</h2>
-        <a href="#work" class="btn">
+        <h2 class="statement showcase-title" id="showcase-title" data-reveal="wipe">See the work in production.</h2>
+        <a href="#work" class="btn" data-reveal>
           All case studies
           <PixelArt name="chev" scale={2} class="chev" />
         </a>
       </div>
 
       <div class="showcase-body" data-showcase>
-        <div class="showcase-tabs" role="tablist" aria-label="Featured case studies" aria-orientation="vertical">
+        <div class="showcase-tabs" data-reveal-stagger="80" role="tablist" aria-label="Featured case studies" aria-orientation="vertical">
           {showcase.map((s, i) => (
             <button
               type="button"
@@ -361,7 +338,7 @@ const showcase = [
           ))}
         </div>
 
-        <div class="showcase-slides">
+        <div class="showcase-slides" data-reveal style="--delay:200ms">
           {showcase.map((s, i) => {
             const [lead, ...rest] = s.project.results;
             return (
@@ -410,13 +387,13 @@ const showcase = [
     <!-- All work -->
     <section class="work" id="work" aria-labelledby="work-title">
       <div class="work-head">
-        <h2 class="work-title" id="work-title">Selected work</h2>
-        <p class="work-sub">
+        <h2 class="work-title" id="work-title" data-reveal="wipe">Selected work</h2>
+        <p class="work-sub" data-reveal style="--delay:200ms">
           {projects.length} case studies — ML infrastructure, iOS and graphics, cloud platforms and
           products taken to exit.
         </p>
       </div>
-      <div class="work-grid">
+      <div class="work-grid" data-reveal-stagger="90">
         {projects.map((project) => (
           <ProjectCard
             slug={project.slug}
@@ -437,46 +414,19 @@ const showcase = [
 
     <!-- Process -->
     <section class="process" aria-labelledby="process-title">
-      <div class="process-head">
-        <span class="eyebrow">/ How an engagement runs</span>
-        <h2 class="statement process-title" id="process-title">
-          Architecture first, a vertical slice second, and a launch that is measured.
-        </h2>
-      </div>
-      <ol class="process-grid">
-        {process.map((step, i) => (
-          <li class="process-cell">
-            <span class="process-meter" aria-hidden="true">
-              {process.map((_, j) => (
-                <i class:list={[{ on: j <= i }]}></i>
-              ))}
-            </span>
-            <span class="process-num">{step.number}</span>
-            <h3 class="process-step">{step.title}</h3>
-            <p class="process-body">{step.body}</p>
-          </li>
-        ))}
-      </ol>
+      <SectionHead eyebrow="/ How an engagement runs" id="process-title">
+        Architecture first, a vertical slice second, and a launch that is measured.
+      </SectionHead>
+      <ProcessGrid />
     </section>
 
     <!-- Stack -->
     <section class="stack-section" aria-labelledby="stack-title">
       <div class="stack-head">
-        <span class="eyebrow">/ Stack</span>
-        <h2 class="stack-title" id="stack-title">What the work runs on.</h2>
+        <span class="eyebrow" data-reveal>/ Stack</span>
+        <h2 class="stack-title" id="stack-title" data-reveal="wipe">What the work runs on.</h2>
       </div>
-      <div class="stack-list">
-        {stack.map((group) => (
-          <div class="stack-row">
-            <span class="stack-label">{group.label}</span>
-            <div class="stack-tags">
-              {group.items.map((item) => (
-                <span class="node-tag">{item}</span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
+      <StackList />
     </section>
   </main>
 
@@ -519,22 +469,6 @@ const showcase = [
     });
     io.observe(typed);
   }
-
-  /* Studio mark builds itself when it scrolls into view */
-  const reveal = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        entry.target.classList.add('is-in');
-        reveal.unobserve(entry.target);
-      }
-    },
-    { threshold: 0.35 }
-  );
-  document.querySelectorAll('[data-reveal]').forEach((el) => {
-    el.classList.add('reveal-armed');
-    reveal.observe(el);
-  });
 
   /* Capability tabs follow the panel in view */
   const tabs = Array.from(document.querySelectorAll<HTMLElement>('[data-layer-tab]'));
@@ -715,6 +649,37 @@ const showcase = [
     margin: 0 0.04em;
   }
 
+  /* The boat rocks; the robot hops now and then */
+  .hero-title :global(.hero-boat) {
+    transform-origin: 50% 90%;
+    animation: rock 3.8s ease-in-out infinite;
+  }
+
+  @keyframes rock {
+    0%, 100% { transform: rotate(-4deg) translateY(0); }
+    50% { transform: rotate(4deg) translateY(-0.04em); }
+  }
+
+  .blk :global(.blk-sprite) {
+    animation: hop 5s steps(1) 1.6s infinite;
+  }
+
+  @keyframes hop {
+    0%, 88%, 100% { translate: 0 0; }
+    90% { translate: 0 -10px; }
+    92% { translate: 0 -16px; }
+    94% { translate: 0 -10px; }
+    96% { translate: 0 -3px; }
+  }
+
+  .floor :global(.floor-rack) {
+    animation: px-bob 3.4s steps(4) infinite;
+  }
+
+  .floor :global(.floor-phone) {
+    animation: px-bob 2.8s steps(4) 0.6s infinite;
+  }
+
   .hero-pill {
     display: inline-flex;
     align-items: center;
@@ -874,7 +839,7 @@ const showcase = [
   }
 
   /* Hidden only once the script has armed the reveal, so the mark shows without JS */
-  .studio-mark.reveal-armed:not(.is-in) :global(.studio-logo rect) {
+  :global(html.js-motion) .studio-mark:not(.is-in) :global(.studio-logo rect) {
     opacity: 0;
     transform: translateY(-0.6px);
   }
@@ -958,107 +923,6 @@ const showcase = [
     margin-left: 0;
   }
 
-  /* ---------- Numbers ---------- */
-  .numbers {
-    border-bottom: 1px solid var(--line);
-  }
-
-  .numbers-head {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-    padding: clamp(4.5rem, 9vw, 7.5rem) 1.25rem clamp(3.5rem, 6vw, 5rem);
-    text-align: center;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .numbers-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .number {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: clamp(2rem, 3.5vw, 3.25rem) clamp(1.25rem, 3vw, 3rem);
-    border-right: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-  }
-
-  .number:nth-child(3n) {
-    border-right: none;
-  }
-
-  .number-value {
-    font-size: clamp(3.5rem, 7.2vw, 8rem);
-    font-weight: 500;
-    line-height: 0.9;
-    letter-spacing: -0.06em;
-    white-space: nowrap;
-  }
-
-  .number-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    margin-top: 0.75rem;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .number-label i {
-    width: 10px;
-    height: 10px;
-  }
-
-  .number-detail {
-    font-size: 0.9375rem;
-    line-height: 1.5;
-    color: var(--muted);
-  }
-
-  .outcomes-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .outcome {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 1.75rem clamp(1.25rem, 3vw, 3rem) 2.25rem;
-    border-right: 1px solid var(--line);
-  }
-
-  .outcome:last-child {
-    border-right: none;
-  }
-
-  .outcome-value {
-    font-size: clamp(2rem, 3.4vw, 3.5rem);
-    font-weight: 500;
-    line-height: 1;
-    letter-spacing: -0.05em;
-    color: var(--px-amber);
-  }
-
-  .outcome-label {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .outcome-detail {
-    font-size: 0.875rem;
-    line-height: 1.5;
-    color: var(--muted);
-  }
-
   /* ---------- Strings ---------- */
   .strings {
     position: relative;
@@ -1124,7 +988,18 @@ const showcase = [
   .wire {
     width: clamp(1.5rem, 4vw, 3.5rem);
     height: 1px;
-    background-color: var(--line-strong);
+    background: linear-gradient(90deg, var(--line-strong) 0 40%, var(--px-orange) 50%, var(--line-strong) 60% 100%);
+    background-size: 300% 100%;
+    animation: wire-pulse 2.6s linear infinite;
+  }
+
+  .strings-row:nth-child(2) .wire { animation-delay: 0.6s; }
+  .strings-row:nth-child(3) .wire { animation-delay: 1.2s; }
+  .strings-row:nth-child(4) .wire { animation-delay: 1.8s; }
+
+  @keyframes wire-pulse {
+    from { background-position: 100% 0; }
+    to { background-position: 0 0; }
   }
 
   .string-node {
@@ -1172,6 +1047,19 @@ const showcase = [
     background-color: var(--fg);
   }
 
+  .string-node.lit::after {
+    animation: px-blink 2.2s steps(1) infinite;
+  }
+
+  .string-node.lit {
+    transition: border-color 0.3s, background-color 0.3s;
+  }
+
+  .string-node:hover {
+    border-color: var(--px-orange);
+    color: var(--fg);
+  }
+
   .string-node :global(svg) {
     width: 1.1em;
     height: auto;
@@ -1179,13 +1067,6 @@ const showcase = [
 
   /* ---------- Capability layers ---------- */
   .layers {
-    border-bottom: 1px solid var(--line);
-  }
-
-  .layers-title {
-    font-size: clamp(2.5rem, 5.6vw, 6rem);
-    padding: clamp(4.5rem, 9vw, 7.5rem) 1.25rem clamp(4rem, 8vw, 6.5rem);
-    text-align: center;
     border-bottom: 1px solid var(--line);
   }
 
@@ -1583,81 +1464,6 @@ const showcase = [
     border-bottom: none;
   }
 
-  /* ---------- Process ---------- */
-  .process {
-    border-bottom: 1px solid var(--line);
-  }
-
-  .process-head {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-    padding: clamp(4.5rem, 9vw, 7rem) 1.25rem clamp(3.5rem, 6vw, 5rem);
-    text-align: center;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .process-title {
-    max-width: 22ch;
-    font-size: clamp(2.25rem, 5vw, 5.25rem);
-  }
-
-  .process-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    list-style: none;
-  }
-
-  .process-cell {
-    display: flex;
-    flex-direction: column;
-    gap: 0.875rem;
-    padding: 2rem clamp(1.25rem, 2.5vw, 2.25rem) 2.75rem;
-    border-right: 1px solid var(--line);
-  }
-
-  .process-cell:last-child {
-    border-right: none;
-  }
-
-  .process-meter {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 1rem;
-  }
-
-  .process-meter i {
-    width: 14px;
-    height: 14px;
-    background-color: #222226;
-  }
-
-  .process-meter i.on:nth-child(1) { background-color: var(--px-yellow); }
-  .process-meter i.on:nth-child(2) { background-color: var(--px-amber); }
-  .process-meter i.on:nth-child(3) { background-color: var(--px-orange); }
-  .process-meter i.on:nth-child(4) { background-color: var(--px-red); }
-
-  .process-num {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
-    color: var(--dim);
-  }
-
-  .process-step {
-    font-size: 1.5rem;
-    font-weight: 500;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-  }
-
-  .process-body {
-    font-size: 0.9375rem;
-    line-height: 1.6;
-    color: var(--muted);
-  }
-
   /* ---------- Stack ---------- */
   .stack-section {
     display: grid;
@@ -1679,34 +1485,6 @@ const showcase = [
     letter-spacing: -0.03em;
   }
 
-  .stack-row {
-    display: grid;
-    grid-template-columns: 180px 1fr;
-    gap: 1.5rem;
-    align-items: start;
-    padding: 1.4rem clamp(1.25rem, 3vw, 3.5rem);
-    border-bottom: 1px solid var(--line);
-  }
-
-  .stack-row:last-child {
-    border-bottom: none;
-  }
-
-  .stack-label {
-    padding-top: 0.4rem;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--muted);
-  }
-
-  .stack-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem 0.9rem;
-  }
-
   /* ---------- Responsive ---------- */
   @media (max-width: 1100px) {
     .studio {
@@ -1724,30 +1502,6 @@ const showcase = [
       width: min(40%, 220px);
     }
 
-    .numbers-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .number:nth-child(3n) {
-      border-right: 1px solid var(--line);
-    }
-
-    .number:nth-child(2n) {
-      border-right: none;
-    }
-
-    .outcomes-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .outcome:nth-child(2n) {
-      border-right: none;
-    }
-
-    .outcome:nth-child(-n + 2) {
-      border-bottom: 1px solid var(--line);
-    }
-
     .layer {
       grid-template-columns: 1fr;
       align-items: start;
@@ -1759,18 +1513,6 @@ const showcase = [
 
     .slide-quote {
       min-height: 0;
-    }
-
-    .process-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .process-cell:nth-child(2n) {
-      border-right: none;
-    }
-
-    .process-cell:nth-child(-n + 2) {
-      border-bottom: 1px solid var(--line);
     }
 
     .stack-section {
@@ -1867,27 +1609,6 @@ const showcase = [
       gap: 0.35rem;
     }
 
-    .numbers-grid,
-    .outcomes-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .number,
-    .number:nth-child(3n),
-    .outcome,
-    .outcome:nth-child(2n) {
-      border-right: none;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .outcome:last-child {
-      border-bottom: none;
-    }
-
-    .number-value {
-      font-size: clamp(3.5rem, 18vw, 5rem);
-    }
-
     .work-grid {
       grid-template-columns: 1fr;
     }
@@ -1927,26 +1648,6 @@ const showcase = [
 
     .slide-stat {
       padding: 1.5rem;
-    }
-
-    .process-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .process-cell,
-    .process-cell:nth-child(2n) {
-      border-right: none;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .process-cell:last-child {
-      border-bottom: none;
-    }
-
-    .stack-row {
-      grid-template-columns: 1fr;
-      gap: 0.875rem;
-      padding: 1.25rem 1rem;
     }
   }
 </style>

@@ -1,0 +1,55 @@
+---
+/** The technical stack as ruled rows of node tags. */
+import { stack } from '../../data/studio';
+---
+
+<div class="stack-list">
+  {stack.map((group) => (
+    <div class="stack-row">
+      <span class="stack-label" data-reveal>{group.label}</span>
+      <div class="stack-tags" data-reveal-stagger="40">
+        {group.items.map((item) => (
+          <span class="node-tag">{item}</span>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .stack-row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    padding: 1.4rem clamp(1.25rem, 3vw, 3.5rem);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .stack-row:last-child {
+    border-bottom: none;
+  }
+
+  .stack-label {
+    padding-top: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .stack-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 0.9rem;
+  }
+
+  @media (max-width: 700px) {
+    .stack-row {
+      grid-template-columns: 1fr;
+      gap: 0.875rem;
+      padding: 1.25rem 1rem;
+    }
+  }
+</style>

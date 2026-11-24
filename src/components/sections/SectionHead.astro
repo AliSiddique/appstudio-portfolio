@@ -1,0 +1,84 @@
+---
+/**
+ * The site's section opener: a mono eyebrow over a large statement, ruled underneath.
+ * Centred by default (the homepage rhythm); `align="left"` for page heroes.
+ */
+interface Props {
+  eyebrow?: string;
+  id?: string;
+  align?: 'center' | 'left';
+  /** Heading level — h1 for page heroes, h2 for sections. */
+  as?: 'h1' | 'h2';
+  size?: 'lg' | 'xl';
+  class?: string;
+}
+
+const { eyebrow, id, align = 'center', as: Tag = 'h2', size = 'lg', class: className } = Astro.props;
+---
+
+<div class:list={['section-head', `align-${align}`, `size-${size}`, className]}>
+  {eyebrow && <span class="eyebrow" data-reveal>{eyebrow}</span>}
+  <Tag class="statement section-title" id={id} data-reveal="wipe">
+    <slot />
+  </Tag>
+  {Astro.slots.has('lede') && (
+    <p class="section-lede" data-reveal style="--delay:150ms">
+      <slot name="lede" />
+    </p>
+  )}
+  {Astro.slots.has('actions') && (
+    <div class="section-actions" data-reveal style="--delay:250ms">
+      <slot name="actions" />
+    </div>
+  )}
+</div>
+
+<style>
+  .section-head {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: clamp(4.5rem, 9vw, 7.5rem) clamp(1.25rem, 3.5vw, 3.5rem) clamp(3.5rem, 6vw, 5rem);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .align-center {
+    align-items: center;
+    text-align: center;
+  }
+
+  .align-left {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .section-title {
+    max-width: 20ch;
+  }
+
+  .size-xl .section-title {
+    max-width: 16ch;
+    font-size: clamp(2.75rem, 7.6vw, 8.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+  }
+
+  .section-lede {
+    max-width: 56ch;
+    font-size: clamp(1.0625rem, 1.5vw, 1.375rem);
+    line-height: 1.55;
+    color: var(--fg-soft);
+    text-wrap: pretty;
+  }
+
+  .section-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.5rem;
+  }
+
+  .align-center .section-actions {
+    justify-content: center;
+  }
+</style>

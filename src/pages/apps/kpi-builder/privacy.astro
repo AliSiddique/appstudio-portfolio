@@ -30,6 +30,7 @@ const sections: LegalSectionRef[] = [
   effective="24 November 2026"
   updated="24 November 2026"
   base="/apps/kpi-builder"
+  hasGuide
   sections={sections}
 >
   <ShortVersion>
@@ -117,11 +118,23 @@ const sections: LegalSectionRef[] = [
               <strong>Account and user IDs</strong> from your monday.com session token
             </td>
             <td data-label="Why">
-              To check that requests come from a real monday.com session, and to apply per-user rate
-              limits
+              To check that requests come from a real monday.com session, and to apply rate limits
+              and your plan's daily AI allowance
             </td>
             <td data-label="Where it's kept">
-              Kept in our server's memory for about an hour, then cleared; never written to disk
+              Kept in our server's memory for up to a day, then cleared; never written to disk
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Data">
+              <strong>Subscription status:</strong> your account ID and KPI Builder plan, sent by
+              monday.com when you install, uninstall or change plans
+            </td>
+            <td data-label="Why">To apply your plan's limits</td>
+            <td data-label="Where it's kept">
+              Kept in our server's memory only, and removed when you uninstall. monday.com's notice
+              also includes the name and email of the person who made the change; we don't keep
+              them.
             </td>
           </tr>
           <tr>
@@ -184,7 +197,8 @@ const sections: LegalSectionRef[] = [
             <td data-label="Provider"><strong>monday.com Ltd.</strong></td>
             <td data-label="What for">
               The platform KPI Builder runs in; hosting of the app (monday code and CDN); app
-              storage for settings and snapshots
+              storage for settings and snapshots; billing for paid plans (we never see your payment
+              details)
             </td>
             <td data-label="Domains"><code>*.monday.com</code>, <code>*.monday.app</code></td>
           </tr>
@@ -232,13 +246,25 @@ const sections: LegalSectionRef[] = [
         Snapshots older than 180 days are removed automatically.
       </li>
       <li>
-        When you uninstall KPI Builder, the data stored for it is permanently deleted within 10
-        days, unless you ask us in writing to keep it.
+        <strong>Deleting it yourself:</strong> in a widget's settings, Appearance → Delete saved
+        data permanently deletes that widget's settings and trend history straight away. Do this
+        before you remove the widget or uninstall KPI Builder if you don't want the data kept.
+      </li>
+      <li>
+        When you remove the widget or uninstall KPI Builder without deleting its data first, KPI
+        Builder can no longer read or change that data. The data stays in monday.com's app storage,
+        which monday.com manages under its own policies. If you want it deleted, email
+        <a href={`mailto:${email}`}>{email}</a> and we'll delete the data stored for your account
+        using monday.com's developer tools, or ask monday.com to, and confirm when it's done.
       </li>
       <li>AI requests aren't stored by us. Anthropic retains API data only as its policies describe.</li>
       <li>
-        Rate-limit counters (account and user IDs) are kept in memory for about an hour, then
-        cleared.
+        Rate-limit and allowance counters (account and user IDs) are kept in memory for up to a
+        day, then cleared.
+      </li>
+      <li>
+        Subscription status (account ID and plan) is kept in memory while KPI Builder is installed
+        and removed when you uninstall.
       </li>
     </ul>
   </LegalSection>
@@ -264,8 +290,9 @@ const sections: LegalSectionRef[] = [
   <LegalSection id="your-rights" n="8" title="Your choices and rights">
     <ul>
       <li>
-        You can change or delete a widget's settings at any time, and uninstalling KPI Builder
-        removes all of its stored data.
+        You can change a widget's settings at any time, or delete everything it has saved with
+        Delete saved data in its settings. For data left after uninstalling, see
+        <a href="#retention">section 6</a>.
       </li>
       <li>
         The AI features run only when you click them. You can use KPI Builder fully without them.

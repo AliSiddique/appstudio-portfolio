@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import PixelArt from '../components/PixelArt.astro';
 import { studio, services, process, projects } from '../data/studio';
 
 /** Map each service to the shipped work that proves it. */
@@ -26,7 +27,7 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
   <section class="services-hero">
     <span class="hero-tag">/ Services</span>
     <h1 class="services-headline">
-      One engineer, the whole stack — architecture, infrastructure, interface, launch.
+      One studio, the whole stack — architecture, infrastructure, interface, launch.
     </h1>
     <p class="services-sub">
       {studio.name} works the way a small product team does, without the handoffs. Every engagement
@@ -55,7 +56,10 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
           <span class="proof-label">/ Proven on</span>
           <div class="proof-links">
             {(proof[service.number] ?? []).map((slug) => (
-              <a href={`/work/${slug}`} class="proof-link">{bySlug[slug].title} →</a>
+              <a href={`/work/${slug}`} class="proof-link">
+                {bySlug[slug].title}
+                <PixelArt name="chev" scale={2} class="chev" />
+              </a>
             ))}
           </div>
         </div>
@@ -89,7 +93,7 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
       <div class="term-card">
         <h3 class="term-title">Direct access</h3>
         <p class="term-body">
-          You work with the engineer building it. No account manager, no brief passed down a chain.
+          You talk to engineering directly. No account managers, no brief passed down a chain.
         </p>
       </div>
       <div class="term-card">
@@ -122,7 +126,7 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
 <style>
   .services-hero {
     padding: 3rem 1.25rem 3.5rem;
-    border-bottom: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--line);
   }
 
   .hero-tag,
@@ -133,7 +137,7 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
+    color: var(--muted);
     margin-bottom: 1rem;
   }
 
@@ -151,14 +155,14 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
     font-size: clamp(1rem, 1.7vw, 1.25rem);
     font-weight: 400;
     line-height: 1.65;
-    color: var(--color-gray-700);
+    color: var(--muted);
     max-width: 700px;
     margin-top: 1.5rem;
   }
 
   /* Service rows */
   .services-section {
-    border-bottom: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--line);
   }
 
   .service-row {
@@ -166,7 +170,7 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
     grid-template-columns: 1fr 1.6fr 1fr;
     gap: 2rem;
     padding: 2.5rem 1.25rem;
-    border-bottom: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--line);
   }
 
   .service-row:last-child {
@@ -184,7 +188,7 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
     font-size: 0.6875rem;
     font-weight: 500;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   .service-title {
@@ -201,7 +205,7 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   .service-body {
@@ -215,7 +219,7 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
     font-size: 1.0625rem;
     font-weight: 400;
     line-height: 1.65;
-    color: var(--color-black);
+    color: var(--fg);
   }
 
   .service-includes {
@@ -242,7 +246,7 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
     content: "•";
     position: absolute;
     left: 0;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   .service-proof {
@@ -257,7 +261,7 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   .proof-links {
@@ -268,23 +272,32 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
   }
 
   .proof-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
     font-family: var(--font-sans);
-    font-size: 0.9375rem;
-    font-weight: 400;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    transition: opacity 0.2s;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .proof-link :global(.chev) {
+    transition: transform 0.2s;
   }
 
   .proof-link:hover {
-    opacity: 0.6;
+    color: var(--px-amber);
+  }
+
+  .proof-link:hover :global(.chev) {
+    transform: translateX(3px);
   }
 
   /* Process */
   .process-section {
     padding: 4rem 1.25rem;
-    background-color: var(--color-gray-50);
-    border-bottom: 1px solid var(--color-stroke);
+    background-color: var(--bg-raised);
+    border-bottom: 1px solid var(--line);
   }
 
   .process-header {
@@ -303,8 +316,8 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
   .process-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    border: 1px solid var(--color-stroke);
-    background-color: var(--color-white);
+    border: 1px solid var(--line);
+    background-color: var(--bg);
   }
 
   .process-card {
@@ -312,7 +325,7 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
     flex-direction: column;
     gap: 0.625rem;
     padding: 1.75rem 1.5rem;
-    border-right: 1px solid var(--color-stroke);
+    border-right: 1px solid var(--line);
   }
 
   .process-card:last-child {
@@ -324,7 +337,7 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
     font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   .process-title {
@@ -339,7 +352,7 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
     font-size: 0.9375rem;
     font-weight: 400;
     line-height: 1.6;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   /* Terms */
@@ -350,7 +363,7 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
   .terms-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    border: 1px solid var(--color-stroke);
+    border: 1px solid var(--line);
     margin-top: 1rem;
   }
 
@@ -359,7 +372,7 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
     flex-direction: column;
     gap: 0.625rem;
     padding: 1.75rem 1.5rem;
-    border-right: 1px solid var(--color-stroke);
+    border-right: 1px solid var(--line);
   }
 
   .term-card:last-child {
@@ -378,13 +391,13 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
     font-size: 0.9375rem;
     font-weight: 400;
     line-height: 1.6;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   .term-link {
     text-decoration: underline;
     text-underline-offset: 3px;
-    color: var(--color-black);
+    color: var(--fg);
   }
 
   /* Responsive */
@@ -400,7 +413,7 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
       align-items: baseline;
       gap: 1.25rem;
       flex-wrap: wrap;
-      border-top: 1px solid var(--color-stroke);
+      border-top: 1px solid var(--line);
       padding-top: 1.25rem;
     }
 
@@ -422,7 +435,7 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
 
     .process-card:nth-child(-n + 2),
     .term-card:nth-child(-n + 2) {
-      border-bottom: 1px solid var(--color-stroke);
+      border-bottom: 1px solid var(--line);
     }
   }
 
@@ -442,7 +455,7 @@ const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
     .process-card:nth-child(even),
     .term-card:nth-child(even) {
       border-right: none;
-      border-bottom: 1px solid var(--color-stroke);
+      border-bottom: 1px solid var(--line);
     }
 
     .process-card:last-child,

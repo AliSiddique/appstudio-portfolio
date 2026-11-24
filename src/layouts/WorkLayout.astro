@@ -2,8 +2,11 @@
 import Layout from './Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import PixelArt from '../components/PixelArt.astro';
+import { projectIcon } from '../data/pixels';
 
 interface Props {
+  slug?: string;
   title: string;
   subtitle?: string;
   type: string;
@@ -19,6 +22,7 @@ interface Props {
 }
 
 const {
+  slug,
   title,
   subtitle,
   type,
@@ -32,6 +36,8 @@ const {
   metaDescription,
   nextProject,
 } = Astro.props;
+
+const icon = slug ? projectIcon[slug] : undefined;
 ---
 
 <Layout title={`${title} — Ali Siddique`} description={metaDescription} ogType="website">
@@ -39,13 +45,19 @@ const {
 
   <!-- Back nav bar -->
   <div class="project-back-bar">
-    <a href="/" class="back-link">← Work</a>
+    <a href="/#work" class="back-link">
+      <PixelArt name="chev" scale={2} class="chev chev-back" />
+      Work
+    </a>
     <span class="project-index">/ {number}</span>
   </div>
 
   <!-- Project hero -->
   <section class="project-hero">
-    {status && <span class="project-status">{status}</span>}
+    <div class="project-kicker">
+      {icon && <PixelArt name={icon} scale={5} />}
+      {status && <span class="project-status">{status}</span>}
+    </div>
     <h1 class="project-title">{title}</h1>
     {subtitle && <p class="project-subtitle">{subtitle}</p>}
     {headline && <p class="project-headline">{headline}</p>}
@@ -92,7 +104,7 @@ const {
       <a href={nextProject.href} class="next-project-link">
         <span class="next-label">/ Next Project</span>
         <span class="next-title">{nextProject.title}</span>
-        <span class="next-arrow">→</span>
+        <span class="next-arrow"><PixelArt name="arrow" scale={5} /></span>
       </a>
     </section>
   )}
@@ -107,7 +119,7 @@ const {
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem 1.25rem;
-    border-bottom: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--line);
   }
 
   .back-link {
@@ -116,16 +128,37 @@ const {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--color-black);
-    border: 1.5px solid var(--color-black);
-    border-radius: var(--radius-pill);
-    padding: 0.25rem 0.75rem;
-    transition: background-color 0.2s, color 0.2s;
+    color: var(--fg);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    padding: 0.45rem 0.75rem;
+    transition: background-color 0.2s, border-color 0.2s;
   }
 
   .back-link:hover {
-    background-color: var(--color-black);
-    color: var(--color-white);
+    background-color: var(--bg-hover);
+    border-color: #4a4a52;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .back-link :global(.chev-back) {
+    transform: rotate(180deg);
+  }
+
+  .project-kicker {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .project-kicker .project-status {
+    margin-bottom: 0;
   }
 
   .project-index {
@@ -134,13 +167,13 @@ const {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   /* Hero */
   .project-hero {
     padding: 3rem 1.25rem 0;
-    border-bottom: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--line);
   }
 
   .project-status {
@@ -150,19 +183,18 @@ const {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    background-color: var(--color-black);
-    color: var(--color-white);
-    border-radius: var(--radius-pill);
-    padding: 0.25rem 0.75rem;
-    margin-bottom: 1rem;
+    background-color: var(--px-amber);
+    color: var(--bg);
+    padding: 0.4rem 0.7rem;
+    margin-bottom: 1.25rem;
   }
 
   .project-title {
     font-family: var(--font-sans);
-    font-size: clamp(2.5rem, 8vw, 6.5rem);
+    font-size: clamp(3rem, 9vw, 8.5rem);
     font-weight: 500;
-    line-height: 1;
-    letter-spacing: -0.02em;
+    line-height: 0.95;
+    letter-spacing: -0.045em;
   }
 
   .project-subtitle {
@@ -171,7 +203,7 @@ const {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
+    color: var(--muted);
     margin-top: 0.875rem;
   }
 
@@ -181,15 +213,15 @@ const {
     font-weight: 400;
     line-height: 1.35;
     letter-spacing: -0.01em;
-    color: var(--color-black);
+    color: var(--fg);
     max-width: 44ch;
     margin-top: 1.75rem;
   }
 
   /* Results band */
   .results-band {
-    background-color: var(--color-dark);
-    color: var(--color-white);
+    background-color: var(--px-crimson);
+    color: #ffffff;
     padding: 2.5rem 1.25rem;
   }
 
@@ -200,14 +232,14 @@ const {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
+    color: rgba(255, 255, 255, 0.8);
     margin-bottom: 1.75rem;
   }
 
   .results-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    border-top: 1px solid rgba(255, 255, 255, 0.28);
   }
 
   .result-cell {
@@ -215,7 +247,7 @@ const {
     flex-direction: column;
     gap: 0.5rem;
     padding: 1.5rem 1.25rem 0 0;
-    border-right: 1px solid rgba(255, 255, 255, 0.14);
+    border-right: 1px solid rgba(255, 255, 255, 0.28);
   }
 
   .result-cell:last-child {
@@ -240,13 +272,13 @@ const {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
+    color: rgba(255, 255, 255, 0.85);
     line-height: 1.5;
   }
 
   .project-meta-bar {
     display: flex;
-    border-top: 1px solid var(--color-stroke);
+    border-top: 1px solid var(--line);
     margin-top: 2.5rem;
   }
 
@@ -256,7 +288,7 @@ const {
     flex-direction: column;
     gap: 0.3rem;
     padding: 0.875rem 1rem;
-    border-right: 1px solid var(--color-stroke);
+    border-right: 1px solid var(--line);
   }
 
   .meta-col:last-child {
@@ -269,7 +301,7 @@ const {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   .meta-value {
@@ -278,12 +310,12 @@ const {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--color-black);
+    color: var(--fg);
   }
 
   /* Next project */
   .next-project-section {
-    border-top: 1px solid var(--color-stroke);
+    border-top: 1px solid var(--line);
   }
 
   .next-project-link {
@@ -298,8 +330,8 @@ const {
   }
 
   .next-project-link:hover {
-    background-color: var(--color-black);
-    color: var(--color-white);
+    background-color: var(--px-orange);
+    color: var(--bg);
   }
 
   .next-label {
@@ -327,13 +359,13 @@ const {
 
   /* Shared project content styles (applied globally for slot content) */
   :global(.project-cover) {
-    border-bottom: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--line);
   }
 
   :global(.cover-img-wrap) {
     height: clamp(230px, 34vw, 520px);
     overflow: hidden;
-    background-color: var(--color-gray-50);
+    background-color: var(--bg-raised);
   }
 
   :global(.cover-img) {
@@ -344,7 +376,7 @@ const {
   }
 
   :global(.project-overview) {
-    border-bottom: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--line);
   }
 
   :global(.overview-grid) {
@@ -354,7 +386,7 @@ const {
 
   :global(.overview-left) {
     padding: 2.5rem 1.5rem;
-    border-right: 1px solid var(--color-stroke);
+    border-right: 1px solid var(--line);
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
@@ -374,7 +406,7 @@ const {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
+    color: var(--muted);
     margin-bottom: 0.5rem;
   }
 
@@ -383,7 +415,7 @@ const {
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.65;
-    color: var(--color-black);
+    color: var(--fg);
   }
 
   :global(.detail-block) {
@@ -399,7 +431,7 @@ const {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   :global(.detail-list) {
@@ -417,7 +449,7 @@ const {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--color-black);
+    color: var(--fg);
     position: relative;
     padding-left: 1rem;
     line-height: 1.6;
@@ -427,17 +459,17 @@ const {
     content: "•";
     position: absolute;
     left: 0;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   /* Case study body — challenge, approach, stack */
   :global(.case-section) {
     padding: 4rem 1.25rem;
-    border-bottom: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--line);
   }
 
   :global(.case-section-gray) {
-    background-color: var(--color-gray-50);
+    background-color: var(--bg-raised);
   }
 
   :global(.case-header) {
@@ -466,14 +498,14 @@ const {
     font-size: 1.0625rem;
     font-weight: 400;
     line-height: 1.7;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   :global(.approach-grid) {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    border: 1px solid var(--color-stroke);
-    background-color: var(--color-white);
+    border: 1px solid var(--line);
+    background-color: var(--bg);
   }
 
   :global(.approach-card) {
@@ -481,8 +513,8 @@ const {
     flex-direction: column;
     gap: 0.625rem;
     padding: 1.75rem 1.5rem;
-    border-right: 1px solid var(--color-stroke);
-    border-bottom: 1px solid var(--color-stroke);
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
   }
 
   :global(.approach-card:nth-child(even)) {
@@ -499,7 +531,7 @@ const {
     font-size: 0.6875rem;
     font-weight: 500;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   :global(.approach-title) {
@@ -514,7 +546,7 @@ const {
     font-size: 0.9375rem;
     font-weight: 400;
     line-height: 1.65;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   :global(.case-chips) {
@@ -528,15 +560,15 @@ const {
     font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.03em;
-    border: 1px solid var(--color-stroke);
-    border-radius: var(--radius-pill);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
     padding: 0.25rem 0.75rem;
-    background-color: var(--color-white);
+    background-color: var(--bg);
     white-space: nowrap;
   }
 
   :global(.project-gallery) {
-    border-bottom: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--line);
   }
 
   :global(.gallery-label) {
@@ -546,8 +578,8 @@ const {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
-    border-bottom: 1px solid var(--color-stroke);
+    color: var(--muted);
+    border-bottom: 1px solid var(--line);
     padding-bottom: 1.25rem;
   }
 
@@ -559,9 +591,9 @@ const {
   :global(.gallery-item) {
     aspect-ratio: 4 / 3;
     overflow: hidden;
-    background-color: var(--color-gray-100);
-    border-right: 1px solid var(--color-stroke);
-    border-bottom: 1px solid var(--color-stroke);
+    background-color: var(--bg-raised);
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
   }
 
   :global(.gallery-item:nth-child(even)) {
@@ -592,7 +624,7 @@ const {
     :global(.approach-card),
     :global(.approach-card:nth-child(even)) {
       border-right: none;
-      border-bottom: 1px solid var(--color-stroke);
+      border-bottom: 1px solid var(--line);
     }
 
     :global(.approach-card:last-child) {
@@ -605,7 +637,7 @@ const {
 
     :global(.overview-left) {
       border-right: none;
-      border-bottom: 1px solid var(--color-stroke);
+      border-bottom: 1px solid var(--line);
     }
 
     :global(.gallery-grid) {
@@ -614,7 +646,7 @@ const {
 
     :global(.gallery-item) {
       border-right: none;
-      border-bottom: 1px solid var(--color-stroke);
+      border-bottom: 1px solid var(--line);
     }
 
     :global(.gallery-item:last-child) {
@@ -637,7 +669,7 @@ const {
 
     .meta-col:nth-child(1),
     .meta-col:nth-child(2) {
-      border-bottom: 1px solid var(--color-stroke);
+      border-bottom: 1px solid var(--line);
     }
   }
 </style>

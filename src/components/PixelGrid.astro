@@ -1,0 +1,51 @@
+---
+/**
+ * A mosaic of square cells in a few shades of one colour — the backdrop for the
+ * capability panels. Seeded, so the pattern is identical on every build.
+ */
+interface Props {
+  /** First colour is the base and appears most often; the rest are accents. */
+  colors: string[];
+  cols?: number;
+  rows?: number;
+  seed?: number;
+  class?: string;
+}
+
+const { colors, cols = 16, rows = 10, seed = 7, class: className } = Astro.props;
+
+let state = seed >>> 0;
+const rand = () => {
+  state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
+  return state / 4294967296;
+};
+
+const cells: { x: number; y: number; fill: string }[] = [];
+for (let y = 0; y < rows; y++) {
+  for (let x = 0; x < cols; x++) {
+    const r = rand();
+    const fill = r < 0.42 ? colors[0] : colors[1 + Math.floor(rand() * (colors.length - 1))];
+    cells.push({ x, y, fill });
+  }
+}
+---
+
+<svg
+  class:list={['pixel-grid', className]}
+  viewBox={`0 0 ${cols} ${rows}`}
+  preserveAspectRatio="xMidYMid slice"
+  shape-rendering="crispEdges"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+  focusable="false"
+>
+  {cells.map((c) => <rect x={c.x} y={c.y} width="1.02" height="1.02" fill={c.fill} />)}
+</svg>
+
+<style>
+  .pixel-grid {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>

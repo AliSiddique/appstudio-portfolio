@@ -10,6 +10,18 @@ interface Props {
 }
 
 const { variant, class: className = '', fit = 'slice' } = Astro.props;
+
+/* Each case study draws its line art in one colour from the pixel palette. */
+const ink: Record<VisualVariant, string> = {
+  motion: '#ff8103',
+  imaging: '#a8d2ff',
+  geometry: '#ffaf02',
+  landscape: '#3eb67e',
+  assessment: '#ff5228',
+  portfolio: '#ffd21f',
+  audio: '#8de0b9',
+  platform: '#5aa9ff',
+};
 ---
 
 <svg
@@ -19,11 +31,12 @@ const { variant, class: className = '', fit = 'slice' } = Astro.props;
   xmlns="http://www.w3.org/2000/svg"
   role="presentation"
   aria-hidden="true"
+  style={`--ink:${ink[variant]}`}
 >
-  <rect width="1200" height="800" fill="var(--color-gray-50)" />
+  <rect width="1200" height="800" fill="var(--visual-bg, #161618)" />
 
   {/* Shared background grid */}
-  <g stroke="currentColor" stroke-width="1" opacity="0.07">
+  <g stroke="#ffffff" stroke-width="1" opacity="0.06">
     {Array.from({ length: 11 }, (_, i) => (
       <line x1={i * 120} y1="0" x2={i * 120} y2="800" />
     ))}
@@ -318,7 +331,7 @@ const { variant, class: className = '', fit = 'slice' } = Astro.props;
     display: block;
     width: 100%;
     height: 100%;
-    color: var(--color-black);
-    background-color: var(--color-gray-50);
+    color: var(--ink);
+    background-color: var(--visual-bg, #161618);
   }
 </style>

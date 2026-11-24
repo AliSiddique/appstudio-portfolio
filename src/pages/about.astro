@@ -173,7 +173,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
   /* About Hero */
   .about-hero {
     padding: 3rem 1.25rem 3.5rem;
-    border-bottom: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--line);
   }
 
   .hero-tag {
@@ -183,7 +183,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
+    color: var(--muted);
     margin-bottom: 1.5rem;
   }
 
@@ -201,14 +201,14 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     font-size: clamp(1rem, 1.7vw, 1.25rem);
     font-weight: 400;
     line-height: 1.65;
-    color: var(--color-gray-700);
+    color: var(--muted);
     max-width: 780px;
     margin-top: 1.75rem;
   }
 
   /* Info Grid */
   .info-section {
-    border-bottom: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--line);
   }
 
   .info-grid {
@@ -218,7 +218,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
 
   .info-col {
     padding: 1.75rem 1.25rem;
-    border-right: 1px solid var(--color-stroke);
+    border-right: 1px solid var(--line);
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -234,7 +234,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   .info-content {
@@ -250,13 +250,13 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     text-transform: uppercase;
     letter-spacing: 0.04em;
     line-height: 1.5;
-    color: var(--color-black);
+    color: var(--fg);
   }
 
   /* Numbers */
   .numbers-section {
-    background-color: var(--color-dark);
-    color: var(--color-white);
+    background-color: var(--bg-raised);
+    color: var(--fg);
     padding: 3.5rem 1.25rem;
   }
 
@@ -267,14 +267,14 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
+    color: var(--muted);
     margin-bottom: 2rem;
   }
 
   .numbers-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    border-top: 1px solid var(--line);
   }
 
   .number-cell {
@@ -282,8 +282,8 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     flex-direction: column;
     gap: 0.4rem;
     padding: 1.75rem 1.5rem 1.75rem 0;
-    border-right: 1px solid rgba(255, 255, 255, 0.14);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
   }
 
   .number-cell:not(:nth-child(3n + 1)) {
@@ -314,7 +314,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     font-family: var(--font-sans);
     font-size: 0.875rem;
     line-height: 1.5;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   .numbers-secondary {
@@ -342,14 +342,14 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   /* Skills */
   .skills-section {
     padding: 4rem 1.25rem;
-    background-color: var(--color-gray-50);
-    border-bottom: 1px solid var(--color-stroke);
+    background-color: var(--bg-raised);
+    border-bottom: 1px solid var(--line);
   }
 
   .section-tag {
@@ -359,7 +359,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
+    color: var(--muted);
     margin-bottom: 0.75rem;
   }
 
@@ -377,7 +377,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
   }
 
   .skills-table {
-    border-top: 1px solid var(--color-stroke);
+    border-top: 1px solid var(--line);
   }
 
   .skills-row {
@@ -386,7 +386,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     gap: 1.5rem;
     align-items: start;
     padding: 1.125rem 0;
-    border-bottom: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--line);
   }
 
   .skills-row-label {
@@ -395,7 +395,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
+    color: var(--muted);
     padding-top: 0.3rem;
   }
 
@@ -410,17 +410,17 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.03em;
-    border: 1px solid var(--color-stroke);
-    border-radius: var(--radius-pill);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
     padding: 0.25rem 0.75rem;
-    background-color: var(--color-white);
+    background-color: var(--bg);
     white-space: nowrap;
   }
 
   /* CV Section */
   .cv-section {
     padding: 3.5rem 1.25rem 4rem;
-    border-bottom: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--line);
   }
 
   .cv-title {
@@ -433,14 +433,14 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
   }
 
   .cv-table {
-    border-top: 1px solid var(--color-stroke);
+    border-top: 1px solid var(--line);
   }
 
   .cv-row {
     display: grid;
     grid-template-columns: 180px 1fr;
     gap: 2rem;
-    border-bottom: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--line);
     padding: 1.5rem 0;
     align-items: start;
   }
@@ -451,7 +451,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--color-gray-700);
+    color: var(--muted);
     padding-top: 0.125rem;
   }
 
@@ -474,7 +474,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--color-black);
+    color: var(--fg);
     padding-top: 0.1rem;
   }
 
@@ -490,7 +490,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--color-black);
+    color: var(--fg);
   }
 
   .cv-detail {
@@ -498,20 +498,20 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     font-size: 0.9375rem;
     font-weight: 400;
     line-height: 1.6;
-    color: var(--color-gray-700);
+    color: var(--muted);
     max-width: 62ch;
   }
 
   /* Credentials */
   .credentials-section {
     padding: 3.5rem 1.25rem 4rem;
-    border-bottom: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--line);
   }
 
   .credentials-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    border: 1px solid var(--color-stroke);
+    border: 1px solid var(--line);
     margin-top: 1.5rem;
   }
 
@@ -520,7 +520,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     flex-direction: column;
     gap: 0.5rem;
     padding: 1.5rem 1.25rem;
-    border-right: 1px solid var(--color-stroke);
+    border-right: 1px solid var(--line);
   }
 
   .credential-card:last-child {
@@ -533,7 +533,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   .credential-title {
@@ -548,7 +548,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     font-size: 0.875rem;
     font-weight: 400;
     line-height: 1.6;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   /* Contact */
@@ -557,7 +557,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
   }
 
   .contact-grid {
-    border-top: 1px solid var(--color-stroke);
+    border-top: 1px solid var(--line);
     margin-top: 1.5rem;
   }
 
@@ -579,7 +579,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   .contact-item-value {
@@ -602,7 +602,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     }
 
     .credential-card:nth-child(-n + 2) {
-      border-bottom: 1px solid var(--color-stroke);
+      border-bottom: 1px solid var(--line);
     }
   }
 
@@ -617,7 +617,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
 
     .info-col:nth-child(1),
     .info-col:nth-child(2) {
-      border-bottom: 1px solid var(--color-stroke);
+      border-bottom: 1px solid var(--line);
     }
 
     .numbers-grid {
@@ -625,7 +625,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     }
 
     .number-cell:nth-child(3n) {
-      border-right: 1px solid rgba(255, 255, 255, 0.14);
+      border-right: 1px solid var(--line);
     }
 
     .number-cell:nth-child(even) {
@@ -648,7 +648,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
 
     .info-col {
       border-right: none;
-      border-bottom: 1px solid var(--color-stroke);
+      border-bottom: 1px solid var(--line);
     }
 
     .numbers-grid {
@@ -681,7 +681,7 @@ import { studio, metrics, outcomes, stack, timeline, credentials } from '../data
     .credential-card,
     .credential-card:nth-child(even) {
       border-right: none;
-      border-bottom: 1px solid var(--color-stroke);
+      border-bottom: 1px solid var(--line);
       padding-left: 0;
     }
 

@@ -1,0 +1,61 @@
+---
+/**
+ * Renders a sprite from `src/data/pixels.ts` as a crisp SVG.
+ * Horizontal runs of the same colour are merged into one <rect> to keep the markup small.
+ */
+import { sprites, pixelPalette, type SpriteName } from '../data/pixels';
+
+interface Props {
+  name: SpriteName;
+  /** CSS pixels per sprite pixel. */
+  scale?: number;
+  class?: string;
+  /** Accessible label. Omit for decorative sprites (the default). */
+  label?: string;
+}
+
+const { name, scale = 4, class: className, label } = Astro.props;
+
+const rows: readonly string[] = sprites[name];
+const height = rows.length;
+const width = rows[0].length;
+
+const rects: { x: number; y: number; w: number; fill: string }[] = [];
+rows.forEach((row, y) => {
+  let x = 0;
+  while (x < row.length) {
+    const ch = row[x];
+    if (ch === '.') {
+      x++;
+      continue;
+    }
+    let run = 1;
+    while (row[x + run] === ch) run++;
+    rects.push({ x, y, w: run, fill: pixelPalette[ch] ?? 'currentColor' });
+    x += run;
+  }
+});
+---
+
+<svg
+  class:list={['pixel-art', className]}
+  viewBox={`0 0 ${width} ${height}`}
+  width={width * scale}
+  height={height * scale}
+  shape-rendering="crispEdges"
+  xmlns="http://www.w3.org/2000/svg"
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  focusable="false"
+>
+  {rects.map((r) => <rect x={r.x} y={r.y} width={r.w} height="1.02" fill={r.fill} />)}
+</svg>
+
+<style>
+  .pixel-art {
+    display: inline-block;
+    flex-shrink: 0;
+    image-rendering: pixelated;
+  }
+</style>

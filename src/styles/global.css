@@ -24,19 +24,48 @@
   font-display: swap;
 }
 
+/*
+ * Design tokens.
+ * A near-black canvas divided by hairline grid rules, white display type, and a warm
+ * "pixel" ramp (yellow → amber → orange → red) used for blocks, sprites and accents.
+ */
 :root {
-  --font-sans: "Neue Montreal", "Arial", sans-serif;
-  --font-mono: "Neue Montreal Mono", "Courier New", monospace;
-  --color-black: #000000;
-  --color-white: #ffffff;
-  --color-gray-50: #f7f7f7;
-  --color-gray-100: #efefef;
-  --color-gray-200: #e0e0e0;
-  --color-gray-700: #555555;
-  --color-dark: #0e0e0e;
-  --color-stroke: rgba(0, 0, 0, 0.12);
-  --radius-default: 0.5rem;
-  --radius-pill: 999px;
+  color-scheme: dark;
+
+  --font-sans: "Neue Montreal", "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Neue Montreal Mono", "JetBrains Mono", ui-monospace, "Courier New", monospace;
+
+  /* Surfaces */
+  --bg: #101012;
+  --bg-raised: #161618;
+  --bg-hover: #1c1c1f;
+  --bg-card: #1a1a1d;
+
+  /* Text */
+  --fg: #f6f6f3;
+  --fg-soft: #d4d4d0;
+  --muted: #8e8e94;
+  --dim: #66666c;
+
+  /* Rules */
+  --line: #232326;
+  --line-strong: #34343a;
+
+  /* Pixel palette */
+  --px-yellow: #ffd21f;
+  --px-amber: #ffaf02;
+  --px-orange: #ff8103;
+  --px-red: #ff5228;
+  --px-crimson: #d3290f;
+  --px-blue: #037de3;
+  --px-sky: #a8d2ff;
+  --px-green: #3eb67e;
+  --px-mint: #8de0b9;
+
+  --radius: 4px;
+  --nav-h: 56px;
+  /* Side gutters of the page grid — the hero's block columns sit in these. */
+  --gutter: clamp(1rem, 8.25vw, 10rem);
 }
 
 *,
@@ -50,15 +79,22 @@
 html {
   font-family: var(--font-sans);
   font-size: 16px;
-  color: var(--color-black);
-  background-color: var(--color-white);
+  color: var(--fg);
+  background-color: var(--bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scroll-padding-top: calc(var(--nav-h) + 1rem);
 }
 
 body {
   min-height: 100vh;
   overflow-x: hidden;
+  background-color: var(--bg);
+}
+
+::selection {
+  background-color: var(--px-orange);
+  color: var(--bg);
 }
 
 a {
@@ -74,4 +110,146 @@ img {
 
 ul {
   list-style: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--px-amber);
+  outline-offset: 2px;
+}
+
+/* ---------- Shared building blocks ---------- */
+
+/* Mono eyebrow label: "/ Section" */
+.eyebrow {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+/* Large centred section statement */
+.statement {
+  font-family: var(--font-sans);
+  font-size: clamp(2.25rem, 5.2vw, 5.5rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+/* Filled dark button with a pixel chevron */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.95rem 1.25rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--fg);
+  white-space: nowrap;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn:hover {
+  background-color: var(--bg-hover);
+  border-color: #4a4a52;
+}
+
+.btn .chev {
+  transition: transform 0.2s;
+}
+
+.btn:hover .chev,
+.link-chev:hover .chev {
+  transform: translateX(3px);
+}
+
+/* Bright variant, used once per view at most */
+.btn-light {
+  background-color: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg);
+}
+
+.btn-light:hover {
+  background-color: #ffffff;
+  border-color: #ffffff;
+}
+
+/* Text link with a pixel chevron ("Discover … >") */
+.link-chev {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  margin-left: -1.25rem;
+  border-radius: var(--radius);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  font-weight: 500;
+  color: var(--fg);
+  transition: background-color 0.2s;
+}
+
+.link-chev:hover {
+  background-color: var(--bg-hover);
+}
+
+.chev {
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Square tag with node handles on its left and right edges */
+.node-tag {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: var(--fg-soft);
+  background-color: var(--bg-raised);
+  border: 1px solid var(--line-strong);
+  padding: 0.35rem 0.75rem;
+  white-space: nowrap;
+}
+
+.node-tag::before,
+.node-tag::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  margin-top: -2px;
+  background-color: var(--muted);
+}
+
+.node-tag::before {
+  left: -2.5px;
+}
+
+.node-tag::after {
+  right: -2.5px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

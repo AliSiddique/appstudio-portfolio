@@ -19,27 +19,45 @@ interface Props {
   app: string;
   /** Short app name, used in the document switcher and page title. */
   appShort: string;
-  doc: 'privacy' | 'terms';
+  doc: 'privacy' | 'terms' | 'guide';
   docTitle: string;
   description: string;
-  effective: string;
+  /** Leave out for documents that aren't agreements, such as a how-to guide. */
+  effective?: string;
   updated: string;
+  /** Overrides the browser tab title (defaults to "<app> <docTitle> — Salinash Studio"). */
+  pageTitle?: string;
+  /** Adds a "How to use" link (at <base>/how-to-use) to the document switcher. */
+  hasGuide?: boolean;
   /** Path holding this app's documents, e.g. /apps/kpi-builder */
   base: string;
   icon?: SpriteName;
   sections: LegalSectionRef[];
 }
 
-const { app, appShort, doc, docTitle, description, effective, updated, base, icon = 'chart', sections } =
-  Astro.props;
+const {
+  app,
+  appShort,
+  doc,
+  docTitle,
+  description,
+  effective,
+  updated,
+  pageTitle,
+  hasGuide = false,
+  base,
+  icon = 'chart',
+  sections,
+} = Astro.props;
 
 const docs = [
+  ...(hasGuide ? [{ key: 'guide', label: 'How to use', href: `${base}/how-to-use` }] : []),
   { key: 'privacy', label: 'Privacy Policy', href: `${base}/privacy` },
   { key: 'terms', label: 'Terms of Service', href: `${base}/terms` },
 ];
 ---
 
-<Layout title={`${app} ${docTitle} — Salinash Studio`} description={description} analytics={false}>
+<Layout title={pageTitle ?? `${app} ${docTitle} — Salinash Studio`} description={description} analytics={false}>
   <div class="legal-page">
     <Header activePage="none" />
 
@@ -53,16 +71,18 @@ const docs = [
           <span class="legal-app">{app}</span>
           {docTitle}
         </h1>
-        <div class="legal-meta" data-reveal-stagger="80">
-          <div class="meta-cell">
-            <span class="meta-label">Effective</span>
-            <span class="meta-value">{effective}</span>
-          </div>
+        <div class:list={['legal-meta', { 'no-effective': !effective }]} data-reveal-stagger="80">
+          {effective && (
+            <div class="meta-cell">
+              <span class="meta-label">Effective</span>
+              <span class="meta-value">{effective}</span>
+            </div>
+          )}
           <div class="meta-cell">
             <span class="meta-label">Last updated</span>
             <span class="meta-value">{updated}</span>
           </div>
-          <nav class="meta-cell doc-switch" aria-label={`${appShort} legal documents`}>
+          <nav class="meta-cell doc-switch" aria-label={`${appShort} documents`}>
             {docs.map((d) => (
               <a
                 href={d.href}
@@ -171,6 +191,10 @@ const docs = [
     border-top: 1px solid var(--line);
   }
 
+  .legal-meta.no-effective {
+    grid-template-columns: 1fr 3fr;
+  }
+
   .meta-cell {
     display: flex;
     flex-direction: column;
@@ -198,6 +222,7 @@ const docs = [
 
   .doc-switch {
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: flex-end;
     gap: 0.5rem;
@@ -297,6 +322,14 @@ const docs = [
     }
 
     .meta-cell:nth-child(2) {
+      border-right: none;
+    }
+
+    .legal-meta.no-effective {
+      grid-template-columns: 1fr;
+    }
+
+    .legal-meta.no-effective .meta-cell {
       border-right: none;
     }
 

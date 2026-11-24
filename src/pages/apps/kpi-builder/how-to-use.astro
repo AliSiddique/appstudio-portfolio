@@ -1,0 +1,508 @@
+---
+import AppLegalLayout, { type LegalSectionRef } from '../../../layouts/AppLegalLayout.astro';
+import LegalSection from '../../../components/legal/LegalSection.astro';
+
+const email = 'hello@salinash.studio';
+
+const sections: LegalSectionRef[] = [
+  { id: 'install', n: '1', title: 'Install and add the widget' },
+  { id: 'first-kpi', n: '2', title: 'Your first KPI in a minute' },
+  { id: 'ai', n: '3', title: 'AI features' },
+  { id: 'inputs', n: '4', title: 'Inputs' },
+  { id: 'formulas', n: '5', title: 'Formulas' },
+  { id: 'display', n: '6', title: 'Goals, trends and colors' },
+  { id: 'reading', n: '7', title: 'Reading the widget' },
+  { id: 'plans', n: '8', title: 'Plans' },
+  { id: 'faq', n: '9', title: 'FAQ' },
+];
+---
+
+<AppLegalLayout
+  app="AI KPI & Formula Builder"
+  appShort="KPI Builder"
+  doc="guide"
+  docTitle="How to use"
+  pageTitle="How to use AI KPI & Formula Builder — Salinash Studio"
+  description="How to set up AI KPI & Formula Builder on a monday.com dashboard: build KPIs with AI or by hand, write formulas, and track goals and trends."
+  updated="24 November 2026"
+  base="/apps/kpi-builder"
+  hasGuide
+  sections={sections}
+>
+  <p class="guide-lead">
+    Live KPI cards for your monday.com dashboards: pull numbers from boards, combine them with a
+    formula, and track the result against goals and over time.
+  </p>
+
+  <LegalSection id="install" n="1" title="Install and add the widget">
+    <p>
+      Before you start, you need at least one board with numbers, statuses or dates to measure, and
+      permission to edit the dashboard.
+    </p>
+    <ol class="steps">
+      <li>
+        <strong>Install KPI Builder</strong>
+        Install it from the monday.com marketplace. An account admin may need to approve the
+        installation. KPI Builder only asks for permission to <em>read</em> boards.
+      </li>
+      <li>
+        <strong>Open a dashboard</strong>
+        Create a new dashboard or open an existing one, and click <em>Add widget</em>.
+      </li>
+      <li>
+        <strong>Add KPI Builder</strong>
+        Find KPI Builder in the apps list and add it. The widget opens on a welcome page with
+        templates.
+      </li>
+    </ol>
+  </LegalSection>
+
+  <LegalSection id="first-kpi" n="2" title="Your first KPI in a minute">
+    <ol class="steps">
+      <li>
+        <strong>Describe it, or pick a template</strong>
+        Type what you want to measure, like “How much of the marketing budget have we spent?”, and
+        the AI builds it. Or pick a template such as <em>Budget used</em>, <em>Completion rate</em>
+        or <em>Win rate</em>, choose a board, and KPI Builder matches the right columns and statuses
+        for you.
+      </li>
+      <li>
+        <strong>Check the data</strong>
+        On the <em>Data</em> tab, anything KPI Builder couldn't match is highlighted with a hint.
+        Pick the column or add the filter it asks for.
+      </li>
+      <li>
+        <strong>Review the KPI</strong>
+        On the <em>KPIs</em> tab, adjust the label, number format, visual, goal and trend. The live
+        preview updates as you type.
+      </li>
+      <li>
+        <strong>Save</strong>
+        The widget shows your KPI on the dashboard and keeps it up to date.
+      </li>
+    </ol>
+
+    <figure class="figure">
+      <svg
+        viewBox="0 0 620 200"
+        role="img"
+        aria-label="Example widget: a gauge at 60 percent of a budget limit, and revenue of $842K with a progress bar toward a $1M goal"
+      >
+        <rect x="1" y="1" width="618" height="198" fill="var(--bg-raised)" stroke="var(--line-strong)"></rect>
+        <line x1="310" y1="1" x2="310" y2="199" stroke="var(--line-strong)"></line>
+        <text x="22" y="32" font-size="13" font-weight="500" fill="var(--muted)">Budget used</text>
+        <circle cx="160" cy="110" r="56" fill="none" stroke="var(--line-strong)" stroke-width="11" stroke-linecap="round" stroke-dasharray="263.9 351.9" transform="rotate(135 160 110)"></circle>
+        <circle cx="160" cy="110" r="56" fill="none" stroke="var(--px-green)" stroke-width="11" stroke-linecap="round" stroke-dasharray="158 351.9" transform="rotate(135 160 110)"></circle>
+        <text x="160" y="116" text-anchor="middle" font-size="26" font-weight="500" fill="var(--fg)">60%</text>
+        <text x="160" y="136" text-anchor="middle" font-size="11" fill="var(--muted)">of 100% limit</text>
+        <text x="22" y="186" font-size="12" font-weight="500" fill="var(--px-red)">↑ 0.6%</text>
+        <text x="68" y="186" font-size="12" fill="var(--muted)">vs last week</text>
+        <text x="332" y="32" font-size="13" font-weight="500" fill="var(--muted)">Revenue</text>
+        <text x="332" y="104" font-size="44" font-weight="500" fill="var(--fg)">$842K</text>
+        <rect x="332" y="122" width="266" height="9" fill="var(--line-strong)"></rect>
+        <rect x="332" y="122" width="224" height="9" fill="var(--px-orange)"></rect>
+        <text x="332" y="150" font-size="12" font-weight="500" fill="var(--muted)">84%</text>
+        <text x="598" y="150" text-anchor="end" font-size="12" fill="var(--muted)">$1M goal</text>
+        <text x="332" y="186" font-size="12" font-weight="500" fill="var(--px-green)">↑ 12%</text>
+        <text x="372" y="186" font-size="12" fill="var(--muted)">vs last month</text>
+        <polyline points="480,186 500,182 516,184 532,176 548,178 564,170 580,172 598,164" fill="none" stroke="var(--px-orange)" stroke-width="2"></polyline>
+      </svg>
+      <figcaption>
+        Two KPIs in one widget: a gauge with a limit, and revenue with a goal bar and a trend.
+      </figcaption>
+    </figure>
+  </LegalSection>
+
+  <LegalSection id="ai" n="3" title="AI features">
+    <div class="cards">
+      <div class="card">
+        <h3>Create with AI</h3>
+        <p>
+          Describe a KPI in plain words and choose the boards to use. The AI picks the columns,
+          groups and filters (including dates such as “this quarter”), writes the formula, and sets a
+          sensible format, visual and goal.
+        </p>
+      </div>
+      <div class="card">
+        <h3>You stay in control</h3>
+        <p>
+          Nothing is saved until you review it. Every board, column, status label and formula the AI
+          suggests is checked against your real boards. Anything that doesn't match is left out and
+          listed for you to fix.
+        </p>
+      </div>
+      <div class="card">
+        <h3>AI insights</h3>
+        <p>
+          On Pro and Business, open “How it's calculated” and choose <em>Summarize with AI</em> for a
+          one or two sentence read of the KPI: progress toward the goal, recent change, and what
+          drives it.
+        </p>
+      </div>
+    </div>
+    <p class="note">
+      <strong>What is sent to the AI.</strong> To create a KPI, KPI Builder sends your request and
+      the selected boards' names, group names, column names and status labels to Claude by
+      Anthropic. For an insight, it sends the KPI's name, formula and the numbers shown in the
+      panel. Item names and cell values are never sent. AI features run only when you click them.
+      See the <a href="/apps/kpi-builder/privacy">privacy policy</a> for details.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="inputs" n="4" title="Inputs: pulling numbers from boards">
+    <p>
+      An <strong>input</strong> is one number taken from your boards. Give it a short name, like
+      <code>BUDGET</code> or <code>DONE</code>, and use that name in formulas.
+    </p>
+    <div class="cards">
+      <div class="card">
+        <h3>Column values</h3>
+        <p>
+          Sum, average, median, minimum or maximum of one or more columns. Works with Numbers,
+          Formula, Mirror, Rating and Time tracking columns (time is counted in hours).
+        </p>
+      </div>
+      <div class="card">
+        <h3>Count items</h3>
+        <p>How many items match. Combine it with filters to count, for example, items whose status is Done.</p>
+      </div>
+      <div class="card">
+        <h3>Groups and boards</h3>
+        <p>Limit an input to specific groups, or add more boards to combine data from across your account.</p>
+      </div>
+      <div class="card">
+        <h3>Filters</h3>
+        <p>
+          Keep only items where a column <em>is</em>, <em>contains</em>, or is <em>greater</em> or
+          <em>less</em> than a value. Date columns and the item's created date support periods like
+          <em>this month</em>, <em>last 30 days</em> or <em>before today</em>.
+        </p>
+      </div>
+    </div>
+  </LegalSection>
+
+  <LegalSection id="formulas" n="5" title="Formulas">
+    <p>
+      Combine inputs and plain numbers. Names aren't case sensitive, and the editor suggests names
+      and functions as you type.
+    </p>
+    <pre class="code-block">PERCENT(SPENT, BUDGET)
+ROUND((REVENUE - COST) / REVENUE * 100, 1)
+IF(WON + LOST = 0, 0, WON / (WON + LOST) * 100)</pre>
+    <div class="legal-table">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Operator or function</th>
+            <th scope="col">What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>+ − * / ^</code> and <code>( )</code></td>
+            <td data-label="What it does">Arithmetic, powers and grouping</td>
+          </tr>
+          <tr>
+            <td><code>&gt; &lt; &gt;= &lt;= = !=</code></td>
+            <td data-label="What it does">Comparisons (true = 1, false = 0), mostly used inside IF</td>
+          </tr>
+          <tr>
+            <td><code>SUM, AVG, MIN, MAX</code></td>
+            <td data-label="What it does">Combine several values</td>
+          </tr>
+          <tr>
+            <td><code>ROUND(x, digits)</code>, <code>FLOOR</code>, <code>CEIL</code></td>
+            <td data-label="What it does">Round to a number of decimals</td>
+          </tr>
+          <tr>
+            <td><code>PERCENT(part, total)</code></td>
+            <td data-label="What it does">part ÷ total × 100</td>
+          </tr>
+          <tr>
+            <td><code>IF(condition, then, else)</code></td>
+            <td data-label="What it does">
+              Choose a value. Only the branch that's taken is calculated, so
+              <code>IF(T = 0, 0, D / T)</code> never divides by zero
+            </td>
+          </tr>
+          <tr>
+            <td><code>ABS, SQRT</code></td>
+            <td data-label="What it does">Absolute value, square root</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </LegalSection>
+
+  <LegalSection id="display" n="6" title="Goals, trends and colors">
+    <h3 class="sub">Number format</h3>
+    <p>
+      Choose Number, Currency (20 currencies), Percent or Duration (hours shown as
+      <code>12h 30m</code>). Set decimals, compact numbers (12.3K), and optional text before or after
+      the number.
+    </p>
+    <h3 class="sub">Visuals</h3>
+    <p>
+      <strong>Number</strong> shows a large figure. <strong>Gauge</strong> and
+      <strong>Progress bar</strong> fill toward a goal. If there's no goal, they fill toward 100%
+      when the format is Percent.
+    </p>
+    <h3 class="sub">Goals and limits</h3>
+    <p>
+      Set a target as a number (<code>50000</code>) or a formula (<code>BUDGET * 0.9</code>). Choose
+      whether <em>higher</em> or <em>lower</em> is better. Spend, bugs and overdue work are better
+      lower, and their target is treated as a limit.
+    </p>
+    <h3 class="sub">Trends</h3>
+    <p>
+      KPI Builder saves one snapshot of each KPI per day while the dashboard is viewed. It then shows
+      the change since yesterday, last week or last month, along with a 30-day sparkline. Arrows are
+      green when the change is good, based on your higher or lower setting.
+    </p>
+    <h3 class="sub">Color rules</h3>
+    <p>
+      Recolor the number or tile background when the result crosses a threshold, for example red
+      below zero. The first matching rule wins.
+    </p>
+    <p class="note">Gauges, progress bars, goals, trends and color rules are on the Pro and Business plans.</p>
+  </LegalSection>
+
+  <LegalSection id="reading" n="7" title="Reading the widget">
+    <ul>
+      <li>
+        <strong>Click a KPI</strong> (or the list icon) to see how it's calculated: the formula with
+        live values, every input with its board, groups, filters and item count, the goal, and the
+        comparison value.
+      </li>
+      <li>
+        <strong>Refresh</strong> reloads board data. KPI Builder also refreshes by itself when a
+        connected board changes, and every 5 minutes.
+      </li>
+      <li>On Pro and Business, up to <strong>4 KPIs</strong> share one widget and arrange themselves to fit its size.</li>
+      <li>Light, dark and night themes follow your monday.com settings.</li>
+    </ul>
+  </LegalSection>
+
+  <LegalSection id="plans" n="8" title="Plans">
+    <div class="legal-table">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Plan</th>
+            <th scope="col">What's included</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Free</strong></td>
+            <td data-label="What's included">
+              One KPI per widget, up to 3 inputs from one board each, the big-number view, and 3
+              KPIs built with AI a day.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Pro</strong></td>
+            <td data-label="What's included">
+              Up to 4 KPIs per widget, 12 inputs that can combine boards, gauges and progress bars,
+              goals, trends, color rules, 25 AI-built KPIs and 50 AI insights a day.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Business</strong></td>
+            <td data-label="What's included">
+              Everything in Pro, 200 AI-built KPIs and 500 AI insights a day, and priority support.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Allowances are per account and reset at midnight UTC. If you move to a smaller plan, nothing is
+      deleted: extra KPIs and features come back when you upgrade. Plans are billed through
+      monday.com.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="faq" n="9" title="FAQ">
+    <div class="faq">
+      <details>
+        <summary>Why doesn't my KPI show a trend yet?</summary>
+        <p>
+          Trends compare with saved daily snapshots. The first comparison appears once there's a
+          snapshot from the chosen period (for example, one day after setup for “vs yesterday”).
+        </p>
+      </details>
+      <details>
+        <summary>Who can change the widget?</summary>
+        <p>
+          Anyone who can edit the dashboard. Viewers and guests see the KPIs and the calculation
+          details, but not the settings.
+        </p>
+      </details>
+      <details>
+        <summary>A board shows “deleted or no access”. What happened?</summary>
+        <p>
+          KPI Builder reads data with the permissions of whoever is viewing the dashboard. If a board
+          was deleted, or the viewer can't access it, KPI Builder says so instead of showing a wrong
+          number. Pick another board, or share the board with the viewer.
+        </p>
+      </details>
+      <details>
+        <summary>Does KPI Builder store my board data?</summary>
+        <p>
+          No. Board data is read in your browser while the widget is open. KPI Builder saves only the
+          widget's settings and its daily KPI snapshots, in monday.com's app storage for that widget.
+          The AI features don't store anything either: requests go to Anthropic's API and the answer
+          comes straight back.
+        </p>
+      </details>
+      <details>
+        <summary>How large can boards be?</summary>
+        <p>
+          KPI Builder reads boards 500 items at a time, up to 25,000 items per board. Large boards
+          take a moment to load, and a progress indicator is shown meanwhile. If a board has more than
+          25,000 items, the widget says so, so you know the KPI covers the first 25,000.
+        </p>
+      </details>
+      <details>
+        <summary>How do I delete what KPI Builder saved?</summary>
+        <p>
+          Open the widget's settings, go to <strong>Appearance</strong> and click
+          <strong>Delete saved data</strong>. This permanently deletes that widget's KPIs, settings
+          and trend history, and the widget goes back to its welcome screen. Your boards aren't
+          changed. Do this before removing the widget if you don't want its data kept. For anything
+          else, email <a href={`mailto:${email}`}>{email}</a>.
+        </p>
+      </details>
+    </div>
+    <p>Questions or feedback? Email <a href={`mailto:${email}`}>{email}</a>.</p>
+  </LegalSection>
+</AppLegalLayout>
+
+<style>
+  .guide-lead {
+    max-width: 60ch;
+    margin-bottom: 2.5rem;
+    font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+    line-height: 1.5;
+    color: var(--fg);
+  }
+
+  .steps {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    counter-reset: step;
+    border: 1px solid var(--line-strong);
+  }
+
+  .steps > li {
+    position: relative;
+    padding: 1.1rem 1.25rem 1.2rem 3.5rem;
+    border-bottom: 1px solid var(--line);
+    counter-increment: step;
+  }
+
+  .steps > li:last-child {
+    border-bottom: none;
+  }
+
+  .steps > li::before {
+    content: counter(step, decimal-leading-zero);
+    position: absolute;
+    left: 1.25rem;
+    top: 1.2rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--px-orange);
+  }
+
+  .steps strong {
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  .figure {
+    margin: 0.5rem 0 0;
+  }
+
+  .figure svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    font-family: var(--font-sans);
+  }
+
+  .figure figcaption {
+    margin-top: 0.6rem;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    border-top: 1px solid var(--line-strong);
+    border-left: 1px solid var(--line-strong);
+  }
+
+  .card {
+    padding: 1.1rem 1.25rem 1.25rem;
+    border-right: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .card h3,
+  .sub {
+    margin-bottom: 0.35rem;
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: var(--fg);
+  }
+
+  .sub {
+    margin: 0.75rem 0 -0.5rem;
+  }
+
+  .card p {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  .note {
+    padding: 1rem 1.25rem;
+    border-left: 3px solid var(--px-orange);
+    background-color: var(--bg-raised);
+    font-size: 0.9375rem;
+  }
+
+  .code-block {
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--line-strong);
+    background-color: var(--bg-raised);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--fg);
+    overflow-x: auto;
+  }
+
+  .faq {
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .faq details {
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .faq summary {
+    padding: 1rem 0;
+    font-weight: 500;
+    color: var(--fg);
+    cursor: pointer;
+  }
+
+  .faq details p {
+    padding-bottom: 1rem;
+  }
+</style>

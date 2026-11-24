@@ -2,12 +2,13 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import { getCollection } from 'astro:content';
+import PixelArt from '../../components/PixelArt.astro';
 import ShareButtons from '../../components/ShareButtons.astro';
+import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  return posts.map(post => ({
+  return posts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
   }));
@@ -15,172 +16,265 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
+const minutes = Math.max(1, Math.round(post.body.split(/\s+/).filter(Boolean).length / 220));
 ---
 
 <Layout
-  title={`${post.data.title} — Ali Siddique`}
+  title={`${post.data.title} — Salinash Studio`}
   description={post.data.description}
   ogType="article"
   publishedDate={post.data.date}
 >
   <Header activePage="blog" />
 
-  <article class="post-article">
-    <header class="post-header">
-      <div class="post-header-meta">
-        <a href="/blog" class="back-link">← Blog</a>
-        <span class="post-date">{post.data.date}</span>
-      </div>
-      <h1 class="post-title">{post.data.title}</h1>
+  <main>
+    <div class="back-bar">
+      <a href="/blog" class="back-link">
+        <PixelArt name="chev" scale={2} class="chev chev-back" />
+        Blog
+      </a>
+      <span class="back-meta">{post.data.date}</span>
+    </div>
+
+    <header class="post-head">
+      <span class="eyebrow" data-reveal>/ Notes from the studio · {minutes} min read</span>
+      <h1 class="post-title" data-reveal="wipe">{post.data.title}</h1>
       {post.data.description && (
-        <p class="post-description">{post.data.description}</p>
+        <p class="post-description" data-reveal style="--delay:200ms">{post.data.description}</p>
       )}
     </header>
 
-    <div class="post-content">
-      <Content />
-    </div>
+    <div class="post-body">
+      <aside class="post-aside">
+        <div class="aside-inner" data-reveal-stagger="80">
+          <div class="aside-block">
+            <span class="eyebrow">/ Published</span>
+            <span class="aside-value">{post.data.date}</span>
+          </div>
+          <div class="aside-block">
+            <span class="eyebrow">/ Reading time</span>
+            <span class="aside-value">{minutes} min</span>
+          </div>
+          <ShareButtons title={post.data.title} />
+        </div>
+      </aside>
 
-    <ShareButtons title={post.data.title} />
-  </article>
+      <article class="post-content" data-reveal>
+        <Content />
+      </article>
+    </div>
+  </main>
 
   <Footer />
 </Layout>
 
 <style>
-  .post-article {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 3rem 1.25rem 6rem;
-  }
-
-  .post-header {
-    margin-bottom: 3rem;
-    padding-bottom: 2rem;
+  .back-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem clamp(1.25rem, 3.5vw, 3.5rem);
     border-bottom: 1px solid var(--line);
   }
 
-  .post-header-meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1.5rem;
-  }
-
   .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.75rem;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
     font-family: var(--font-mono);
     font-size: 0.75rem;
-    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--muted);
-    text-decoration: none;
-    transition: opacity 0.2s;
+    letter-spacing: 0.06em;
+    transition: background-color 0.2s, border-color 0.2s;
   }
 
   .back-link:hover {
-    opacity: 0.6;
+    background-color: var(--bg-hover);
+    border-color: #4a4a52;
   }
 
-  .post-date {
+  .back-link :global(.chev-back) {
+    transform: rotate(180deg);
+  }
+
+  .back-meta {
     font-family: var(--font-mono);
     font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
     color: var(--muted);
+  }
+
+  .post-head {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: clamp(3.5rem, 7vw, 6rem) clamp(1.25rem, 3.5vw, 3.5rem) clamp(3rem, 5vw, 4rem);
+    border-bottom: 1px solid var(--line);
   }
 
   .post-title {
-    font-family: var(--font-sans);
-    font-size: clamp(2rem, 5vw, 3.5rem);
+    max-width: 18ch;
+    font-size: clamp(2.5rem, 6.4vw, 6.75rem);
     font-weight: 500;
-    line-height: 1.1;
-    letter-spacing: -0.01em;
-    margin-bottom: 1rem;
+    line-height: 0.98;
+    letter-spacing: -0.05em;
+    text-wrap: balance;
   }
 
   .post-description {
-    font-family: var(--font-sans);
-    font-size: 1.125rem;
-    font-weight: 400;
+    max-width: 56ch;
+    font-size: clamp(1.125rem, 1.6vw, 1.375rem);
     line-height: 1.5;
-    color: var(--muted);
+    color: var(--fg-soft);
   }
 
-  /* Markdown content styles — matching site aesthetic */
+  /* Body: sticky meta column + reading column, like the homepage's tab layout */
+  .post-body {
+    display: grid;
+    grid-template-columns: 26% 1fr;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .post-aside {
+    border-right: 1px solid var(--line);
+    padding: 3rem clamp(1.25rem, 3vw, 3.5rem);
+  }
+
+  .aside-inner {
+    position: sticky;
+    top: calc(var(--nav-h) + 2rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .aside-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .aside-value {
+    font-size: 1.125rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  /* Markdown content */
   .post-content {
-    font-family: var(--font-sans);
-    font-size: 1.0625rem;
-    font-weight: 400;
-    line-height: 1.7;
-    color: var(--fg);
+    max-width: 72ch;
+    padding: 3rem clamp(1.25rem, 4vw, 4rem) 5rem;
+    font-size: 1.125rem;
+    line-height: 1.75;
+    color: var(--fg-soft);
   }
 
   .post-content :global(h1),
   .post-content :global(h2),
   .post-content :global(h3),
   .post-content :global(h4) {
-    font-family: var(--font-sans);
+    color: var(--fg);
     font-weight: 500;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-    margin-top: 2.5rem;
-    margin-bottom: 0.75rem;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
   }
 
-  .post-content :global(h1) { font-size: clamp(1.75rem, 3vw, 2.5rem); }
-  .post-content :global(h2) { font-size: clamp(1.375rem, 2.5vw, 1.875rem); }
-  .post-content :global(h3) { font-size: 1.25rem; }
-  .post-content :global(h4) { font-size: 1.0625rem; }
+  .post-content :global(h2:first-child),
+  .post-content :global(h1:first-child) {
+    margin-top: 0;
+  }
+
+  .post-content :global(h1) { font-size: clamp(2rem, 3.4vw, 2.75rem); }
+  .post-content :global(h2) { font-size: clamp(1.625rem, 2.8vw, 2.25rem); }
+  .post-content :global(h3) { font-size: 1.375rem; }
+  .post-content :global(h4) { font-size: 1.125rem; }
 
   .post-content :global(p) {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.4rem;
+  }
+
+  .post-content :global(strong),
+  .post-content :global(b) {
+    font-weight: 500;
+    color: var(--fg);
   }
 
   .post-content :global(a) {
+    color: var(--fg);
     text-decoration: underline;
-    text-underline-offset: 3px;
-    transition: opacity 0.2s;
+    text-decoration-color: var(--px-orange);
+    text-underline-offset: 4px;
+    transition: color 0.2s;
   }
 
   .post-content :global(a:hover) {
-    opacity: 0.6;
+    color: var(--px-amber);
   }
 
   .post-content :global(ul),
   .post-content :global(ol) {
-    margin-bottom: 1.25rem;
-    padding-left: 1.5rem;
+    margin-bottom: 1.4rem;
+    padding-left: 1.25rem;
+  }
+
+  .post-content :global(ul) {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .post-content :global(ul li) {
+    position: relative;
+    padding-left: 1.25rem;
+  }
+
+  .post-content :global(ul li::before) {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.72em;
+    width: 5px;
+    height: 5px;
+    background-color: var(--px-orange);
+  }
+
+  .post-content :global(ol) {
+    list-style: decimal;
   }
 
   .post-content :global(li) {
-    margin-bottom: 0.375rem;
+    margin-bottom: 0.4rem;
   }
 
   .post-content :global(blockquote) {
-    border-left: 2px solid var(--line);
-    padding-left: 1.25rem;
-    margin: 1.5rem 0;
-    color: var(--muted);
-    font-style: italic;
+    margin: 2rem 0;
+    padding: 0.25rem 0 0.25rem 1.5rem;
+    border-left: 3px solid var(--px-orange);
+    font-size: 1.375rem;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    color: var(--fg);
   }
 
   .post-content :global(code) {
     font-family: var(--font-mono);
-    font-size: 0.875em;
+    font-size: 0.85em;
     background-color: var(--bg-raised);
-    border: 1px solid var(--line);
-    padding: 0.125em 0.375em;
-    border-radius: 3px;
+    border: 1px solid var(--line-strong);
+    padding: 0.1em 0.4em;
+    color: var(--px-mint);
   }
 
   .post-content :global(pre) {
-    background-color: var(--bg-raised);
-    border: 1px solid var(--line);
-    padding: 1.25rem;
+    margin-bottom: 1.4rem;
+    padding: 1.25rem 1.5rem;
+    background-color: #0b0b0c !important;
+    border: 1px solid var(--line-strong);
     overflow-x: auto;
-    margin-bottom: 1.25rem;
   }
 
   .post-content :global(pre code) {
@@ -188,12 +282,13 @@ const { Content } = await post.render();
     border: none;
     padding: 0;
     font-size: 0.875rem;
+    color: var(--fg-soft);
   }
 
   .post-content :global(hr) {
     border: none;
     border-top: 1px solid var(--line);
-    margin: 2.5rem 0;
+    margin: 3rem 0;
   }
 
   .post-content :global(img) {
@@ -204,7 +299,7 @@ const { Content } = await post.render();
   .post-content :global(table) {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.4rem;
     font-family: var(--font-mono);
     font-size: 0.8125rem;
   }
@@ -219,7 +314,30 @@ const { Content } = await post.render();
   .post-content :global(th) {
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.05em;
     background-color: var(--bg-raised);
+    color: var(--fg);
+  }
+
+  @media (max-width: 900px) {
+    .post-body {
+      grid-template-columns: 1fr;
+    }
+
+    .post-aside {
+      order: 2;
+      border-right: none;
+      border-top: 1px solid var(--line);
+      padding: 2rem 1rem;
+    }
+
+    .aside-inner {
+      position: static;
+    }
+
+    .post-content {
+      padding: 2.5rem 1rem 3.5rem;
+      font-size: 1.0625rem;
+    }
   }
 </style>

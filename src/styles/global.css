@@ -253,3 +253,48 @@ ul {
     scroll-behavior: auto !important;
   }
 }
+
+/* ---------- Motion ----------
+ * Elements opt in with data-reveal (fade up), data-reveal="wipe" (stepped pixel wipe,
+ * for big headlines) or data-reveal-stagger (children enter one after another).
+ * Hidden states only apply once html.js-motion is set, so nothing is lost without JS
+ * or with reduced motion. src/components/Motion.astro adds .is-in on scroll.
+ */
+html.js-motion [data-reveal]:not(.is-in),
+html.js-motion [data-reveal-stagger]:not(.is-in) > * {
+  opacity: 0;
+  transform: translateY(26px);
+}
+
+html.js-motion [data-reveal],
+html.js-motion [data-reveal-stagger] > * {
+  transition:
+    opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1),
+    clip-path 0.9s steps(14, end);
+  transition-delay: var(--delay, 0s);
+}
+
+html.js-motion [data-reveal="wipe"]:not(.is-in) {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(0 100% 0 0);
+}
+
+html.js-motion [data-reveal="wipe"].is-in {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Numbers that count up (see Motion.astro) */
+[data-count] {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes px-blink {
+  50% { opacity: 0; }
+}
+
+@keyframes px-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}

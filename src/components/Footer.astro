@@ -19,12 +19,12 @@ const year = new Date().getFullYear();
 
 <section class="cta" aria-labelledby="cta-title">
   <div class="cta-inner">
-    <span class="eyebrow">/ Start a project</span>
-    <h2 class="statement cta-title" id="cta-title">
+    <span class="eyebrow" data-reveal>/ Start a project</span>
+    <h2 class="statement cta-title" id="cta-title" data-reveal="wipe">
       Got something to build?<br />
       <span class="cta-dim">Let's scope it properly.</span>
     </h2>
-    <div class="cta-actions">
+    <div class="cta-actions" data-reveal style="--delay:200ms">
       <a href={startMailto} class="btn btn-light">
         Get in touch
         <PixelArt name="chev" scale={2} class="chev" />
@@ -37,9 +37,9 @@ const year = new Date().getFullYear();
     <a href={`mailto:${studio.email}`} class="cta-email">{studio.email}</a>
   </div>
 
-  <div class="skyline" aria-hidden="true">
+  <div class="skyline" aria-hidden="true" data-reveal-hook>
     {heights.map((h, col) => (
-      <div class:list={['sky-col', { 'sky-wide': col >= 16 }]}>
+      <div class:list={['sky-col', { 'sky-wide': col >= 16 }]} style={`--c:${col % 16}`}>
         {Array.from({ length: h }, (_, level) => (
           <span class="sky-cell" style={`background-color:${levelColor[level]}`}></span>
         ))}
@@ -52,7 +52,7 @@ const year = new Date().getFullYear();
 </section>
 
 <footer class="site-footer">
-  <div class="footer-grid">
+  <div class="footer-grid" data-reveal-stagger="90">
     <div class="footer-cell footer-brand">
       <a href="/" class="footer-logo">
         <PixelArt name="logo" scale={4} />
@@ -90,7 +90,7 @@ const year = new Date().getFullYear();
       </ul>
     </div>
   </div>
-  <div class="wordmark" aria-hidden="true">
+  <div class="wordmark" aria-hidden="true" data-reveal-hook>
     <svg viewBox="0 0 1000 172" xmlns="http://www.w3.org/2000/svg" focusable="false">
       <defs>
         <linearGradient id="wordmark-ramp" gradientUnits="userSpaceOnUse" x1="0" y1="8" x2="0" y2="168">
@@ -183,11 +183,25 @@ const year = new Date().getFullYear();
     aspect-ratio: 1;
   }
 
+  /* Columns rise out of the floor in a wave; sprites land last */
+  .sky-col {
+    transition: translate 0.7s steps(6, end);
+    transition-delay: calc(var(--c) * 45ms);
+  }
+
+  :global(html.js-motion) .skyline:not(.is-in) .sky-col {
+    translate: 0 101%;
+  }
+
+  .sky-col :global(.sky-sprite) {
+    animation: px-bob 2.6s steps(3) infinite;
+  }
+
   .sky-col :global(.sky-sprite) {
     position: absolute;
     bottom: 100%;
     left: 50%;
-    transform: translateX(-50%);
+    translate: -50% 0;
   }
 
   /* Footer */
@@ -259,6 +273,12 @@ const year = new Date().getFullYear();
     width: 100%;
     height: auto;
     overflow: visible;
+    transition: clip-path 1s steps(5, end) 0.15s;
+  }
+
+  /* Builds up one colour band at a time, crimson first */
+  :global(html.js-motion) .wordmark:not(.is-in) svg {
+    clip-path: inset(100% 0 0 0);
   }
 
   .wordmark text {

@@ -41,11 +41,13 @@ src/
 │   ├── Header.astro          # Sticky cell-based nav bar + mobile menu
 │   ├── Footer.astro          # CTA, pixel skyline, link grid, full-width wordmark
 │   ├── ProjectCard.astro     # Work card with hover clip-path reveal
-│   ├── ProjectVisual.astro   # Inline SVG cover art, one per project
+│   ├── ProjectVisual.astro   # Pixel-mosaic project art with an animated mock-up per project
 │   ├── PixelArt.astro        # Renders a sprite from data/pixels.ts as crisp SVG
 │   ├── PixelGrid.astro       # Seeded pixel-mosaic backdrop
 │   ├── CapabilityVisual.astro# Mock-ups for the four discipline panels
-│   └── ShareButtons.astro    # Blog post share row
+│   ├── Motion.astro          # Scroll reveals, pixel wipes and count-ups (site-wide)
+│   ├── ShareButtons.astro    # Blog post share row
+│   └── sections/             # Shared blocks: SectionHead, NumbersGrid, ProcessGrid, StackList
 ├── data/
 │   ├── studio.ts             # Single source of truth (see above)
 │   └── pixels.ts             # Pixel sprites as character grids + palette
@@ -78,9 +80,14 @@ pnpm preview     # preview the production build
 - **Pixel art** is drawn as character grids in `src/data/pixels.ts` — each character is a
   palette colour, `.` is transparent, `X` follows the text colour. Add a sprite there and
   render it with `<PixelArt name="…" />`.
-- **Project artwork** is inline SVG rather than bitmap screenshots, so covers stay crisp,
-  add no image weight, and inherit the site's colour variables. Swap a variant's markup in
-  `ProjectVisual.astro` to drop in real product screenshots later.
+- **Project artwork** is code, not bitmaps: a seeded pixel mosaic in the project's colour
+  with an animated HTML mock-up of the product on top, so covers stay crisp and add no image
+  weight. Swap a variant's markup in `ProjectVisual.astro` to drop in real screenshots later.
+- **Motion** is opt-in per element: `data-reveal` (fade up), `data-reveal="wipe"` (stepped
+  pixel wipe for big headings), `data-reveal-stagger="80"` (children enter in turn),
+  `data-reveal-hook` (just adds `.is-in` for a component's own entrance) and `data-count`
+  (numbers count up). Hidden start states only apply when `html.js-motion` is set, so
+  everything shows without JavaScript or with reduced motion.
 - **Old work URLs** (`/work/ios-app`, `/work/website`, `/work/monday-app`,
   `/work/framer-template`, `/work/shopify-app`) redirect to their nearest current case study
   via `redirects` in `astro.config.mjs`.

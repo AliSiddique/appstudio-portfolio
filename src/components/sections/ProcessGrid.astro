@@ -1,0 +1,113 @@
+---
+/** The four engagement stages, each with a pixel meter that fills as it scrolls in. */
+import { process } from '../../data/studio';
+---
+
+<ol class="process-grid" data-reveal-stagger="110">
+  {process.map((step, i) => (
+    <li class="process-cell">
+      <span class="process-meter" aria-hidden="true">
+        {process.map((_, j) => (
+          <i class:list={[{ on: j <= i }]} style={`--j:${j}`}></i>
+        ))}
+      </span>
+      <span class="process-num">{step.number}</span>
+      <h3 class="process-step">{step.title}</h3>
+      <p class="process-body">{step.body}</p>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    list-style: none;
+  }
+
+  .process-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    padding: 2rem clamp(1.25rem, 2.5vw, 2.25rem) 2.75rem;
+    border-right: 1px solid var(--line);
+  }
+
+  .process-cell:last-child {
+    border-right: none;
+  }
+
+  .process-meter {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 1rem;
+  }
+
+  .process-meter i {
+    width: 14px;
+    height: 14px;
+    background-color: #222226;
+    transition: background-color 0.2s steps(1);
+    transition-delay: calc(var(--delay, 0s) + 400ms + var(--j) * 140ms);
+  }
+
+  .process-meter i.on:nth-child(1) { background-color: var(--px-yellow); }
+  .process-meter i.on:nth-child(2) { background-color: var(--px-amber); }
+  .process-meter i.on:nth-child(3) { background-color: var(--px-orange); }
+  .process-meter i.on:nth-child(4) { background-color: var(--px-red); }
+
+  /* Before the grid scrolls in, the meters are empty */
+  :global(html.js-motion) .process-grid:not(.is-in) .process-meter i {
+    background-color: #222226;
+  }
+
+  .process-num {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--dim);
+  }
+
+  .process-step {
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .process-body {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  @media (max-width: 1100px) {
+    .process-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .process-cell:nth-child(2n) {
+      border-right: none;
+    }
+
+    .process-cell:nth-child(-n + 2) {
+      border-bottom: 1px solid var(--line);
+    }
+  }
+
+  @media (max-width: 700px) {
+    .process-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .process-cell,
+    .process-cell:nth-child(2n) {
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .process-cell:last-child {
+      border-bottom: none;
+    }
+  }
+</style>

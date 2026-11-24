@@ -9,10 +9,12 @@ interface Props {
   cols?: number;
   rows?: number;
   seed?: number;
+  /** Share of cells that flash lighter now and then (0 turns it off). */
+  twinkle?: number;
   class?: string;
 }
 
-const { colors, cols = 16, rows = 10, seed = 7, class: className } = Astro.props;
+const { colors, cols = 16, rows = 10, seed = 7, twinkle = 0.09, class: className } = Astro.props;
 
 let state = seed >>> 0;
 const rand = () => {
@@ -28,6 +30,11 @@ for (let y = 0; y < rows; y++) {
     cells.push({ x, y, fill });
   }
 }
+
+/* Twinkle overlays: white squares that flash briefly, each on its own clock. */
+const sparks = cells
+  .filter(() => rand() < twinkle)
+  .map((c) => ({ ...c, delay: (rand() * 6).toFixed(2), dur: (4 + rand() * 4).toFixed(2) }));
 ---
 
 <svg
@@ -40,6 +47,9 @@ for (let y = 0; y < rows; y++) {
   focusable="false"
 >
   {cells.map((c) => <rect x={c.x} y={c.y} width="1.02" height="1.02" fill={c.fill} />)}
+  {sparks.map((c) => (
+    <rect class="spark" x={c.x} y={c.y} width="1" height="1" style={`animation-delay:${c.delay}s;animation-duration:${c.dur}s`} />
+  ))}
 </svg>
 
 <style>
@@ -47,5 +57,18 @@ for (let y = 0; y < rows; y++) {
     display: block;
     width: 100%;
     height: 100%;
+  }
+
+  .spark {
+    fill: #ffffff;
+    opacity: 0;
+    animation: spark 6s steps(1) infinite;
+  }
+
+  @keyframes spark {
+    0%, 100% { opacity: 0; }
+    6% { opacity: 0.32; }
+    12% { opacity: 0.14; }
+    18% { opacity: 0; }
   }
 </style>

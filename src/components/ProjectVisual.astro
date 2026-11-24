@@ -1,337 +1,1299 @@
 ---
+/**
+ * Project artwork: a pixel mosaic in the project's colour with an animated mock-up of the
+ * product on top, in the same idiom as the capability panels on the home page.
+ *
+ * The mock-ups live on a 3:2 "stage" sized in container units (cqw), so they scale with
+ * whatever holds them. `fit="slice"` fills the box (cards); `fit="meet"` centres the 3:2
+ * stage inside a wider band and lets the mosaic run to the edges (case study covers).
+ * Mock-ups are illustrations of each product, not screenshots.
+ */
+import PixelArt from './PixelArt.astro';
+import PixelGrid from './PixelGrid.astro';
 import type { VisualVariant } from '../data/studio';
 
 interface Props {
   variant: VisualVariant;
   class?: string;
-  /** 'slice' fills the box (cards, whose 3:2 matches the viewBox); 'meet' fits the whole
-      drawing inside a wider band without cropping (case study covers). */
   fit?: 'slice' | 'meet';
 }
 
 const { variant, class: className = '', fit = 'slice' } = Astro.props;
 
-/* Each case study draws its line art in one colour from the pixel palette. */
-const ink: Record<VisualVariant, string> = {
-  motion: '#ff8103',
-  imaging: '#a8d2ff',
-  geometry: '#ffaf02',
-  landscape: '#3eb67e',
-  assessment: '#ff5228',
-  portfolio: '#ffd21f',
-  audio: '#8de0b9',
-  platform: '#5aa9ff',
+const palettes: Record<VisualVariant, string[]> = {
+  motion: ['#ff7a1a', '#ff8f3a', '#ff6a0d', '#ffa45c', '#f25a07'],
+  imaging: ['#7dbcfb', '#a8d2ff', '#4a9ff2', '#cfe6ff', '#2d8ff0'],
+  geometry: ['#ffd34d', '#ffc21a', '#ffe17a', '#ffb800', '#ffcf33'],
+  landscape: ['#6fd5a8', '#8fe3bf', '#4fc490', '#b5efd5', '#3eb67e'],
+  portfolio: ['#ff5a3c', '#ff6e4f', '#f2462a', '#ff8a6e', '#e63b1f'],
+  assessment: ['#bfe3ff', '#a6d6ff', '#d9efff', '#8cc8f5', '#b3dcfc'],
+  audio: ['#b5efd5', '#a0e8c7', '#c8f4e0', '#8de0b9', '#d6f7e8'],
+  platform: ['#ffb31a', '#ffa200', '#ffc04d', '#ff9500', '#ffbb33'],
 };
+
+const seeds: Record<VisualVariant, number> = {
+  motion: 5,
+  imaging: 13,
+  geometry: 29,
+  landscape: 37,
+  portfolio: 43,
+  assessment: 59,
+  audio: 67,
+  platform: 71,
+};
+
+const walkFrames = [
+  { sprite: 'walkStand', n: '01', flip: false },
+  { sprite: 'walkStep', n: '08', flip: false },
+  { sprite: 'walkStand', n: '16', flip: false },
+  { sprite: 'walkStep', n: '24', flip: true },
+] as const;
+
+const phones = [
+  { icon: 'chart', rows: ['#ffd21f', '#ff8103', '#3eb67e'] },
+  { icon: 'rocket', rows: ['#a8d2ff', '#ff5228', '#ffaf02'] },
+  { icon: 'bolt', rows: ['#8de0b9', '#ffd21f', '#037de3'] },
+] as const;
+
+/* GameTestPrep puzzle: size steps down each column, colour changes each row. */
+const puzzle = [
+  ['#ffaf02', 64], ['#ffaf02', 44], ['#ffaf02', 26],
+  ['#ff5228', 64], ['#ff5228', 44], ['#ff5228', 26],
+  ['#037de3', 64], ['#037de3', 44], null,
+] as const;
+
+const waveBars = [3, 6, 9, 5, 12, 8, 4, 10, 14, 7, 5, 11, 6, 13, 9, 4, 8, 12, 5, 10, 7, 3, 9, 6, 11, 4, 8, 13, 6, 9, 5, 7];
+const requestBars = [5, 6, 5, 7, 8, 7, 9, 8, 10, 9, 11, 10, 9, 11, 12, 11, 13, 12, 14, 13];
 ---
 
-<svg
-  class:list={['project-visual', className]}
-  viewBox="0 0 1200 800"
-  preserveAspectRatio={`xMidYMid ${fit}`}
-  xmlns="http://www.w3.org/2000/svg"
-  role="presentation"
-  aria-hidden="true"
-  style={`--ink:${ink[variant]}`}
->
-  <rect width="1200" height="800" fill="var(--visual-bg, #161618)" />
+<div class:list={['pv', `pv-${variant}`, `pv-${fit}`, className]} aria-hidden="true" data-reveal-hook>
+  <PixelGrid colors={palettes[variant]} seed={seeds[variant]} cols={18} rows={12} class="pv-bg" />
 
-  {/* Shared background grid */}
-  <g stroke="#ffffff" stroke-width="1" opacity="0.06">
-    {Array.from({ length: 11 }, (_, i) => (
-      <line x1={i * 120} y1="0" x2={i * 120} y2="800" />
-    ))}
-    {Array.from({ length: 7 }, (_, i) => (
-      <line x1="0" y1={i * 120} x2="1200" y2={i * 120} />
-    ))}
-  </g>
+  <div class="pv-stage">
+    {variant === 'motion' && (
+      <div class="pv-win mo-win" style="--e:0">
+        <div class="pv-bar">
+          <span class="pv-dots"><i></i><i></i><i></i></span>
+          <span>npcmotion · generate</span>
+          <span class="pv-live"><i></i>GPU warm</span>
+        </div>
+        <div class="mo-prompt">
+          <span class="mo-sigil">&gt;</span> zombie shuffles forward, arms out<span class="pv-cursor"></span>
+        </div>
+        <div class="mo-body">
+          <div class="mo-strip">
+            {walkFrames.map((f, k) => (
+              <div class="mo-frame" style={`--k:${k}`}>
+                <PixelArt name={f.sprite} scale={4} class={f.flip ? 'flip' : undefined} />
+                <span>f{f.n}</span>
+              </div>
+            ))}
+          </div>
+          <div class="mo-preview">
+            <span class="mo-walker">
+              <PixelArt name="walkStand" scale={6} class="w-stand" />
+              <PixelArt name="walkStep" scale={6} class="w-step" />
+              <PixelArt name="walkStep" scale={6} class="w-flip flip" />
+            </span>
+            <span class="mo-ground"></span>
+            <span class="mo-label">preview</span>
+          </div>
+        </div>
+        <div class="mo-foot">
+          <span class="pv-tag">HY-Motion</span>
+          <span class="pv-tag">Kimodo</span>
+          <span class="pv-tag pv-tag-ok">R15 rig ✓</span>
+        </div>
+      </div>
+    )}
 
-  {variant === 'motion' && (
-    <g stroke="currentColor" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-      {/* Timeline */}
-      <line x1="120" y1="640" x2="1080" y2="640" stroke-width="2" opacity="0.35" />
-      {[0, 1, 2, 3, 4].map((i) => (
-        <line x1={160 + i * 220} y1="628" x2={160 + i * 220} y2="652" stroke-width="2" opacity="0.5" />
-      ))}
-      {/* Keyframe figures: a walk cycle sampled across the timeline */}
-      {[
-        { x: 160, la: -28, ra: 26, ll: 22, rl: -20 },
-        { x: 380, la: -14, ra: 14, ll: 10, rl: -8 },
-        { x: 600, la: 6, ra: -8, ll: -8, rl: 10 },
-        { x: 820, la: 22, ra: -24, ll: -20, rl: 22 },
-        { x: 1040, la: 30, ra: -30, ll: -26, rl: 28 },
-      ].map((p, i) => (
-        <g opacity={0.3 + i * 0.175}>
-          <circle cx={p.x} cy="300" r="26" />
-          <line x1={p.x} y1="326" x2={p.x} y2="450" />
-          <line x1={p.x} y1="360" x2={p.x + p.la * 2.2} y2="430" />
-          <line x1={p.x} y1="360" x2={p.x + p.ra * 2.2} y2="430" />
-          <line x1={p.x} y1="450" x2={p.x + p.ll * 2.2} y2="560" />
-          <line x1={p.x} y1="450" x2={p.x + p.rl * 2.2} y2="560" />
-        </g>
-      ))}
-      {/* GPU inference block feeding the rig */}
-      <rect x="120" y="110" width="250" height="90" rx="4" stroke-width="2.5" />
-      <line x1="150" y1="140" x2="150" y2="170" stroke-width="2" />
-      <line x1="172" y1="140" x2="172" y2="170" stroke-width="2" />
-      <line x1="194" y1="140" x2="194" y2="170" stroke-width="2" />
-      <rect x="830" y="110" width="250" height="90" rx="4" stroke-width="2.5" opacity="0.55" />
-      <path d="M 380 155 L 810 155" stroke-width="2" stroke-dasharray="10 10" opacity="0.5" />
-      <path d="M 795 143 L 815 155 L 795 167" stroke-width="2" opacity="0.5" />
-    </g>
-  )}
+    {variant === 'imaging' && (
+      <>
+        <div class="pv-win im-win" style="--e:0">
+          <div class="pv-bar">
+            <span class="pv-dots"><i></i><i></i><i></i></span>
+            <span>DICOM Viewer Pro</span>
+            <span class="pv-right">Axial</span>
+          </div>
+          <div class="im-body">
+            <div class="im-series">
+              {[0, 1, 2, 3].map((k) => (
+                <span class="im-thumb" style={`--k:${k}`}><PixelArt name="scan" scale={2} /></span>
+              ))}
+            </div>
+            <div class="im-view">
+              <PixelArt name="scan" scale={8} class="im-scan" />
+              <i class="im-cross-h"></i>
+              <i class="im-cross-v"></i>
+              <i class="im-sweep"></i>
+              <span class="im-ov im-tl">Series 2</span>
+              <span class="im-ov im-br">W / L</span>
+            </div>
+            <div class="im-wl"><i></i></div>
+          </div>
+        </div>
+        <span class="pv-tag pv-float im-tag" style="--e:2">Metal pipeline</span>
+      </>
+    )}
 
-  {variant === 'imaging' && (
-    <g stroke="currentColor" fill="none" stroke-width="2.5">
-      {/* Stacked scan slices in perspective */}
-      {[0, 1, 2, 3].map((i) => (
-        <g opacity={0.25 + i * 0.25} transform={`translate(${i * 56} ${-i * 34})`}>
-          <rect x="180" y="300" width="330" height="330" rx="3" />
-        </g>
-      ))}
-      {/* Foreground slice content: an axial cross-section */}
-      <g transform="translate(168 -102)">
-        <ellipse cx="345" cy="465" rx="128" ry="150" stroke-width="3" />
-        <ellipse cx="345" cy="465" rx="84" ry="102" opacity="0.6" />
-        <ellipse cx="308" cy="440" rx="26" ry="34" opacity="0.45" />
-        <ellipse cx="384" cy="440" rx="26" ry="34" opacity="0.45" />
-        <line x1="345" y1="300" x2="345" y2="630" stroke-width="1.5" opacity="0.4" />
-        <line x1="185" y1="465" x2="505" y2="465" stroke-width="1.5" opacity="0.4" />
-      </g>
-      {/* Window/level intensity ramp */}
-      <rect x="820" y="560" width="280" height="44" rx="2" stroke-width="2" opacity="0.6" />
-      {Array.from({ length: 14 }, (_, i) => (
-        <line
-          x1={828 + i * 20}
-          y1="560"
-          x2={828 + i * 20}
-          y2="604"
-          stroke-width={1 + i * 0.55}
-          opacity="0.32"
-        />
-      ))}
-      {/* Series index markers */}
-      {[0, 1, 2, 3, 4, 5].map((i) => (
-        <rect x={820 + i * 48} y="180" width="34" height="34" rx="2" opacity={i === 2 ? 1 : 0.28} stroke-width="2" />
-      ))}
-    </g>
-  )}
+    {variant === 'geometry' && (
+      <div class="pv-win ge-win" style="--e:0">
+        <div class="pv-bar">
+          <span class="pv-dots"><i></i><i></i><i></i></span>
+          <span>ConvertPoly</span>
+          <span class="pv-right">scene.fbx</span>
+        </div>
+        <div class="ge-body">
+          <div class="ge-view">
+            <span class="ge-floor"></span>
+            <span class="ge-shadow"></span>
+            <PixelArt name="cube" scale={10} class="ge-cube" />
+            <span class="im-ov im-tl">WebGL</span>
+          </div>
+          <div class="ge-side">
+            <span class="ge-label">Export as</span>
+            {['OBJ', 'FBX', 'glTF', 'STL'].map((f, k) => (
+              <span class="ge-fmt" style={`--k:${k}`}>{f}</span>
+            ))}
+            <span class="ge-convert">
+              Convert
+              <PixelArt name="chev" scale={1} class="chev" />
+            </span>
+          </div>
+        </div>
+      </div>
+    )}
 
-  {variant === 'geometry' && (
-    <g stroke="currentColor" fill="none" stroke-width="2.5" stroke-linejoin="round">
-      {/* Wireframe polyhedron */}
-      <g transform="translate(600 400)">
-        <polygon points="0,-210 182,-105 182,105 0,210 -182,105 -182,-105" stroke-width="3" />
-        <polygon points="0,-120 104,-60 104,60 0,120 -104,60 -104,-60" opacity="0.65" />
-        <line x1="0" y1="-210" x2="0" y2="-120" opacity="0.5" />
-        <line x1="182" y1="-105" x2="104" y2="-60" opacity="0.5" />
-        <line x1="182" y1="105" x2="104" y2="60" opacity="0.5" />
-        <line x1="0" y1="210" x2="0" y2="120" opacity="0.5" />
-        <line x1="-182" y1="105" x2="-104" y2="60" opacity="0.5" />
-        <line x1="-182" y1="-105" x2="-104" y2="-60" opacity="0.5" />
-        {/* Triangulated faces */}
-        <line x1="0" y1="-210" x2="182" y2="105" opacity="0.28" stroke-width="1.5" />
-        <line x1="182" y1="-105" x2="0" y2="210" opacity="0.28" stroke-width="1.5" />
-        <line x1="-182" y1="-105" x2="182" y2="-105" opacity="0.28" stroke-width="1.5" />
-        <line x1="-182" y1="105" x2="182" y2="105" opacity="0.28" stroke-width="1.5" />
-      </g>
-      {/* Vertex handles */}
-      {[
-        [600, 190], [782, 295], [782, 505], [600, 610], [418, 505], [418, 295],
-      ].map(([cx, cy]) => (
-        <rect x={cx - 7} y={cy - 7} width="14" height="14" fill="currentColor" stroke="none" />
-      ))}
-      {/* Format exchange nodes */}
-      {[
-        { x: 150, y: 190 }, { x: 150, y: 590 }, { x: 1050, y: 190 }, { x: 1050, y: 590 },
-      ].map((n) => (
-        <rect x={n.x - 68} y={n.y - 30} width="136" height="60" rx="3" stroke-width="2" opacity="0.45" />
-      ))}
-      <path d="M 286 205 L 400 280" stroke-width="2" stroke-dasharray="8 8" opacity="0.4" />
-      <path d="M 286 575 L 400 510" stroke-width="2" stroke-dasharray="8 8" opacity="0.4" />
-      <path d="M 914 205 L 800 280" stroke-width="2" stroke-dasharray="8 8" opacity="0.4" />
-      <path d="M 914 575 L 800 510" stroke-width="2" stroke-dasharray="8 8" opacity="0.4" />
-    </g>
-  )}
+    {variant === 'landscape' && (
+      <>
+        <div class="pv-win la-win" style="--e:0">
+          <div class="pv-bar">
+            <span class="pv-dots"><i></i><i></i><i></i></span>
+            <span>garden plan</span>
+            <span class="pv-right">AI layout</span>
+          </div>
+          <div class="la-plot"><PixelArt name="garden" scale={8} class="la-garden" /></div>
+        </div>
+        <div class="pv-card la-stamp" style="--e:2">
+          <PixelArt name="trophy" scale={4} />
+          <span class="la-stamp-text">
+            <strong>Acquired</strong>
+            <small>via Acquire.com</small>
+          </span>
+        </div>
+        <div class="pv-card la-users" style="--e:3">
+          <strong data-count>4,000</strong>
+          <span>users reached</span>
+        </div>
+      </>
+    )}
 
-  {variant === 'landscape' && (
-    <g stroke="currentColor" fill="none" stroke-width="2.5">
-      {/* Topographic contours */}
-      {[0, 1, 2, 3, 4, 5].map((i) => (
-        <path
-          d={`M 100 ${640 - i * 34} C 320 ${560 - i * 50}, 480 ${700 - i * 30}, 660 ${590 - i * 46} S 980 ${470 - i * 36}, 1100 ${540 - i * 40}`}
-          opacity={0.9 - i * 0.12}
-          stroke-width={i === 0 ? 3 : 2}
-        />
-      ))}
-      {/* Planting plot grid */}
-      <g opacity="0.55">
-        {[0, 1, 2].map((r) =>
-          [0, 1, 2, 3].map((c) => (
-            <circle cx={250 + c * 120} cy={220 + r * 84} r="17" stroke-width="2" />
-          ))
-        )}
-      </g>
-      {/* Boundary */}
-      <rect x="180" y="150" width="560" height="290" rx="3" stroke-width="2" stroke-dasharray="12 8" opacity="0.5" />
-      {/* Acquired stamp */}
-      <g transform="translate(940 250)">
-        <circle cx="0" cy="0" r="104" stroke-width="3" opacity="0.8" />
-        <circle cx="0" cy="0" r="86" stroke-width="1.5" opacity="0.45" />
-        <path d="M -40 4 L -12 34 L 42 -28" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
-      </g>
-    </g>
-  )}
-
-  {variant === 'assessment' && (
-    <g stroke="currentColor" fill="none" stroke-width="2.5">
-      {/* Pattern-recognition tile grid */}
-      {[0, 1, 2].map((r) =>
-        [0, 1, 2, 3].map((c) => (
-          <rect x={200 + c * 210} y={180 + r * 160} width="160" height="120" rx="4" opacity="0.5" stroke-width="2" />
-        ))
-      )}
-      {/* Tile contents */}
-      <circle cx="280" cy="240" r="34" stroke-width="3" />
-      <rect x="456" y="206" width="68" height="68" stroke-width="3" />
-      <polygon points="700,206 734,274 666,274" stroke-width="3" />
-      <rect x="876" y="206" width="68" height="68" rx="34" stroke-width="3" />
-
-      <circle cx="280" cy="400" r="26" stroke-width="3" opacity="0.75" />
-      <rect x="466" y="374" width="52" height="52" stroke-width="3" opacity="0.75" />
-      <polygon points="700,374 726,426 674,426" stroke-width="3" opacity="0.75" />
-      <rect x="886" y="374" width="52" height="52" rx="26" stroke-width="3" opacity="0.75" />
-
-      <circle cx="280" cy="560" r="18" stroke-width="3" opacity="0.5" />
-      <rect x="474" y="542" width="36" height="36" stroke-width="3" opacity="0.5" />
-      <polygon points="700,542 718,578 682,578" stroke-width="3" opacity="0.5" />
-      {/* The answer slot */}
-      <rect x="830" y="500" width="160" height="120" rx="4" stroke-width="3" stroke-dasharray="10 8" />
-      <line x1="892" y1="560" x2="928" y2="560" stroke-width="3" />
-      <line x1="910" y1="542" x2="910" y2="578" stroke-width="3" />
-      {/* Timer bar */}
-      <rect x="200" y="672" width="790" height="20" rx="10" stroke-width="2" opacity="0.4" />
-      <rect x="200" y="672" width="470" height="20" rx="10" fill="currentColor" stroke="none" opacity="0.55" />
-    </g>
-  )}
-
-  {variant === 'portfolio' && (
-    <g stroke="currentColor" fill="none" stroke-width="2.5">
-      {/* Six devices, one per shipped app */}
-      {[0, 1, 2].map((r) =>
-        [0, 1, 2].map((c) => {
-          if (r > 1) return null;
-          const x = 230 + c * 260;
-          const y = 130 + r * 300;
-          return (
-            <g opacity={0.45 + (r * 3 + c) * 0.09}>
-              <rect x={x} y={y} width="170" height="260" rx="22" stroke-width="3" />
-              <rect x={x + 58} y={y + 12} width="54" height="10" rx="5" stroke-width="2" opacity="0.6" />
-              <line x1={x + 22} y1={y + 56} x2={x + 118} y2={y + 56} stroke-width="3" />
-              <line x1={x + 22} y1={y + 84} x2={x + 148} y2={y + 84} stroke-width="2" opacity="0.5" />
-              <rect x={x + 22} y={y + 108} width="126" height="74" rx="4" stroke-width="2" opacity="0.5" />
-              <line x1={x + 22} y1={y + 204} x2={x + 92} y2={y + 204} stroke-width="2" opacity="0.5" />
-              <rect x={x + 54} y={y + 226} width="62" height="8" rx="4" fill="currentColor" stroke="none" opacity="0.4" />
-            </g>
-          );
-        })
-      )}
-      {/* Revenue trend */}
-      <polyline
-        points="1010,650 1040,600 1070,612 1100,520 1130,470 1160,360"
-        stroke-width="3.5"
-      />
-      {[[1010, 650], [1040, 600], [1070, 612], [1100, 520], [1130, 470], [1160, 360]].map(([cx, cy]) => (
-        <circle cx={cx} cy={cy} r="6" fill="currentColor" stroke="none" />
-      ))}
-      <line x1="1000" y1="690" x2="1180" y2="690" stroke-width="2" opacity="0.35" />
-    </g>
-  )}
-
-  {variant === 'audio' && (
-    <g stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round">
-      {/* Waveform */}
-      <g>
-        {Array.from({ length: 44 }, (_, i) => {
-          const h = [26, 58, 96, 142, 72, 34, 110, 168, 88, 48, 132, 190, 104, 60, 84, 150, 196, 118, 66, 38][i % 20] * 0.82;
-          return (
-            <line
-              x1={140 + i * 22}
-              y1={300 - h / 2}
-              x2={140 + i * 22}
-              y2={300 + h / 2}
-              stroke-width="6"
-              opacity={i < 26 ? 0.85 : 0.28}
-            />
-          );
-        })}
-      </g>
-      {/* Playhead */}
-      <line x1="690" y1="170" x2="690" y2="430" stroke-width="3" opacity="0.6" />
-      {/* Embedding space: transcript segments as points, with a query neighbourhood */}
-      <g transform="translate(0 130)">
-        <circle cx="600" cy="420" r="150" stroke-width="2" stroke-dasharray="10 9" opacity="0.4" />
-        {[
-          [600, 420], [548, 372], [664, 392], [572, 470], [652, 468], [510, 432], [690, 448],
-        ].map(([cx, cy], i) => (
-          <circle cx={cx} cy={cy} r={i === 0 ? 13 : 8} fill="currentColor" stroke="none" opacity={i === 0 ? 1 : 0.55} />
+    {variant === 'portfolio' && (
+      <>
+        {phones.map((p, k) => (
+          <div class="pf-phone" style={`--k:${k};--e:${k}`}>
+            <div class="pf-screen">
+              <div class="pf-head">
+                <span class="pf-icon"><PixelArt name={p.icon} scale={2} /></span>
+                <i></i>
+              </div>
+              {p.rows.map((c) => (
+                <span class="pf-row"><b style={`background-color:${c}`}></b><i></i></span>
+              ))}
+              <span class="pf-cta"></span>
+            </div>
+          </div>
         ))}
-        {[[548, 372], [664, 392], [572, 470], [652, 468]].map(([x2, y2]) => (
-          <line x1="600" y1="420" x2={x2} y2={y2} stroke-width="1.8" opacity="0.4" />
-        ))}
-        {[[300, 380], [250, 466], [356, 300], [900, 400], [960, 480], [850, 320]].map(([cx, cy]) => (
-          <circle cx={cx} cy={cy} r="7" fill="currentColor" stroke="none" opacity="0.2" />
-        ))}
-      </g>
-    </g>
-  )}
+        <div class="pv-card pf-card" style="--e:3">
+          <strong data-count>£50K+</strong>
+          <span>revenue · six apps</span>
+          <div class="pf-bars">
+            {[3, 4, 4, 6, 7, 9, 10, 12].map((h, k) => (
+              <i style={`--h:${h};--k:${k}`}></i>
+            ))}
+          </div>
+        </div>
+      </>
+    )}
 
-  {variant === 'platform' && (
-    <g stroke="currentColor" fill="none" stroke-width="2.5">
-      {/* Ingress */}
-      <rect x="100" y="360" width="150" height="80" rx="4" stroke-width="3" />
-      {/* Service mesh */}
-      {[
-        { x: 400, y: 200 }, { x: 400, y: 400 }, { x: 400, y: 600 },
-        { x: 700, y: 300 }, { x: 700, y: 500 },
-      ].map((n) => (
-        <rect x={n.x - 75} y={n.y - 42} width="150" height="84" rx="4" stroke-width="2.5" opacity="0.8" />
-      ))}
-      {/* Edges */}
-      {[
-        [250, 400, 325, 200], [250, 400, 325, 400], [250, 400, 325, 600],
-        [475, 200, 625, 300], [475, 400, 625, 300], [475, 400, 625, 500], [475, 600, 625, 500],
-      ].map(([x1, y1, x2, y2]) => (
-        <line x1={x1} y1={y1} x2={x2} y2={y2} stroke-width="2" opacity="0.4" />
-      ))}
-      {/* Cache + queue */}
-      <g transform="translate(940 250)">
-        <ellipse cx="0" cy="-34" rx="72" ry="22" stroke-width="2.5" />
-        <path d="M -72 -34 L -72 44" stroke-width="2.5" />
-        <path d="M 72 -34 L 72 44" stroke-width="2.5" />
-        <ellipse cx="0" cy="44" rx="72" ry="22" stroke-width="2.5" />
-        <ellipse cx="0" cy="6" rx="72" ry="22" stroke-width="1.5" opacity="0.4" />
-      </g>
-      <g transform="translate(940 520)">
-        <rect x="-78" y="-34" width="156" height="68" rx="4" stroke-width="2.5" />
-        {[0, 1, 2].map((i) => (
-          <rect x={-62 + i * 44} y="-16" width="32" height="32" rx="2" stroke-width="2" opacity={0.85 - i * 0.22} />
-        ))}
-      </g>
-      <line x1="775" y1="300" x2="862" y2="270" stroke-width="2" opacity="0.4" />
-      <line x1="775" y1="500" x2="858" y2="520" stroke-width="2" opacity="0.4" />
-      {/* Metrics readout */}
-      <polyline points="120,660 190,660 220,612 260,690 300,640 350,655 420,655" stroke-width="3" opacity="0.7" />
-      <line x1="100" y1="710" x2="440" y2="710" stroke-width="2" opacity="0.3" />
-    </g>
-  )}
-</svg>
+    {variant === 'assessment' && (
+      <>
+        <div class="pv-win as-win" style="--e:0">
+          <div class="pv-bar">
+            <span class="pv-dots"><i></i><i></i><i></i></span>
+            <span>GameTestPrep</span>
+            <span class="pv-right">Level 4</span>
+          </div>
+          <div class="as-timer"><i></i></div>
+          <div class="as-grid">
+            {puzzle.map((cell) =>
+              cell ? (
+                <span class="as-cell">
+                  <b style={`background-color:${cell[0]};width:${cell[1]}%;height:${cell[1]}%`}></b>
+                </span>
+              ) : (
+                <span class="as-cell as-slot">?</span>
+              )
+            )}
+          </div>
+          <div class="as-foot">
+            <span class="pv-tag">Pattern recognition</span>
+            <span class="as-btn">Submit</span>
+          </div>
+        </div>
+        <div class="pv-card as-users" style="--e:2">
+          <strong data-count>500</strong>
+          <span>users</span>
+        </div>
+      </>
+    )}
+
+    {variant === 'audio' && (
+      <>
+        <div class="pv-win au-win" style="--e:0">
+          <div class="pv-bar">
+            <span class="pv-dots"><i></i><i></i><i></i></span>
+            <span>transcribe</span>
+            <span class="pv-live pv-live-red"><i></i>Live</span>
+          </div>
+          <div class="au-wave">
+            {waveBars.map((h, k) => (
+              <i style={`--h:${h};--k:${k}`}></i>
+            ))}
+            <span class="au-head"></span>
+          </div>
+          <div class="au-lines">
+            <p><span class="au-time">00:42</span> we should revisit <mark>pricing</mark> before launch</p>
+            <p><span class="au-time">00:47</span> the <mark style="--k:1">cost</mark> question came up again</p>
+            <p><span class="au-time">00:53</span> agreed, let’s<span class="pv-cursor"></span></p>
+          </div>
+        </div>
+        <div class="pv-card au-search" style="--e:2">
+          <span class="au-q">Search by meaning</span>
+          <strong>“pricing worries”</strong>
+          <span class="au-hit">00:42</span>
+          <span class="au-hit">00:47</span>
+        </div>
+      </>
+    )}
+
+    {variant === 'platform' && (
+      <>
+        <div class="pv-win pl-win" style="--e:0">
+          <div class="pv-bar">
+            <span class="pv-dots"><i></i><i></i><i></i></span>
+            <span>inventory · production</span>
+            <span class="pv-live"><i></i>healthy</span>
+          </div>
+          <div class="pl-body">
+            <div class="pl-panel">
+              <span class="pl-label">Pods</span>
+              <div class="pl-pods">
+                {Array.from({ length: 12 }, (_, k) => (
+                  <i style={`--k:${k}`}></i>
+                ))}
+              </div>
+            </div>
+            <div class="pl-panel">
+              <span class="pl-label">Requests</span>
+              <div class="pl-bars">
+                {requestBars.map((h, k) => (
+                  <i style={`--h:${h};--k:${k}`}></i>
+                ))}
+              </div>
+            </div>
+            <div class="pl-pipe">
+              {['build', 'test', 'deploy'].map((step, k) => (
+                <>
+                  {k > 0 && <PixelArt name="chev" scale={1} class="chev" />}
+                  <span class="pl-step" style={`--k:${k}`}>{step}</span>
+                </>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div class="pv-card pl-deploy" style="--e:2">
+          <strong data-count>−70%</strong>
+          <span>deploy time</span>
+        </div>
+      </>
+    )}
+  </div>
+</div>
 
 <style>
-  .project-visual {
+  .pv {
+    position: relative;
     display: block;
     width: 100%;
     height: 100%;
-    color: var(--ink);
-    background-color: var(--visual-bg, #161618);
+    overflow: hidden;
+    isolation: isolate;
+    font-family: var(--font-mono);
+    color: var(--fg);
+  }
+
+  .pv :global(.pv-bg) {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .pv-stage {
+    position: absolute;
+    container-type: inline-size;
+  }
+
+  .pv-slice .pv-stage {
+    inset: 0;
+  }
+
+  .pv-meet .pv-stage {
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    height: 100%;
+    aspect-ratio: 3 / 2;
+    max-width: 100%;
+    transform: translateX(-50%);
+  }
+
+  .pv :global(.flip) {
+    transform: scaleX(-1);
+  }
+
+  /* ---------- Shared chrome ---------- */
+  .pv-win,
+  .pv-card,
+  .pv-float,
+  .pf-phone {
+    position: absolute;
+    transition:
+      opacity 0.7s ease,
+      transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition-delay: calc(var(--e, 0) * 120ms + 100ms);
+  }
+
+  :global(html.js-motion) .pv:not(.is-in) :is(.pv-win, .pv-card, .pv-float, .pf-phone) {
+    opacity: 0;
+    transform: translateY(4cqw);
+  }
+
+  .pv-win {
+    background-color: #121214;
+    border-radius: 1cqw;
+    box-shadow: 0 2.5cqw 5cqw rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+  }
+
+  .pv-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.4cqw;
+    padding: 1.2cqw 1.8cqw;
+    border-bottom: 1px solid #26262b;
+    font-size: clamp(7px, 1.6cqw, 12px);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .pv-dots {
+    display: inline-flex;
+    gap: 0.6cqw;
+  }
+
+  .pv-dots i {
+    width: 0.9cqw;
+    height: 0.9cqw;
+    background-color: var(--px-green);
+  }
+
+  .pv-dots i:first-child {
+    background-color: var(--px-red);
+  }
+
+  .pv-dots i:nth-child(2) {
+    background-color: var(--px-amber);
+  }
+
+  .pv-right,
+  .pv-live {
+    margin-left: auto;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .pv-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7cqw;
+    color: var(--px-mint);
+  }
+
+  .pv-live i {
+    width: 0.9cqw;
+    height: 0.9cqw;
+    background-color: var(--px-green);
+    animation: px-blink 1.4s steps(1) infinite;
+  }
+
+  .pv-live-red {
+    color: #ff8f7a;
+  }
+
+  .pv-live-red i {
+    background-color: var(--px-red);
+  }
+
+  .pv-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.7cqw 1.2cqw;
+    background-color: #1b1b1f;
+    border: 1px solid #2c2c32;
+    font-size: clamp(7px, 1.45cqw, 11px);
+    color: var(--fg-soft);
+    white-space: nowrap;
+  }
+
+  .pv-tag-ok {
+    color: var(--px-mint);
+  }
+
+  .pv-cursor {
+    display: inline-block;
+    width: 0.55em;
+    height: 1em;
+    margin-left: 0.15em;
+    vertical-align: -0.15em;
+    background-color: var(--px-orange);
+    animation: px-blink 1s steps(1) infinite;
+  }
+
+  .pv-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6cqw;
+    padding: 2cqw 2.2cqw;
+    background-color: #121214;
+    border-radius: 1cqw;
+    box-shadow: 0 2.5cqw 5cqw rgba(0, 0, 0, 0.3);
+    font-size: clamp(7px, 1.45cqw, 11px);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  .pv-card strong {
+    font-family: var(--font-sans);
+    font-size: clamp(14px, 4.4cqw, 34px);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    text-transform: none;
+    color: var(--fg);
+  }
+
+  .im-ov {
+    position: absolute;
+    font-size: clamp(6px, 1.3cqw, 10px);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--px-sky);
+  }
+
+  .im-tl {
+    top: 1.2cqw;
+    left: 1.4cqw;
+  }
+
+  .im-br {
+    right: 1.4cqw;
+    bottom: 1.2cqw;
+  }
+
+  /* ---------- NPCMotion ---------- */
+  .mo-win {
+    left: 7%;
+    top: 15%;
+    width: 86%;
+  }
+
+  .mo-prompt {
+    padding: 1.8cqw 2cqw 0;
+    font-size: clamp(8px, 1.9cqw, 14px);
+    color: var(--fg);
+    white-space: nowrap;
+  }
+
+  .mo-sigil {
+    color: var(--px-orange);
+  }
+
+  .mo-body {
+    display: flex;
+    gap: 1.6cqw;
+    padding: 1.8cqw 2cqw;
+  }
+
+  .mo-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1cqw;
+    flex: 1;
+  }
+
+  .mo-frame {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1cqw;
+    padding: 2cqw 0 1cqw;
+    background-color: #18181b;
+    border: 1px solid #2a2a30;
+    font-size: clamp(6px, 1.25cqw, 10px);
+    color: var(--dim);
+    animation: mo-active 2.4s steps(1) infinite;
+    animation-delay: calc(var(--k) * 0.6s);
+  }
+
+  .mo-frame :global(svg) {
+    width: 45%;
+    height: auto;
+  }
+
+  @keyframes mo-active {
+    0% { border-color: var(--px-orange); color: var(--px-orange); }
+    25%, 100% { border-color: #2a2a30; color: var(--dim); }
+  }
+
+  .mo-preview {
+    position: relative;
+    width: 24cqw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 3.4cqw;
+    background-color: #0b0b0d;
+    border: 1px solid #2a2a30;
+  }
+
+  .mo-walker {
+    position: relative;
+    display: block;
+    width: 8cqw;
+    aspect-ratio: 9 / 12;
+  }
+
+  .mo-walker :global(svg) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: auto;
+  }
+
+  .mo-walker :global(.w-stand) { animation: w-stand 1.2s linear infinite; }
+  .mo-walker :global(.w-step) { animation: w-step 1.2s linear infinite; }
+  .mo-walker :global(.w-flip) { animation: w-flip 1.2s linear infinite; }
+
+  @keyframes w-stand {
+    0%, 24.9% { opacity: 1; }
+    25%, 49.9% { opacity: 0; }
+    50%, 74.9% { opacity: 1; }
+    75%, 100% { opacity: 0; }
+  }
+
+  @keyframes w-step {
+    0%, 24.9% { opacity: 0; }
+    25%, 49.9% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+
+  @keyframes w-flip {
+    0%, 74.9% { opacity: 0; }
+    75%, 100% { opacity: 1; }
+  }
+
+  .mo-ground {
+    width: 70%;
+    height: 2px;
+    margin-top: 0.4cqw;
+    background: repeating-linear-gradient(90deg, #3a3a42 0 4px, transparent 4px 8px);
+    animation: ground 0.6s linear infinite;
+  }
+
+  @keyframes ground {
+    to { background-position: -8px 0; }
+  }
+
+  .mo-label {
+    position: absolute;
+    left: 1.2cqw;
+    top: 1cqw;
+    font-size: clamp(6px, 1.2cqw, 9px);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--dim);
+  }
+
+  .mo-foot {
+    display: flex;
+    gap: 1cqw;
+    padding: 0 2cqw 2cqw;
+  }
+
+  /* ---------- DICOM Viewer Pro ---------- */
+  .im-win {
+    left: 7%;
+    top: 13%;
+    width: 86%;
+  }
+
+  .im-body {
+    display: grid;
+    grid-template-columns: 9cqw 1fr 2.4cqw;
+    gap: 1.6cqw;
+    padding: 1.8cqw;
+  }
+
+  .im-series {
+    display: flex;
+    flex-direction: column;
+    gap: 1cqw;
+  }
+
+  .im-thumb {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    background-color: #000;
+    border: 1px solid #26262b;
+    animation: im-thumb 4s steps(1) infinite;
+    animation-delay: calc(var(--k) * 1s);
+  }
+
+  .im-thumb :global(svg) {
+    width: 70%;
+    height: auto;
+  }
+
+  @keyframes im-thumb {
+    0% { border-color: var(--px-sky); }
+    25%, 100% { border-color: #26262b; }
+  }
+
+  .im-view {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 10;
+    background-color: #000;
+    overflow: hidden;
+  }
+
+  .im-view :global(.im-scan) {
+    width: auto;
+    height: 86%;
+  }
+
+  .im-cross-h,
+  .im-cross-v {
+    position: absolute;
+    background-color: rgba(168, 210, 255, 0.45);
+  }
+
+  .im-cross-h {
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    animation: im-cross-y 6s ease-in-out infinite;
+  }
+
+  .im-cross-v {
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    animation: im-cross-x 7s ease-in-out infinite;
+  }
+
+  @keyframes im-cross-y {
+    0%, 100% { top: 42%; }
+    50% { top: 60%; }
+  }
+
+  @keyframes im-cross-x {
+    0%, 100% { left: 56%; }
+    50% { left: 40%; }
+  }
+
+  .im-sweep {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -20%;
+    height: 18%;
+    background: linear-gradient(180deg, transparent, rgba(3, 125, 227, 0.28), transparent);
+    animation: im-sweep 3.2s linear infinite;
+  }
+
+  @keyframes im-sweep {
+    to { top: 110%; }
+  }
+
+  .im-wl {
+    position: relative;
+    background-color: #1d1d22;
+  }
+
+  .im-wl i {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 14%;
+    background-color: var(--px-sky);
+    animation: im-wl 5s ease-in-out infinite;
+  }
+
+  @keyframes im-wl {
+    0%, 100% { top: 18%; }
+    50% { top: 62%; }
+  }
+
+  .im-tag {
+    right: 5%;
+    bottom: 6%;
+  }
+
+  /* ---------- ConvertPoly ---------- */
+  .ge-win {
+    left: 7%;
+    top: 13%;
+    width: 86%;
+  }
+
+  .ge-body {
+    display: grid;
+    grid-template-columns: 1fr 17cqw;
+    gap: 1.6cqw;
+    padding: 1.8cqw;
+  }
+
+  .ge-view {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 10;
+    background-color: #0b0b0d;
+    overflow: hidden;
+    perspective: 40cqw;
+  }
+
+  .ge-floor {
+    position: absolute;
+    left: -30%;
+    right: -30%;
+    bottom: -18%;
+    height: 70%;
+    background-image:
+      linear-gradient(rgba(255, 210, 31, 0.28) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 210, 31, 0.28) 1px, transparent 1px);
+    background-size: 4cqw 4cqw;
+    transform: rotateX(68deg);
+    transform-origin: bottom;
+    animation: ge-floor 3s linear infinite;
+  }
+
+  @keyframes ge-floor {
+    to { background-position: 0 4cqw; }
+  }
+
+  .ge-view :global(.ge-cube) {
+    position: relative;
+    width: 15cqw;
+    height: auto;
+    margin-bottom: 4cqw;
+    animation: px-bob 2.4s ease-in-out infinite;
+  }
+
+  .ge-shadow {
+    position: absolute;
+    bottom: 22%;
+    width: 13cqw;
+    height: 1.4cqw;
+    background-color: rgba(0, 0, 0, 0.6);
+    animation: ge-shadow 2.4s ease-in-out infinite;
+  }
+
+  @keyframes ge-shadow {
+    50% { transform: scaleX(0.8); opacity: 0.6; }
+  }
+
+  .ge-side {
+    display: flex;
+    flex-direction: column;
+    gap: 1cqw;
+  }
+
+  .ge-label {
+    font-size: clamp(6px, 1.25cqw, 10px);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--dim);
+  }
+
+  .ge-fmt {
+    padding: 1.1cqw 1.3cqw;
+    border: 1px solid #2a2a30;
+    font-size: clamp(7px, 1.6cqw, 12px);
+    color: var(--fg-soft);
+    animation: ge-fmt 4s steps(1) infinite;
+    animation-delay: calc(var(--k) * 1s);
+  }
+
+  @keyframes ge-fmt {
+    0% { background-color: var(--px-yellow); border-color: var(--px-yellow); color: #101012; }
+    25%, 100% { background-color: transparent; border-color: #2a2a30; color: var(--fg-soft); }
+  }
+
+  .ge-convert {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding: 1.2cqw 1.3cqw;
+    background-color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: clamp(7px, 1.6cqw, 12px);
+    font-weight: 500;
+    color: #101012;
+  }
+
+  .ge-convert :global(.chev) {
+    width: 0.8cqw;
+    height: auto;
+  }
+
+  /* ---------- AI Landscape Designer ---------- */
+  .la-win {
+    left: 7%;
+    top: 14%;
+    width: 58%;
+  }
+
+  .la-plot {
+    padding: 1.6cqw;
+  }
+
+  .la-plot :global(.la-garden) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .la-stamp {
+    right: 6%;
+    top: 16%;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.6cqw;
+    padding: 2cqw 2.6cqw;
+    border: 2px solid var(--px-amber);
+    rotate: -6deg;
+  }
+
+  .la-stamp :global(svg) {
+    width: 4.6cqw;
+    height: auto;
+  }
+
+  .la-stamp-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4cqw;
+  }
+
+  .la-stamp strong {
+    font-size: clamp(12px, 3.2cqw, 24px);
+    color: var(--px-amber);
+  }
+
+  :global(html.js-motion) .pv:not(.is-in) .la-stamp {
+    transform: scale(1.6);
+  }
+
+  .la-users {
+    right: 9%;
+    bottom: 14%;
+  }
+
+  /* ---------- iOS App Portfolio ---------- */
+  .pf-phone {
+    top: calc(15% + var(--k) * 4%);
+    left: calc(9% + var(--k) * 21%);
+    width: 19cqw;
+    aspect-ratio: 9 / 18;
+    padding: 1cqw;
+    background-color: #0d0d0f;
+    border-radius: 3cqw;
+    box-shadow: 0 2.5cqw 5cqw rgba(0, 0, 0, 0.3);
+    animation: px-bob 3.6s ease-in-out infinite;
+    animation-delay: calc(var(--k) * -1.2s);
+  }
+
+  .pf-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 1.3cqw;
+    height: 100%;
+    padding: 2.6cqw 1.4cqw 1.4cqw;
+    background-color: #050507;
+    border-radius: 2.2cqw;
+  }
+
+  .pf-head {
+    display: flex;
+    align-items: center;
+    gap: 1cqw;
+    margin-bottom: 0.6cqw;
+  }
+
+  .pf-icon {
+    display: grid;
+    place-items: center;
+    width: 4.6cqw;
+    height: 4.6cqw;
+    background-color: #1d1d22;
+    border-radius: 1cqw;
+  }
+
+  .pf-icon :global(svg) {
+    width: 62%;
+    height: auto;
+  }
+
+  .pf-head i,
+  .pf-row i {
+    flex: 1;
+    height: 1cqw;
+    background-color: #2a2a30;
+  }
+
+  .pf-row {
+    display: flex;
+    align-items: center;
+    gap: 1cqw;
+    padding: 1cqw;
+    background-color: #141417;
+  }
+
+  .pf-row b {
+    width: 2.6cqw;
+    height: 2.6cqw;
+  }
+
+  .pf-cta {
+    margin-top: auto;
+    height: 3.4cqw;
+    background-color: var(--px-blue);
+    border-radius: 0.8cqw;
+  }
+
+  .pf-card {
+    right: 5%;
+    bottom: 11%;
+    width: 30%;
+  }
+
+  .pf-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.6cqw;
+    height: 7cqw;
+    margin-top: 1cqw;
+  }
+
+  .pf-bars i {
+    flex: 1;
+    height: calc(var(--h) * 0.55cqw);
+    background-color: var(--px-red);
+    transform-origin: bottom;
+    transition: transform 0.5s steps(4);
+    transition-delay: calc(var(--k) * 90ms + 600ms);
+  }
+
+  :global(html.js-motion) .pv:not(.is-in) .pf-bars i {
+    transform: scaleY(0);
+  }
+
+  /* ---------- GameTestPrep ---------- */
+  .as-win {
+    left: 8%;
+    top: 12%;
+    width: 56%;
+  }
+
+  .as-timer {
+    height: 0.9cqw;
+    background-color: #1d1d22;
+  }
+
+  .as-timer i {
+    display: block;
+    height: 100%;
+    background-color: var(--px-sky);
+    animation: as-timer 8s steps(16) infinite;
+    transform-origin: left;
+  }
+
+  @keyframes as-timer {
+    from { transform: scaleX(1); }
+    to { transform: scaleX(0); }
+  }
+
+  .as-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2cqw;
+    padding: 2cqw;
+  }
+
+  .as-cell {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 3 / 2;
+    background-color: #18181b;
+    border: 1px solid #26262b;
+  }
+
+  .as-slot {
+    border: 1px dashed var(--px-sky);
+    font-family: var(--font-sans);
+    font-size: clamp(12px, 4cqw, 30px);
+    font-weight: 500;
+    color: var(--px-sky);
+    animation: px-blink 1.2s steps(1) infinite;
+  }
+
+  .as-foot {
+    display: flex;
+    justify-content: space-between;
+    gap: 1cqw;
+    padding: 0 2cqw 2cqw;
+  }
+
+  .as-btn {
+    padding: 0.8cqw 1.6cqw;
+    background-color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: clamp(7px, 1.5cqw, 11px);
+    font-weight: 500;
+    color: #101012;
+  }
+
+  .as-users {
+    right: 9%;
+    bottom: 18%;
+  }
+
+  /* ---------- AI Audio Transcriber ---------- */
+  .au-win {
+    left: 7%;
+    top: 15%;
+    width: 64%;
+  }
+
+  .au-wave {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5cqw;
+    height: 12cqw;
+    padding: 0 2cqw;
+    border-bottom: 1px solid #26262b;
+  }
+
+  .au-wave i {
+    flex: 1;
+    height: calc(var(--h) * 0.65cqw);
+    background-color: var(--px-mint);
+    animation: au-wave 1.1s ease-in-out infinite alternate;
+    animation-delay: calc(var(--k) * -0.13s);
+  }
+
+  @keyframes au-wave {
+    from { transform: scaleY(0.35); }
+    to { transform: scaleY(1); }
+  }
+
+  .au-head {
+    position: absolute;
+    top: 10%;
+    bottom: 10%;
+    left: 2cqw;
+    width: 2px;
+    background-color: var(--fg);
+    animation: au-head 6s linear infinite;
+  }
+
+  @keyframes au-head {
+    to { left: calc(100% - 2cqw); }
+  }
+
+  .au-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2cqw;
+    padding: 2cqw;
+    font-family: var(--font-sans);
+    font-size: clamp(8px, 1.8cqw, 14px);
+    color: var(--fg-soft);
+    white-space: nowrap;
+  }
+
+  .au-time {
+    margin-right: 1cqw;
+    font-family: var(--font-mono);
+    font-size: 0.8em;
+    color: var(--dim);
+  }
+
+  .au-lines mark {
+    padding: 0 0.3em;
+    color: #101012;
+    background: linear-gradient(90deg, var(--px-mint) 50%, transparent 50%) 100% 0 / 200% 100% no-repeat;
+    animation: au-mark 4s steps(6) infinite;
+    animation-delay: calc(var(--k, 0) * 0.8s);
+  }
+
+  @keyframes au-mark {
+    0% { background-position: 100% 0; color: var(--fg-soft); }
+    30%, 100% { background-position: 0 0; color: #101012; }
+  }
+
+  .au-search {
+    right: 6%;
+    bottom: 12%;
+    width: 30%;
+  }
+
+  .au-search strong {
+    font-size: clamp(10px, 2.4cqw, 18px);
+    letter-spacing: -0.02em;
+  }
+
+  .au-hit {
+    padding: 0.7cqw 1cqw;
+    border: 1px solid #2c2c32;
+    color: var(--px-mint);
+  }
+
+  /* ---------- Inventory Cloud Platform ---------- */
+  .pl-win {
+    left: 7%;
+    top: 14%;
+    width: 64%;
+  }
+
+  .pl-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6cqw;
+    padding: 2cqw;
+  }
+
+  .pl-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2cqw;
+    padding: 1.6cqw;
+    background-color: #18181b;
+    border: 1px solid #26262b;
+  }
+
+  .pl-label {
+    font-size: clamp(6px, 1.25cqw, 10px);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--dim);
+  }
+
+  .pl-pods {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.8cqw;
+  }
+
+  /* Rolling deploy: each pod goes amber in turn, then back to green */
+  .pl-pods i {
+    aspect-ratio: 1;
+    background-color: var(--px-green);
+    animation: pl-pod 6s steps(1) infinite;
+    animation-delay: calc(var(--k) * 0.3s);
+  }
+
+  @keyframes pl-pod {
+    0% { background-color: var(--px-amber); }
+    6%, 100% { background-color: var(--px-green); }
+  }
+
+  .pl-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.4cqw;
+    height: 11cqw;
+  }
+
+  .pl-bars i {
+    flex: 1;
+    height: calc(var(--h) * 0.75cqw);
+    background-color: var(--px-amber);
+    transform-origin: bottom;
+    animation: pl-bar 2.6s ease-in-out infinite alternate;
+    animation-delay: calc(var(--k) * -0.2s);
+  }
+
+  @keyframes pl-bar {
+    from { transform: scaleY(0.7); }
+    to { transform: scaleY(1); }
+  }
+
+  .pl-pipe {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 1.2cqw;
+    color: var(--dim);
+  }
+
+  .pl-pipe :global(.chev) {
+    width: 0.8cqw;
+    height: auto;
+  }
+
+  .pl-step {
+    padding: 0.9cqw 1.4cqw;
+    border: 1px solid #2a2a30;
+    font-size: clamp(7px, 1.45cqw, 11px);
+    color: var(--fg-soft);
+    animation: pl-step 4.5s steps(1) infinite;
+    animation-delay: calc(var(--k) * 1.5s);
+  }
+
+  @keyframes pl-step {
+    0% { border-color: var(--px-green); color: var(--px-mint); }
+    33%, 100% { border-color: #2a2a30; color: var(--fg-soft); }
+  }
+
+  .pl-deploy {
+    right: 7%;
+    bottom: 16%;
+  }
+
+  .pl-deploy strong {
+    color: var(--px-amber);
   }
 </style>

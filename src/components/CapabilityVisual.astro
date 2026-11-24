@@ -53,7 +53,7 @@ const gpuBars = [0, 0, 1, 3, 6, 8, 7, 5, 6, 3, 1, 0];
 const deployBars = [10, 9, 10, 8, 9, 3, 3, 2, 3, 3];
 ---
 
-<div class:list={['cv', `cv-${variant}`]} aria-hidden="true">
+<div class:list={['cv', `cv-${variant}`]} aria-hidden="true" data-reveal-hook>
   <PixelGrid colors={palettes[variant]} seed={seeds[variant]} class="cv-bg" />
 
   {variant === 'ml' && (
@@ -64,7 +64,7 @@ const deployBars = [10, 9, 10, 8, 9, 3, 3, 2, 3, 3];
           <span>inference.yaml</span>
         </div>
         <div class="cv-code">{mlCode.map((line, n) => (
-          <span class="cv-line"><span class="ln">{n + 1}</span>{'  '.repeat(line.i ?? 0)}{line.raw && <span class="v">{line.raw}</span>}{line.k && <span class="k">{line.k}:</span>}{line.v && <span class="v"> {line.v}</span>}{line.c && <span class="c">{line.k ? '  ' : ''}{line.c}</span>}</span>
+          <span class="cv-line" style={`--n:${n}`}><span class="ln">{n + 1}</span>{'  '.repeat(line.i ?? 0)}{line.raw && <span class="v">{line.raw}</span>}{line.k && <span class="k">{line.k}:</span>}{line.v && <span class="v"> {line.v}</span>}{line.c && <span class="c">{line.k ? '  ' : ''}{line.c}</span>}</span>
         ))}</div>
       </div>
       <div class="cv-card cv-ml-gpu">
@@ -98,7 +98,7 @@ const deployBars = [10, 9, 10, 8, 9, 3, 3, 2, 3, 3];
           <span>WindowLevel.metal</span>
         </div>
         <div class="cv-code">{metalCode.map((line, n) => (
-          <span class="cv-line"><span class="ln">{n + 1}</span><span class="v">{line}</span></span>
+          <span class="cv-line" style={`--n:${n}`}><span class="ln">{n + 1}</span><span class="v">{line}</span></span>
         ))}</div>
       </div>
       <span class="node-tag cv-tag cv-ios-tag">+35% retention</span>
@@ -185,6 +185,39 @@ const deployBars = [10, 9, 10, 8, 9, 3, 3, 2, 3, 3];
     position: absolute;
     inset: 0;
     z-index: -1;
+  }
+
+  /* Entrance: chrome rises in, code types in line by line, once the panel is in view */
+  .cv-window,
+  .cv-card,
+  .cv-phone,
+  .cv-prompt,
+  .cv-tile,
+  .cv-label,
+  .cv-tag {
+    transition:
+      opacity 0.7s ease,
+      translate 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .cv-card,
+  .cv-tag,
+  .cv-label {
+    transition-delay: 0.35s;
+  }
+
+  :global(html.js-motion) .cv:not(.is-in) :is(.cv-window, .cv-card, .cv-phone, .cv-prompt, .cv-tile, .cv-label, .cv-tag) {
+    opacity: 0;
+    translate: 0 4cqw;
+  }
+
+  .cv-line {
+    transition: opacity 0.05s;
+    transition-delay: calc(0.5s + var(--n, 0) * 0.11s);
+  }
+
+  :global(html.js-motion) .cv:not(.is-in) .cv-line {
+    opacity: 0;
   }
 
   /* ---------- Shared window + card chrome ---------- */

@@ -284,4 +284,21 @@ const icon = projectIcon[slug] ?? 'chip';
   .details-cta :global(.chev) {
     transition: transform 0.2s;
   }
+
+  @media (max-width: 700px) {
+    .card-title-badge {
+      top: 0.625rem;
+      left: 0.625rem;
+      gap: 0.4rem;
+      padding: 0.3rem 0.55rem;
+      font-size: 0.8125rem;
+    }
+
+    .card-status-badge {
+      top: 0.625rem;
+      right: 0.625rem;
+      padding: 0.3rem 0.5rem;
+      font-size: 0.5625rem;
+    }
+  }
 </style>

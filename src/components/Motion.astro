@@ -1,0 +1,93 @@
+---
+/**
+ * Site-wide scroll motion. Pairs with the "Motion" block in global.css.
+ * - [data-reveal]          fades/slides in (or wipes, with ="wipe") when scrolled into view
+ * - [data-reveal-stagger]  reveals its children one after another
+ * - [data-count]           counts up to its own text ("£50K+", "20,000+", "−70%") once visible
+ * Elements also get a `reveal` event, for components with their own entrance.
+ */
+---
+
+<script is:inline>
+  // Runs before first paint so revealed elements never flash in and out.
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+    document.documentElement.classList.add('js-motion');
+  }
+</script>
+
+<script>
+  const root = document.documentElement;
+  const motion = root.classList.contains('js-motion');
+
+  const countUp = (el: HTMLElement) => {
+    if (el.dataset.counted) return;
+    el.dataset.counted = 'true';
+    const text = el.textContent ?? '';
+    const match = text.match(/^([^\d]*)([\d,.]+)(.*)$/s);
+    if (!match) return;
+    const [, prefix, digits, suffix] = match;
+    const target = parseFloat(digits.replace(/,/g, ''));
+    if (!isFinite(target) || target === 0) return;
+    const grouped = digits.includes(',');
+    const decimals = (digits.split('.')[1] ?? '').length;
+    const format = (n: number) => {
+      const fixed = n.toFixed(decimals);
+      return grouped ? Number(fixed).toLocaleString('en-GB', { minimumFractionDigits: decimals }) : fixed;
+    };
+    const duration = 1400;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 4);
+      el.textContent = prefix + format(target * eased) + suffix;
+      if (t < 1) requestAnimationFrame(tick);
+      else el.textContent = text;
+    };
+    requestAnimationFrame(tick);
+  };
+
+  if (motion) {
+    // A fully clipped element (the "wipe" start state) never reports as intersecting,
+    // so wipe targets are watched through their parent and revealed from there.
+    const targets = new Map<Element, HTMLElement[]>();
+    const watch = (observed: Element, el: HTMLElement) => {
+      const list = targets.get(observed) ?? [];
+      list.push(el);
+      targets.set(observed, list);
+    };
+
+    const reveal = (el: HTMLElement) => {
+      el.classList.add('is-in');
+      el.querySelectorAll<HTMLElement>('[data-count]').forEach(countUp);
+      if (el.hasAttribute('data-count')) countUp(el);
+      el.dispatchEvent(new CustomEvent('reveal'));
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          (targets.get(entry.target) ?? []).forEach(reveal);
+          targets.delete(entry.target);
+          io.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -6% 0px' }
+    );
+
+    document.querySelectorAll<HTMLElement>('[data-reveal-stagger]').forEach((parent) => {
+      const step = Number(parent.dataset.revealStagger) || 70;
+      Array.from(parent.children).forEach((child, i) => {
+        (child as HTMLElement).style.setProperty('--delay', `${Math.min(i, 14) * step}ms`);
+      });
+    });
+
+    document
+      .querySelectorAll<HTMLElement>('[data-reveal], [data-reveal-stagger], [data-reveal-hook]')
+      .forEach((el) => {
+        const observed = el.dataset.reveal === 'wipe' && el.parentElement ? el.parentElement : el;
+        watch(observed, el);
+      });
+    targets.forEach((_, observed) => io.observe(observed));
+  }
+</script>

@@ -1,12 +1,8 @@
 @import "tailwindcss";
 
-/*
- * Neue Montreal, self-hosted from public/fonts (licensed).
- * Only the weights the site uses are loaded: 400 and 500, plus mono 500.
- */
 @font-face {
   font-family: "Neue Montreal";
-  src: url("/fonts/neue-montreal-regular.woff2") format("woff2");
+  src: url("https://jackygrob.com/_astro/fonts/ade86920521c26c3.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -14,7 +10,7 @@
 
 @font-face {
   font-family: "Neue Montreal";
-  src: url("/fonts/neue-montreal-medium.woff2") format("woff2");
+  src: url("https://jackygrob.com/_astro/fonts/02d9a0380fe3ef52.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -22,7 +18,7 @@
 
 @font-face {
   font-family: "Neue Montreal Mono";
-  src: url("/fonts/neue-montreal-mono-medium.woff2") format("woff2");
+  src: url("https://jackygrob.com/_astro/fonts/e2090e63872bb3e3.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;

@@ -10,6 +10,8 @@ interface Props {
   ogImage?: string;
   ogType?: 'website' | 'article';
   publishedDate?: string;
+  /** Vercel Analytics. Off for pages whose privacy text promises no analytics. */
+  analytics?: boolean;
 }
 
 const {
@@ -18,6 +20,7 @@ const {
   ogImage = '/og-image.png',
   ogType = 'website',
   publishedDate,
+  analytics = true,
 } = Astro.props;
 
 const siteOrigin = Astro.site?.origin ?? studio.url;
@@ -105,7 +108,7 @@ const structuredData = {
 
     <!-- Structured data -->
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-        <Analytics />
+        {analytics && <Analytics />}
 
   </head>
   <body id="top">

@@ -1,0 +1,85 @@
+---
+/** The "short version" summary at the top of a legal document: ruled cells, one per point. */
+interface Props {
+  id?: string;
+}
+
+const { id = 'short-version' } = Astro.props;
+---
+
+<section class="short" id={id} aria-labelledby={`${id}-title`}>
+  <h2 class="short-title" id={`${id}-title`}>The short version</h2>
+  <ul class="short-list" data-reveal-stagger="80">
+    <slot />
+  </ul>
+</section>
+
+<style>
+  .short {
+    margin-bottom: 2.5rem;
+    border: 1px solid var(--line-strong);
+    background-color: var(--bg-raised);
+    scroll-margin-top: calc(var(--nav-h) + 1rem);
+  }
+
+  .short-title {
+    padding: 1.1rem 1.5rem;
+    border-bottom: 1px solid var(--line-strong);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--px-amber);
+  }
+
+  .short-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    list-style: none;
+  }
+
+  .short-list > :global(li) {
+    position: relative;
+    padding: 1.4rem 1.5rem 1.5rem 3rem;
+    border-bottom: 1px solid var(--line);
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    color: var(--fg);
+  }
+
+  .short-list > :global(li:nth-child(odd)) {
+    border-right: 1px solid var(--line);
+  }
+
+  .short-list > :global(li:nth-last-child(-n + 2):nth-child(odd)),
+  .short-list > :global(li:last-child) {
+    border-bottom: none;
+  }
+
+  .short-list > :global(li::before) {
+    content: "";
+    position: absolute;
+    left: 1.5rem;
+    top: 2.05rem;
+    width: 8px;
+    height: 8px;
+    background-color: var(--px-orange);
+  }
+
+  @media (max-width: 700px) {
+    .short-list {
+      grid-template-columns: 1fr;
+    }
+
+    .short-list > :global(li),
+    .short-list > :global(li:nth-child(odd)) {
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .short-list > :global(li:last-child) {
+      border-bottom: none;
+    }
+  }
+</style>

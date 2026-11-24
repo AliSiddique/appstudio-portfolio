@@ -1,0 +1,264 @@
+---
+import AppLegalLayout, { type LegalSectionRef } from '../../../layouts/AppLegalLayout.astro';
+import LegalSection from '../../../components/legal/LegalSection.astro';
+import ShortVersion from '../../../components/legal/ShortVersion.astro';
+
+const email = 'hello@salinash.studio';
+const privacy = '/apps/kpi-builder/privacy';
+
+const sections: LegalSectionRef[] = [
+  { id: 'short-version', title: 'The short version' },
+  { id: 'agreement', n: '1', title: 'Agreement' },
+  { id: 'the-service', n: '2', title: 'The service' },
+  { id: 'license', n: '3', title: 'License' },
+  { id: 'plans-and-payment', n: '4', title: 'Plans and payment' },
+  { id: 'your-data', n: '5', title: 'Your data' },
+  { id: 'ai-features', n: '6', title: 'AI features' },
+  { id: 'acceptable-use', n: '7', title: 'Acceptable use' },
+  { id: 'support', n: '8', title: 'Support and changes to the service' },
+  { id: 'contacting-you', n: '9', title: "How we'll contact you" },
+  { id: 'intellectual-property', n: '10', title: 'Intellectual property' },
+  { id: 'third-party-services', n: '11', title: 'Third-party services' },
+  { id: 'disclaimers', n: '12', title: 'Disclaimers' },
+  { id: 'liability', n: '13', title: 'Limitation of liability' },
+  { id: 'indemnity', n: '14', title: 'Indemnity' },
+  { id: 'termination', n: '15', title: 'Term and termination' },
+  { id: 'changes', n: '16', title: 'Changes to these terms' },
+  { id: 'governing-law', n: '17', title: 'Governing law' },
+  { id: 'contact', n: '18', title: 'Contact' },
+];
+---
+
+<AppLegalLayout
+  app="AI KPI & Formula Builder"
+  appShort="KPI Builder"
+  doc="terms"
+  docTitle="Terms of Service"
+  description="Terms of Service for AI KPI & Formula Builder, a KPI widget for monday.com dashboards by Salinash."
+  effective="24 November 2026"
+  updated="24 November 2026"
+  base="/apps/kpi-builder"
+  sections={sections}
+>
+  <ShortVersion>
+    <li>
+      KPI Builder is a KPI widget for monday.com dashboards. Use it for your organization's work,
+      within monday.com's own terms.
+    </li>
+    <li>
+      Your data stays yours. We use it only to run KPI Builder, as described in our
+      <a href={privacy}>Privacy Policy</a>.
+    </li>
+    <li>AI suggestions and insights can be wrong. Review them before you rely on them.</li>
+    <li>
+      We'll email installers only about service, security and important changes. Marketing emails
+      need your consent.
+    </li>
+  </ShortVersion>
+
+  <LegalSection id="agreement" n="1" title="Agreement">
+    <p>
+      These terms are an agreement between Salinash (“we”, “us”), based in the United Kingdom, and
+      the organization that installs or uses AI KPI &amp; Formula Builder (“KPI Builder”), referred
+      to as “you”. By installing or using KPI Builder, you accept these terms. If you install KPI
+      Builder on behalf of an organization, you confirm that you're authorized to accept these terms
+      for it.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="the-service" n="2" title="The service">
+    <p>
+      KPI Builder is an app for monday.com. It calculates KPIs from your board data, shows them on
+      dashboards, and offers optional AI features that build KPIs from plain-language requests and
+      summarize results. KPI Builder needs a monday.com account, and your use of monday.com remains
+      subject to monday.com's own terms. KPI Builder is independent and isn't made or endorsed by
+      monday.com Ltd.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="license" n="3" title="License">
+    <p>
+      While KPI Builder is installed and you comply with these terms, we grant you a limited,
+      non-exclusive, non-transferable, revocable right to use KPI Builder within monday.com for your
+      internal business purposes, for the users in your monday.com account.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="plans-and-payment" n="4" title="Plans and payment">
+    <p>
+      KPI Builder is offered on the plans shown on its monday.com marketplace listing. Paid plans are
+      billed by monday.com under its marketplace terms, which also govern renewals, cancellations and
+      refunds. We may change plans or prices with at least 30 days' notice. Changes apply from your
+      next billing period.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="your-data" n="5" title="Your data">
+    <ul>
+      <li>
+        You keep all rights to your data. We process it only to provide and secure KPI Builder, as
+        described in our <a href={privacy}>Privacy Policy</a>.
+      </li>
+      <li>
+        You're responsible for having the right to use the data on your boards, and for the content
+        of requests you send to the AI features.
+      </li>
+      <li>
+        Don't put sensitive information in AI requests: health data, government IDs, payment card
+        numbers or passwords. KPI Builder's AI features are built to work from board structure, not
+        from the contents of items.
+      </li>
+    </ul>
+  </LegalSection>
+
+  <LegalSection id="ai-features" n="6" title="AI features">
+    <ul>
+      <li>
+        “Create with AI” and AI insights are generated by an AI model (Claude by Anthropic). AI
+        output can be inaccurate, incomplete or out of date.
+      </li>
+      <li>
+        KPI Builder checks AI suggestions against your boards, but you're responsible for reviewing a
+        KPI before you save it and for any decision you base on it. AI insights aren't financial,
+        legal or other professional advice.
+      </li>
+      <li>
+        AI features have usage limits (currently 20 KPI builds and 60 insights per person per hour)
+        and may be paused to protect the service.
+      </li>
+      <li>
+        You may not use the AI features for purposes that are illegal or that break Anthropic's usage
+        policies.
+      </li>
+    </ul>
+  </LegalSection>
+
+  <LegalSection id="acceptable-use" n="7" title="Acceptable use">
+    <p>You agree not to:</p>
+    <ul>
+      <li>
+        copy, modify, reverse engineer or resell KPI Builder, except where the law allows it despite
+        this restriction;
+      </li>
+      <li>
+        get around KPI Builder's security, authentication or usage limits, or overload the service;
+      </li>
+      <li>
+        use KPI Builder to break the law or someone else's rights, or in a way that violates
+        monday.com's terms;
+      </li>
+      <li>use KPI Builder to build a competing product.</li>
+    </ul>
+    <p>
+      We may suspend access that puts the service or other users at risk. Where reasonable, we'll
+      tell you first.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="support" n="8" title="Support and changes to the service">
+    <p>
+      Email <a href={`mailto:${email}`}>{email}</a> for help. We respond to support requests within
+      two business days. We work to keep KPI Builder available and reliable, but we don't guarantee
+      uninterrupted service. We may improve, change or remove features. If a change materially
+      reduces what a paid plan includes, we'll give reasonable notice.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="contacting-you" n="9" title="How we'll contact you">
+    <p>
+      We may contact the people who install or administer KPI Builder, using contact details
+      available to us through monday.com or that you give us. We'll contact you about service
+      updates, security and privacy notices, changes to these terms, and support requests. We'll send
+      marketing or product announcements only if you've agreed to receive them, and every such
+      message lets you unsubscribe.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="intellectual-property" n="10" title="Intellectual property">
+    <p>
+      KPI Builder, including its software, design and documentation, belongs to us and our
+      licensors. These terms don't transfer any ownership to you. If you send us feedback or
+      suggestions, we may use them without any obligation to you.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="third-party-services" n="11" title="Third-party services">
+    <p>
+      KPI Builder relies on monday.com, Anthropic and Google Fonts. Their services are governed by
+      their own terms, and we're not responsible for them.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="disclaimers" n="12" title="Disclaimers">
+    <p>
+      Except as expressly stated in these terms, and to the fullest extent the law allows, KPI
+      Builder is provided “as is” and “as available”, without warranties of any kind, express or
+      implied, including warranties of merchantability, fitness for a particular purpose, accuracy
+      and non-infringement.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="liability" n="13" title="Limitation of liability">
+    <p>
+      To the fullest extent the law allows, neither party is liable for indirect, incidental,
+      special, consequential or punitive damages, or for lost profits, revenue or data. Our total
+      liability arising out of these terms or KPI Builder is limited to the amount you paid for KPI
+      Builder in the 12 months before the claim, or USD 100 if you used KPI Builder for free.
+    </p>
+    <p>Nothing in these terms limits liability that can't be limited by law.</p>
+  </LegalSection>
+
+  <LegalSection id="indemnity" n="14" title="Indemnity">
+    <p>
+      You'll defend and indemnify us against third-party claims arising from data you submit to KPI
+      Builder or from your breach of these terms.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="termination" n="15" title="Term and termination">
+    <p>
+      These terms apply while KPI Builder is installed in your monday.com account. You can stop using
+      KPI Builder at any time by uninstalling it. We may end your access if you materially breach
+      these terms and don't fix the breach within 14 days of our notice, or immediately if the law
+      requires it. After termination, we delete your data as described in our
+      <a href={privacy}>Privacy Policy</a>. Sections 5, 6, 10 and 12 to 17 survive termination.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="changes" n="16" title="Changes to these terms">
+    <p>
+      We may update these terms. We'll change the date at the top and, for material changes, notify
+      account admins at least 30 days in advance. If you keep using KPI Builder after changes take
+      effect, you accept them. If you don't agree, uninstall KPI Builder.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="governing-law" n="17" title="Governing law">
+    <p>
+      These terms are governed by the laws of England and Wales. The courts of England and Wales have
+      exclusive jurisdiction, unless the law where you're based gives you the right to bring a claim
+      locally.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="contact" n="18" title="Contact">
+    <address>
+      Salinash<br />
+      United Kingdom<br />
+      <a href={`mailto:${email}`}>{email}</a>
+    </address>
+    <p class="legal-note">
+      KPI Builder is an independent app for monday.com and isn't made or endorsed by monday.com Ltd.
+    </p>
+  </LegalSection>
+</AppLegalLayout>
+
+<style>
+  .legal-note {
+    margin-top: 1rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+</style>

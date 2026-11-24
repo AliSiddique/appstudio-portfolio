@@ -1,0 +1,224 @@
+---
+/**
+ * One numbered section of a legal document, plus the shared prose styles for its body:
+ * paragraphs, square-bulleted lists, ruled tables (stacked into cards on phones),
+ * domains in mono and an address block.
+ */
+interface Props {
+  id: string;
+  n?: string;
+  title: string;
+}
+
+const { id, n, title } = Astro.props;
+---
+
+<section class="legal-section" id={id} aria-labelledby={`${id}-title`}>
+  <h2 class="legal-h2" id={`${id}-title`}>
+    {n && <span class="legal-n">{n}.</span>}
+    {title}
+  </h2>
+  <div class="legal-prose">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .legal-section {
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--line);
+    scroll-margin-top: calc(var(--nav-h) + 1rem);
+  }
+
+  .legal-section:first-child {
+    padding-top: 0;
+  }
+
+  .legal-section:last-child {
+    border-bottom: none;
+  }
+
+  .legal-h2 {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+    font-size: clamp(1.5rem, 2.4vw, 2.125rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  .legal-n {
+    flex-shrink: 0;
+    color: var(--px-orange);
+  }
+
+  /* Prose */
+  .legal-prose {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 72ch;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: var(--fg-soft);
+  }
+
+  .legal-prose :global(strong) {
+    font-weight: 500;
+    color: var(--fg);
+  }
+
+  .legal-prose :global(a) {
+    color: var(--fg);
+    text-decoration: underline;
+    text-decoration-color: var(--px-orange);
+    text-underline-offset: 4px;
+    word-break: break-word;
+  }
+
+  .legal-prose :global(a:hover) {
+    color: var(--px-amber);
+  }
+
+  .legal-prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    color: var(--fg);
+    white-space: nowrap;
+  }
+
+  .legal-prose :global(ul) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    list-style: none;
+  }
+
+  .legal-prose :global(ul > li) {
+    position: relative;
+    padding-left: 1.35rem;
+  }
+
+  .legal-prose :global(ul > li::before) {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.68em;
+    width: 6px;
+    height: 6px;
+    background-color: var(--px-orange);
+  }
+
+  .legal-prose :global(address) {
+    font-style: normal;
+    line-height: 1.6;
+    color: var(--fg);
+  }
+
+  /* Tables: ruled grid on wide screens */
+  .legal-prose :global(.legal-table) {
+    max-width: none;
+    margin: 0.5rem 0;
+    border: 1px solid var(--line-strong);
+  }
+
+  .legal-prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  .legal-prose :global(th) {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--line-strong);
+    background-color: var(--bg-raised);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .legal-prose :global(td) {
+    padding: 1rem;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+
+  .legal-prose :global(td + td),
+  .legal-prose :global(th + th) {
+    border-left: 1px solid var(--line);
+  }
+
+  .legal-prose :global(tr:last-child td) {
+    border-bottom: none;
+  }
+
+  .legal-prose :global(td:first-child) {
+    width: 30%;
+    color: var(--fg);
+  }
+
+  .legal-prose :global(td:first-child strong) {
+    display: block;
+  }
+
+  /* Phones: each row becomes a card with its own labels */
+  @media (max-width: 700px) {
+    .legal-prose :global(.legal-table) {
+      border: none;
+    }
+
+    .legal-prose :global(table),
+    .legal-prose :global(tbody),
+    .legal-prose :global(tr),
+    .legal-prose :global(td) {
+      display: block;
+      width: auto;
+    }
+
+    .legal-prose :global(thead) {
+      display: none;
+    }
+
+    .legal-prose :global(tr) {
+      margin-bottom: 0.75rem;
+      border: 1px solid var(--line-strong);
+    }
+
+    .legal-prose :global(td),
+    .legal-prose :global(td + td) {
+      border-left: none;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .legal-prose :global(td:first-child) {
+      width: auto;
+      background-color: var(--bg-raised);
+    }
+
+    .legal-prose :global(td[data-label]:not(:first-child)::before) {
+      content: attr(data-label);
+      display: block;
+      margin-bottom: 0.35rem;
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .legal-prose :global(tr:last-child td) {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .legal-prose :global(tr td:last-child) {
+      border-bottom: none;
+    }
+  }
+</style>

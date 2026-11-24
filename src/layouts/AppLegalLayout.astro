@@ -1,0 +1,329 @@
+---
+/**
+ * Legal documents for the studio's monday.com apps (privacy policy, terms of service).
+ *
+ * These pages make promises the rest of the site doesn't have to keep, so they:
+ * - turn Vercel Analytics off (the privacy policy says "no analytics"), and
+ * - use local/system fonts instead of the site's hotlinked web fonts, so no third party
+ *   the policy doesn't list receives the visitor's IP address.
+ */
+import Layout from './Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PixelArt from '../components/PixelArt.astro';
+import type { SpriteName } from '../data/pixels';
+
+export type LegalSectionRef = { id: string; n?: string; title: string };
+
+interface Props {
+  app: string;
+  /** Short app name, used in the document switcher and page title. */
+  appShort: string;
+  doc: 'privacy' | 'terms';
+  docTitle: string;
+  description: string;
+  effective: string;
+  updated: string;
+  /** Path holding this app's documents, e.g. /apps/kpi-builder */
+  base: string;
+  icon?: SpriteName;
+  sections: LegalSectionRef[];
+}
+
+const { app, appShort, doc, docTitle, description, effective, updated, base, icon = 'chart', sections } =
+  Astro.props;
+
+const docs = [
+  { key: 'privacy', label: 'Privacy Policy', href: `${base}/privacy` },
+  { key: 'terms', label: 'Terms of Service', href: `${base}/terms` },
+];
+---
+
+<Layout title={`${app} ${docTitle} — Salinash Studio`} description={description} analytics={false}>
+  <div class="legal-page">
+    <Header activePage="none" />
+
+    <main>
+      <header class="legal-hero">
+        <div class="legal-kicker" data-reveal>
+          <PixelArt name={icon} scale={4} />
+          <span class="eyebrow">/ monday.com app · {appShort}</span>
+        </div>
+        <h1 class="legal-title" data-reveal="wipe">
+          <span class="legal-app">{app}</span>
+          {docTitle}
+        </h1>
+        <div class="legal-meta" data-reveal-stagger="80">
+          <div class="meta-cell">
+            <span class="meta-label">Effective</span>
+            <span class="meta-value">{effective}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">Last updated</span>
+            <span class="meta-value">{updated}</span>
+          </div>
+          <nav class="meta-cell doc-switch" aria-label={`${appShort} legal documents`}>
+            {docs.map((d) => (
+              <a
+                href={d.href}
+                class:list={['doc-link', { current: d.key === doc }]}
+                aria-current={d.key === doc ? 'page' : undefined}
+              >
+                {d.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      </header>
+
+      <div class="legal-body">
+        <aside class="legal-aside">
+          <nav class="toc" aria-label="On this page">
+            <span class="eyebrow">/ On this page</span>
+            <ol>
+              {sections.map((s) => (
+                <li>
+                  <a href={`#${s.id}`} data-toc={s.id}>
+                    {s.n && <span class="toc-n">{s.n.padStart(2, '0')}</span>}
+                    {s.title}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        </aside>
+
+        <article class="legal-doc">
+          <slot />
+        </article>
+      </div>
+    </main>
+
+    <Footer />
+  </div>
+</Layout>
+
+<script>
+  // Highlight the contents entry for the section being read.
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-toc]'));
+  const sections = links
+    .map((a) => document.getElementById(a.dataset.toc ?? ''))
+    .filter((el): el is HTMLElement => !!el);
+
+  const spy = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const id = entry.target.id;
+        links.forEach((a) => a.classList.toggle('active', a.dataset.toc === id));
+      }
+    },
+    { rootMargin: '-30% 0px -65% 0px' }
+  );
+  sections.forEach((s) => spy.observe(s));
+</script>
+
+<style>
+  /* No hotlinked web fonts on legal pages — see the note at the top of this file. */
+  .legal-page {
+    --font-sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-family: var(--font-sans);
+  }
+
+  /* Hero */
+  .legal-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    padding: clamp(3.5rem, 7vw, 6rem) clamp(1.25rem, 3.5vw, 3.5rem) 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .legal-kicker {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .legal-title {
+    max-width: 18ch;
+    font-size: clamp(2.5rem, 6.4vw, 6.75rem);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+
+  .legal-app {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.42em;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--muted);
+  }
+
+  .legal-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr;
+    margin: clamp(1rem, 3vw, 2.5rem) calc(-1 * clamp(1.25rem, 3.5vw, 3.5rem)) 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .meta-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1.1rem clamp(1.25rem, 3.5vw, 3.5rem);
+    border-right: 1px solid var(--line);
+  }
+
+  .meta-cell:last-child {
+    border-right: none;
+  }
+
+  .meta-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .meta-value {
+    font-size: 1.0625rem;
+    font-weight: 500;
+  }
+
+  .doc-switch {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+
+  .doc-link {
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--fg-soft);
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  }
+
+  .doc-link:hover {
+    background-color: var(--bg-hover);
+    color: var(--fg);
+  }
+
+  .doc-link.current {
+    background-color: var(--fg);
+    border-color: var(--fg);
+    color: var(--bg);
+  }
+
+  /* Body */
+  .legal-body {
+    display: grid;
+    grid-template-columns: 26% 1fr;
+  }
+
+  .legal-aside {
+    border-right: 1px solid var(--line);
+    padding: 3rem clamp(1.25rem, 3vw, 3.5rem);
+  }
+
+  .toc {
+    position: sticky;
+    top: calc(var(--nav-h) + 2rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: calc(100vh - var(--nav-h) - 4rem);
+    overflow-y: auto;
+  }
+
+  .toc ol {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--line);
+  }
+
+  .toc a {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.9375rem;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+
+  .toc a:hover,
+  .toc a.active {
+    color: var(--fg);
+  }
+
+  .toc a.active .toc-n {
+    color: var(--px-orange);
+  }
+
+  .toc-n {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--dim);
+  }
+
+  .legal-doc {
+    min-width: 0;
+    padding: 3rem clamp(1.25rem, 4vw, 4rem) 5rem;
+  }
+
+  @media (max-width: 900px) {
+    .legal-meta {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .doc-switch {
+      grid-column: 1 / -1;
+      justify-content: flex-start;
+      border-top: 1px solid var(--line);
+      border-right: none;
+    }
+
+    .meta-cell:nth-child(2) {
+      border-right: none;
+    }
+
+    .legal-body {
+      grid-template-columns: 1fr;
+    }
+
+    .legal-aside {
+      display: none;
+    }
+
+    .legal-doc {
+      padding: 2rem 1rem 4rem;
+    }
+  }
+
+  @media print {
+    .legal-page :global(.site-header),
+    .legal-page :global(.cta),
+    .legal-page :global(.site-footer),
+    .legal-aside,
+    .doc-switch {
+      display: none !important;
+    }
+
+    .legal-body {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

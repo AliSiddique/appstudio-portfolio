@@ -1,0 +1,323 @@
+---
+import AppLegalLayout, { type LegalSectionRef } from '../../../layouts/AppLegalLayout.astro';
+import LegalSection from '../../../components/legal/LegalSection.astro';
+import ShortVersion from '../../../components/legal/ShortVersion.astro';
+
+const email = 'hello@salinash.studio';
+
+const sections: LegalSectionRef[] = [
+  { id: 'short-version', title: 'The short version' },
+  { id: 'who-we-are', n: '1', title: 'Who we are' },
+  { id: 'data-we-handle', n: '2', title: 'What data KPI Builder handles' },
+  { id: 'how-we-use-data', n: '3', title: 'How we use data' },
+  { id: 'third-parties', n: '4', title: 'Third parties we use' },
+  { id: 'cookies', n: '5', title: 'Cookies and tracking' },
+  { id: 'retention', n: '6', title: 'How long we keep data' },
+  { id: 'security', n: '7', title: 'Security' },
+  { id: 'your-rights', n: '8', title: 'Your choices and rights' },
+  { id: 'children', n: '9', title: 'Children' },
+  { id: 'changes', n: '10', title: 'Changes to this policy' },
+  { id: 'contact', n: '11', title: 'Contact' },
+];
+---
+
+<AppLegalLayout
+  app="AI KPI & Formula Builder"
+  appShort="KPI Builder"
+  doc="privacy"
+  docTitle="Privacy Policy"
+  description="How AI KPI & Formula Builder, a monday.com dashboard widget by Salinash, handles your data: board data stays in your browser, no cookies, no analytics, no advertising."
+  effective="24 November 2026"
+  updated="24 November 2026"
+  base="/apps/kpi-builder"
+  sections={sections}
+>
+  <ShortVersion>
+    <li>
+      KPI Builder reads your monday.com board data in your browser to calculate KPIs. We don't copy
+      it to our own servers and we don't sell it.
+    </li>
+    <li>
+      We store only your widget's settings and one number per KPI per day (for trend lines). Both
+      live in monday.com's app storage.
+    </li>
+    <li>
+      When you use an AI feature, we send your request and board structure (names of boards, groups
+      and columns, status labels) or a KPI's numbers to Anthropic to generate the answer. Item names
+      and cell values aren't sent.
+    </li>
+    <li>No cookies, no analytics, no advertising.</li>
+  </ShortVersion>
+
+  <LegalSection id="who-we-are" n="1" title="Who we are">
+    <p>
+      AI KPI &amp; Formula Builder (“KPI Builder”) is a dashboard widget app for monday.com,
+      provided by Salinash (“we”, “us”), based in the United Kingdom. For any privacy question or
+      request, contact us at <a href={`mailto:${email}`}>{email}</a>.
+    </p>
+    <p>
+      This policy covers the KPI Builder app, its AI service, and the KPI Builder help pages. Your
+      use of monday.com itself is covered by monday.com's own privacy policy. When KPI Builder
+      processes data from your monday.com account on your organization's behalf, your organization
+      controls that data and we process it to provide the app.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="data-we-handle" n="2" title="What data KPI Builder handles">
+    <div class="legal-table">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Data</th>
+            <th scope="col">Why</th>
+            <th scope="col">Where it's kept</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-label="Data">
+              <strong>Board data:</strong> item names, groups and the column values your KPIs use
+            </td>
+            <td data-label="Why">To calculate the KPIs you configure</td>
+            <td data-label="Where it's kept">
+              Read through monday.com's API and processed only in your browser while the widget is
+              open. Not sent to or stored on our servers.
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Data">
+              <strong>Widget settings:</strong> KPI names, formulas, board, group and column IDs,
+              filter values, display options
+            </td>
+            <td data-label="Why">So the widget remembers its setup</td>
+            <td data-label="Where it's kept">monday.com app storage, for that widget only</td>
+          </tr>
+          <tr>
+            <td data-label="Data">
+              <strong>Trend snapshots:</strong> one number per KPI per day, kept for up to 180 days
+            </td>
+            <td data-label="Why">To show changes over time and sparklines</td>
+            <td data-label="Where it's kept">monday.com app storage, for that widget only</td>
+          </tr>
+          <tr>
+            <td data-label="Data">
+              <strong>AI requests</strong> (only when you use an AI feature): your request text and
+              the selected boards' structure (board, group and column names, column types and
+              status/dropdown labels). For insights: the KPI's name, formula, displayed values, goal
+              and trend, and for each input its name, value and what it adds up (for example “Sum
+              of Budget”). Filter values, item names and cell values aren't sent.
+            </td>
+            <td data-label="Why">To generate a KPI configuration or an insight</td>
+            <td data-label="Where it's kept">
+              Sent from our AI server to Anthropic. Our server doesn't store or log the content.
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Data">
+              <strong>Account and user IDs</strong> from your monday.com session token
+            </td>
+            <td data-label="Why">
+              To check that requests come from a real monday.com session, and to apply per-user rate
+              limits
+            </td>
+            <td data-label="Where it's kept">
+              Kept in our server's memory for about an hour, then cleared; never written to disk
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Data">
+              <strong>Technical data:</strong> IP address, browser details
+            </td>
+            <td data-label="Why">
+              Sent automatically when your browser loads the app, fonts or our AI service
+            </td>
+            <td data-label="Where it's kept">
+              Processed by the hosting and font providers listed below, under their own policies
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      KPI Builder doesn't ask for your name, email address or payment details. If your boards
+      contain personal data (for example in people columns or item names), that data is only used in
+      your browser to calculate KPIs. It can reach our AI provider only if you type it into an AI
+      request yourself.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="how-we-use-data" n="3" title="How we use data">
+    <ul>
+      <li>To provide KPI Builder: calculate KPIs, save settings and show trends.</li>
+      <li>To provide the AI features you choose to use.</li>
+      <li>
+        To keep the service secure and available: verifying sessions, rate-limiting and
+        investigating errors. Our error logs record the type of error, never your requests or board
+        data.
+      </li>
+    </ul>
+    <p>
+      Under the UK GDPR and the EU GDPR, we rely on two lawful bases: providing the service your
+      organization asked for when it installed KPI Builder (contract), and our legitimate interest
+      in keeping the service secure and preventing abuse, for example through session checks and
+      rate limits.
+    </p>
+    <p>
+      We don't sell your data, use it for advertising, or use it to build profiles. We don't use it
+      to train AI models, and Anthropic doesn't use API data for training by default under its
+      commercial terms.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="third-parties" n="4" title="Third parties we use">
+    <div class="legal-table">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Provider</th>
+            <th scope="col">What for</th>
+            <th scope="col">Domains</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-label="Provider"><strong>monday.com Ltd.</strong></td>
+            <td data-label="What for">
+              The platform KPI Builder runs in; hosting of the app (monday code and CDN); app
+              storage for settings and snapshots
+            </td>
+            <td data-label="Domains"><code>*.monday.com</code>, <code>*.monday.app</code></td>
+          </tr>
+          <tr>
+            <td data-label="Provider"><strong>Anthropic, PBC</strong></td>
+            <td data-label="What for">
+              AI model (Claude) behind “Create with AI” and AI insights. Under Anthropic's commercial
+              terms, API inputs and outputs aren't used to train its models by default, and they're
+              retained only as Anthropic's policies describe.
+            </td>
+            <td data-label="Domains"><code>api.anthropic.com</code></td>
+          </tr>
+          <tr>
+            <td data-label="Provider"><strong>Google LLC</strong> (Google Fonts)</td>
+            <td data-label="What for">
+              Typefaces for the widget and help pages. Google receives your IP address and browser
+              details when the fonts load.
+            </td>
+            <td data-label="Domains">
+              <code>fonts.googleapis.com</code>, <code>fonts.gstatic.com</code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      These providers may process data in the United States and other countries outside the UK and
+      the EU. Where UK or EU data protection law requires it, these transfers rely on appropriate
+      safeguards, such as standard contractual clauses (with the UK Addendum for UK data).
+    </p>
+  </LegalSection>
+
+  <LegalSection id="cookies" n="5" title="Cookies and tracking">
+    <p>
+      KPI Builder doesn't set cookies and doesn't use analytics, tracking pixels or advertising
+      tools. The browser's local storage is used only in the public demo, to remember demo settings
+      on your own device.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="retention" n="6" title="How long we keep data">
+    <ul>
+      <li>
+        Widget settings and trend snapshots stay in monday.com app storage while the widget exists.
+        Snapshots older than 180 days are removed automatically.
+      </li>
+      <li>
+        When you uninstall KPI Builder, the data stored for it is permanently deleted within 10
+        days, unless you ask us in writing to keep it.
+      </li>
+      <li>AI requests aren't stored by us. Anthropic retains API data only as its policies describe.</li>
+      <li>
+        Rate-limit counters (account and user IDs) are kept in memory for about an hour, then
+        cleared.
+      </li>
+    </ul>
+  </LegalSection>
+
+  <LegalSection id="security" n="7" title="Security">
+    <ul>
+      <li>All connections use HTTPS (TLS 1.2 or higher).</li>
+      <li>
+        Every request to our AI service must carry a valid monday.com session token, which is signed
+        by monday.com and verified on our server.
+      </li>
+      <li>
+        API keys and secrets are held in monday code's encrypted secret storage. They're never
+        included in the app's code.
+      </li>
+      <li>
+        KPI Builder asks only for permission to read boards. It can't create, change or delete
+        anything in your account.
+      </li>
+    </ul>
+  </LegalSection>
+
+  <LegalSection id="your-rights" n="8" title="Your choices and rights">
+    <ul>
+      <li>
+        You can change or delete a widget's settings at any time, and uninstalling KPI Builder
+        removes all of its stored data.
+      </li>
+      <li>
+        The AI features run only when you click them. You can use KPI Builder fully without them.
+      </li>
+      <li>
+        Depending on where you live (for example under the GDPR, UK GDPR or US state privacy laws),
+        you may have the right to access, correct, delete or export your personal data, or to object
+        to or restrict its processing. Contact <a href={`mailto:${email}`}>{email}</a>. We'll
+        respond within one month. If your organization's monday.com account controls the data, we
+        may refer your request to your organization.
+      </li>
+      <li>
+        If you're unhappy with how we handle your data, you can complain to the UK Information
+        Commissioner's Office (<a href="https://ico.org.uk" rel="noopener">ico.org.uk</a>) or, in
+        the EU, to your local data protection authority. We'd appreciate the chance to put things
+        right first.
+      </li>
+    </ul>
+  </LegalSection>
+
+  <LegalSection id="children" n="9" title="Children">
+    <p>
+      KPI Builder is a business tool and isn't intended for anyone under 16. We don't knowingly
+      process children's data.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="changes" n="10" title="Changes to this policy">
+    <p>
+      If we change this policy, we'll update the date at the top. For significant changes, we'll
+      also notify account admins through the app listing or by email.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="contact" n="11" title="Contact">
+    <address>
+      Salinash<br />
+      United Kingdom<br />
+      <a href={`mailto:${email}`}>{email}</a>
+    </address>
+    <p class="legal-note">
+      KPI Builder is an independent app for monday.com and isn't made or endorsed by monday.com Ltd.
+    </p>
+  </LegalSection>
+</AppLegalLayout>
+
+<style>
+  .legal-note {
+    margin-top: 1rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+</style>

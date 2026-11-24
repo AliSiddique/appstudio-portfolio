@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import PixelArt from '../../components/PixelArt.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog')).sort(
@@ -32,7 +33,7 @@ const posts = (await getCollection('blog')).sort(
             <p class="post-desc">{post.data.description}</p>
           )}
         </div>
-        <div class="post-arrow">→</div>
+        <div class="post-arrow"><PixelArt name="arrow" scale={3} /></div>
       </a>
     ))}
   </section>
@@ -44,7 +45,7 @@ const posts = (await getCollection('blog')).sort(
   .blog-title-section {
     padding: 1.5rem 0 0;
     overflow: hidden;
-    border-bottom: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--line);
   }
 
   .blog-title {
@@ -58,7 +59,7 @@ const posts = (await getCollection('blog')).sort(
   }
 
   .posts-section {
-    border-bottom: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--line);
   }
 
   .post-row {
@@ -67,7 +68,7 @@ const posts = (await getCollection('blog')).sort(
     gap: 2rem;
     align-items: center;
     padding: 1.5rem 1.25rem;
-    border-bottom: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--line);
     transition: background-color 0.15s;
     text-decoration: none;
   }
@@ -77,7 +78,7 @@ const posts = (await getCollection('blog')).sort(
   }
 
   .post-row:hover {
-    background-color: var(--color-gray-50);
+    background-color: var(--bg-raised);
   }
 
   .post-date {
@@ -86,15 +87,16 @@ const posts = (await getCollection('blog')).sort(
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   .post-title {
     font-family: var(--font-sans);
-    font-size: 1.25rem;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
     font-weight: 500;
     line-height: 1.2;
-    color: var(--color-black);
+    color: var(--fg);
     margin-bottom: 0.25rem;
   }
 
@@ -102,14 +104,14 @@ const posts = (await getCollection('blog')).sort(
     font-family: var(--font-sans);
     font-size: 0.9375rem;
     font-weight: 400;
-    color: var(--color-gray-700);
+    color: var(--muted);
     line-height: 1.4;
   }
 
   .post-arrow {
     font-family: var(--font-sans);
     font-size: 1.25rem;
-    color: var(--color-gray-700);
+    color: var(--muted);
     transition: transform 0.15s;
   }
 

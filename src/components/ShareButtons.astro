@@ -43,7 +43,7 @@ const { title } = Astro.props;
     gap: 1rem;
     padding-top: 2.5rem;
     margin-top: 2.5rem;
-    border-top: 1px solid var(--color-stroke);
+    border-top: 1px solid var(--line);
     flex-wrap: wrap;
   }
 
@@ -53,7 +53,7 @@ const { title } = Astro.props;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--color-gray-700);
+    color: var(--muted);
     white-space: nowrap;
   }
 
@@ -67,8 +67,8 @@ const { title } = Astro.props;
     display: inline-flex;
     align-items: center;
     padding: 0.3rem 0.875rem;
-    border: 1.5px solid var(--color-black);
-    border-radius: var(--radius-pill);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
     font-family: var(--font-sans);
     font-size: 0.9375rem;
     font-weight: 400;
@@ -76,12 +76,12 @@ const { title } = Astro.props;
     background: none;
     cursor: pointer;
     text-decoration: none;
-    color: var(--color-black);
+    color: var(--fg);
     transition: background-color 0.2s, color 0.2s;
   }
 
   .share-btn:hover {
-    background-color: var(--color-black);
-    color: var(--color-white);
+    background-color: var(--bg-hover);
+    border-color: #4a4a52;
   }
 </style>

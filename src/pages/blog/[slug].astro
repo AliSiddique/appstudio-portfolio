@@ -57,7 +57,7 @@ const { Content } = await post.render();
   .post-header {
     margin-bottom: 3rem;
     padding-bottom: 2rem;
-    border-bottom: 1px solid var(--color-stroke);
+    border-bottom: 1px solid var(--line);
   }
 
   .post-header-meta {
@@ -73,7 +73,7 @@ const { Content } = await post.render();
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--color-gray-700);
+    color: var(--muted);
     text-decoration: none;
     transition: opacity 0.2s;
   }
@@ -88,7 +88,7 @@ const { Content } = await post.render();
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   .post-title {
@@ -105,7 +105,7 @@ const { Content } = await post.render();
     font-size: 1.125rem;
     font-weight: 400;
     line-height: 1.5;
-    color: var(--color-gray-700);
+    color: var(--muted);
   }
 
   /* Markdown content styles — matching site aesthetic */
@@ -114,7 +114,7 @@ const { Content } = await post.render();
     font-size: 1.0625rem;
     font-weight: 400;
     line-height: 1.7;
-    color: var(--color-black);
+    color: var(--fg);
   }
 
   .post-content :global(h1),
@@ -159,25 +159,25 @@ const { Content } = await post.render();
   }
 
   .post-content :global(blockquote) {
-    border-left: 2px solid var(--color-stroke);
+    border-left: 2px solid var(--line);
     padding-left: 1.25rem;
     margin: 1.5rem 0;
-    color: var(--color-gray-700);
+    color: var(--muted);
     font-style: italic;
   }
 
   .post-content :global(code) {
     font-family: var(--font-mono);
     font-size: 0.875em;
-    background-color: var(--color-gray-50);
-    border: 1px solid var(--color-stroke);
+    background-color: var(--bg-raised);
+    border: 1px solid var(--line);
     padding: 0.125em 0.375em;
     border-radius: 3px;
   }
 
   .post-content :global(pre) {
-    background-color: var(--color-gray-50);
-    border: 1px solid var(--color-stroke);
+    background-color: var(--bg-raised);
+    border: 1px solid var(--line);
     padding: 1.25rem;
     overflow-x: auto;
     margin-bottom: 1.25rem;
@@ -192,13 +192,13 @@ const { Content } = await post.render();
 
   .post-content :global(hr) {
     border: none;
-    border-top: 1px solid var(--color-stroke);
+    border-top: 1px solid var(--line);
     margin: 2.5rem 0;
   }
 
   .post-content :global(img) {
     max-width: 100%;
-    border: 1px solid var(--color-stroke);
+    border: 1px solid var(--line);
   }
 
   .post-content :global(table) {
@@ -211,7 +211,7 @@ const { Content } = await post.render();
 
   .post-content :global(th),
   .post-content :global(td) {
-    border: 1px solid var(--color-stroke);
+    border: 1px solid var(--line);
     padding: 0.625rem 0.875rem;
     text-align: left;
   }
@@ -220,6 +220,6 @@ const { Content } = await post.render();
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    background-color: var(--color-gray-50);
+    background-color: var(--bg-raised);
   }
 </style>

@@ -15,7 +15,7 @@ export const studio = {
     'Salinash Studio is the product engineering practice of Ali Siddique — designing, building and operating production software end to end, from ML inference infrastructure and GPU rendering to iOS apps and real-time web interfaces.',
   /** One-line positioning for the header/hero. */
   positioning:
-    'A one-person product studio that ships whole products — architecture, infrastructure, interface, launch and growth.',
+    'A product studio that ships whole products — architecture, infrastructure, interface, launch and growth.',
 } as const;
 
 /** Headline proof points. Each maps directly to a line on the CV. */
@@ -24,7 +24,7 @@ export const metrics = [
   { value: '£50K+', label: 'Revenue', detail: 'Generated across a six-app iOS portfolio' },
   { value: '20,000+', label: 'Downloads', detail: 'Across shipped iOS applications' },
   { value: '4,500+', label: 'Users', detail: 'Reached across launched products' },
-  { value: '6', label: 'iOS apps shipped', detail: 'Architected, launched and maintained solo' },
+  { value: '6', label: 'iOS apps shipped', detail: 'Architected, launched and maintained in-house' },
   { value: '3+ yrs', label: 'Operating', detail: 'Independent practice, founded 2023' },
 ] as const;
 
@@ -407,7 +407,7 @@ export const projects: Project[] = [
     results: [
       { value: '4,000', label: 'Users reached' },
       { value: 'Acquired', label: 'Sold via Acquire.com' },
-      { value: 'Build → exit', label: 'Full lifecycle owned solo' },
+      { value: 'Build → exit', label: 'Full lifecycle owned in-house' },
     ],
     deliverables: [
       'AI product build & launch',
@@ -430,15 +430,15 @@ export const projects: Project[] = [
     status: 'Shipped — App Store',
     visual: 'portfolio',
     summary:
-      'Six SwiftUI applications architected, launched and grown solo — 20,000+ downloads, £50K+ in revenue and a 35% retention improvement.',
+      'Six SwiftUI applications architected, launched and grown in-house — 20,000+ downloads, £50K+ in revenue and a 35% retention improvement.',
     headline:
-      'Six apps, 20,000+ downloads and £50K+ in revenue — architecture through to acquisition, run by one engineer.',
+      'Six apps, 20,000+ downloads and £50K+ in revenue — architecture through to acquisition, run end to end by the studio.',
     overview: [
       'A portfolio of six iOS applications, each architected with MVVM and Combine, with offline persistence through SwiftData, Firebase push notifications and OAuth2 sign-in.',
       'Together they have passed 20,000 downloads and generated over £50,000 in revenue — shipped, marketed and maintained without a team.',
     ],
     challenge: [
-      'Running six apps solo means the marginal cost of each new one has to stay low. Six bespoke architectures would have been unmaintainable by the second year.',
+      'Running six apps in parallel means the marginal cost of each new one has to stay low. Six bespoke architectures would have been unmaintainable by the second year.',
       'Downloads on their own do not pay. Revenue depends on users coming back, which makes retention the metric that matters rather than install count.',
     ],
     approach: [
@@ -516,7 +516,7 @@ export const projects: Project[] = [
       {
         title: 'Managed backend',
         body:
-          'Supabase covers Postgres, auth and access control, keeping the operational surface small enough for one engineer to run alongside other products.',
+          'Supabase covers Postgres, auth and access control, keeping the operational surface small enough to run alongside the studio’s other products.',
       },
     ],
     results: [
@@ -673,7 +673,7 @@ export const timeline: TimelineEntry[] = [
         company: 'Salinash Studio',
         role: 'Founder — Independent Software Engineer',
         detail:
-          'Sole engineer across web, iOS and ML products, owning architecture, infrastructure, deployment and growth.',
+          'Engineering across web, iOS and ML products, owning architecture, infrastructure, deployment and growth.',
       },
     ],
   },

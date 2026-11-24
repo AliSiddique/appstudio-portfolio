@@ -9,6 +9,7 @@ Built with **Astro** and **Tailwind CSS v4**, deployed as a static site.
 - **Tailwind CSS v4** — via `@tailwindcss/vite`
 - **Neue Montreal** / Neue Montreal Mono typography
 - Vanilla scoped component CSS — no UI framework
+- Dark, grid-ruled design system with original pixel-art sprites (tokens in `global.css`)
 - `@astrojs/sitemap` for sitemap generation, Vercel Analytics for traffic
 
 ## Content model
@@ -37,14 +38,17 @@ next-project link all follow automatically.
 ```
 src/
 ├── components/
-│   ├── Header.astro          # Sticky 3-column navigation header
-│   ├── Footer.astro          # Dark CTA section + 4-column footer
+│   ├── Header.astro          # Sticky cell-based nav bar + mobile menu
+│   ├── Footer.astro          # CTA, pixel skyline, link grid, full-width wordmark
 │   ├── ProjectCard.astro     # Work card with hover clip-path reveal
 │   ├── ProjectVisual.astro   # Inline SVG cover art, one per project
-│   ├── DisciplineIcons.astro # SVG icons for the disciplines section
+│   ├── PixelArt.astro        # Renders a sprite from data/pixels.ts as crisp SVG
+│   ├── PixelGrid.astro       # Seeded pixel-mosaic backdrop
+│   ├── CapabilityVisual.astro# Mock-ups for the four discipline panels
 │   └── ShareButtons.astro    # Blog post share row
 ├── data/
-│   └── studio.ts             # Single source of truth (see above)
+│   ├── studio.ts             # Single source of truth (see above)
+│   └── pixels.ts             # Pixel sprites as character grids + palette
 ├── layouts/
 │   ├── Layout.astro          # Base HTML, SEO meta, JSON-LD schema
 │   └── WorkLayout.astro      # Case study chrome: hero, results band, next project
@@ -71,6 +75,9 @@ pnpm preview     # preview the production build
 
 ## Notes
 
+- **Pixel art** is drawn as character grids in `src/data/pixels.ts` — each character is a
+  palette colour, `.` is transparent, `X` follows the text colour. Add a sprite there and
+  render it with `<PixelArt name="…" />`.
 - **Project artwork** is inline SVG rather than bitmap screenshots, so covers stay crisp,
   add no image weight, and inherit the site's colour variables. Swap a variant's markup in
   `ProjectVisual.astro` to drop in real product screenshots later.

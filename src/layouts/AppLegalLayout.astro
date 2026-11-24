@@ -19,16 +19,17 @@ interface Props {
   app: string;
   /** Short app name, used in the document switcher and page title. */
   appShort: string;
-  doc: 'privacy' | 'terms' | 'guide';
+  doc: 'overview' | 'guide' | 'privacy' | 'terms';
   docTitle: string;
   description: string;
   /** Leave out for documents that aren't agreements, such as a how-to guide. */
   effective?: string;
-  updated: string;
+  /** Leave out for pages that aren't documents, such as the app overview. */
+  updated?: string;
   /** Overrides the browser tab title (defaults to "<app> <docTitle> — Salinash Studio"). */
   pageTitle?: string;
-  /** Adds a "How to use" link (at <base>/how-to-use) to the document switcher. */
-  hasGuide?: boolean;
+  /** Adds "Overview" (at <base>) and "How to use" (at <base>/how-to-use) to the document switcher. */
+  hasAppPages?: boolean;
   /** Path holding this app's documents, e.g. /apps/kpi-builder */
   base: string;
   icon?: SpriteName;
@@ -44,14 +45,19 @@ const {
   effective,
   updated,
   pageTitle,
-  hasGuide = false,
+  hasAppPages = false,
   base,
   icon = 'chart',
   sections,
 } = Astro.props;
 
 const docs = [
-  ...(hasGuide ? [{ key: 'guide', label: 'How to use', href: `${base}/how-to-use` }] : []),
+  ...(hasAppPages
+    ? [
+        { key: 'overview', label: 'Overview', href: base },
+        { key: 'guide', label: 'How to use', href: `${base}/how-to-use` },
+      ]
+    : []),
   { key: 'privacy', label: 'Privacy Policy', href: `${base}/privacy` },
   { key: 'terms', label: 'Terms of Service', href: `${base}/terms` },
 ];
@@ -71,17 +77,22 @@ const docs = [
           <span class="legal-app">{app}</span>
           {docTitle}
         </h1>
-        <div class:list={['legal-meta', { 'no-effective': !effective }]} data-reveal-stagger="80">
+        <div
+          class:list={['legal-meta', { 'no-effective': !effective, 'no-dates': !effective && !updated }]}
+          data-reveal-stagger="80"
+        >
           {effective && (
             <div class="meta-cell">
               <span class="meta-label">Effective</span>
               <span class="meta-value">{effective}</span>
             </div>
           )}
-          <div class="meta-cell">
-            <span class="meta-label">Last updated</span>
-            <span class="meta-value">{updated}</span>
-          </div>
+          {updated && (
+            <div class="meta-cell">
+              <span class="meta-label">Last updated</span>
+              <span class="meta-value">{updated}</span>
+            </div>
+          )}
           <nav class="meta-cell doc-switch" aria-label={`${appShort} documents`}>
             {docs.map((d) => (
               <a
@@ -193,6 +204,10 @@ const docs = [
 
   .legal-meta.no-effective {
     grid-template-columns: 1fr 3fr;
+  }
+
+  .legal-meta.no-dates {
+    grid-template-columns: 1fr;
   }
 
   .meta-cell {

@@ -1,0 +1,121 @@
+---
+import AppLegalLayout, { type LegalSectionRef } from '../../../layouts/AppLegalLayout.astro';
+import LegalSection from '../../../components/legal/LegalSection.astro';
+
+const email = 'hello@salinash.studio';
+
+const sections: LegalSectionRef[] = [
+  { id: 'ask', title: 'Just ask' },
+  { id: 'build', title: 'Or build it yourself' },
+  { id: 'track', title: 'Goals, trends and colors' },
+  { id: 'explain', title: 'See how every number is worked out' },
+  { id: 'who', title: "Who it's for" },
+  { id: 'different', title: 'What makes it different' },
+  { id: 'data', title: 'Your data stays in monday.com' },
+  { id: 'plans', title: 'Plans' },
+];
+---
+
+<AppLegalLayout
+  app="AI KPI & Formula Builder"
+  appShort="KPI Builder"
+  doc="overview"
+  docTitle="Live KPIs for monday.com dashboards"
+  pageTitle="AI KPI & Formula Builder for monday.com — Salinash Studio"
+  description="KPI Builder is a monday.com dashboard widget for the numbers your boards can't add up on their own: budget used, win rate, tasks done and more, built by AI or by hand."
+  base="/apps/kpi-builder"
+  hasAppPages
+  sections={sections}
+>
+  <p class="overview-lead">
+    KPI Builder is for the numbers your boards can't add up on their own. How much of the budget is
+    gone, your win rate, how many tasks got done this month, average deal size, or hours logged
+    against the estimate.
+  </p>
+
+  <LegalSection id="ask" title="Just ask">
+    <p>
+      Ask for what you want to know, like “how much of our marketing budget have we spent?”. The AI
+      picks the board, the columns, which status counts as done and the dates, then writes the
+      formula for you. You check it before anything gets saved, and if something doesn't match your
+      boards it tells you what to fix.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="build" title="Or build it yourself">
+    <p>
+      Rather do it yourself? Count items, or add up, average, or take the highest or lowest value
+      from number, formula, mirror, rating and time tracking columns, across groups and even across
+      boards. Filter by status, person, text, numbers or dates like this month or the last 30 days,
+      then put it together in a formula such as <code>PERCENT(DONE, TOTAL)</code>.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="track" title="Goals, trends and colors">
+    <p>
+      Show each KPI as a big number, a gauge or a progress bar. Give it a goal, or a limit for things
+      like costs, and the color shows you straight away if you're on track. The widget saves one
+      value a day so you can see what changed since yesterday, last week or last month. There's also
+      eight ready-made templates that match your columns for you.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="explain" title="See how every number is worked out">
+    <p>
+      Anyone looking at the dashboard can click a KPI and see exactly how it was worked out: the
+      formula, the inputs and how many items each one counted. On the paid plans the AI can also sum
+      up how a KPI is doing in a sentence or two.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="who" title="Who it's for">
+    <p>
+      Most teams end up exporting to a spreadsheet just to see numbers like budget used, win rate or
+      completion rate, because monday's Numbers widget only adds up or averages one column.
+      KPI Builder keeps them on the dashboard and up to date.
+    </p>
+    <ul>
+      <li><strong>Marketing and finance:</strong> budget used, cost per lead.</li>
+      <li><strong>Sales:</strong> win rate, revenue against target, average deal size.</li>
+      <li><strong>Project teams:</strong> tasks done, overdue tasks, hours against estimate.</li>
+      <li><strong>Operations:</strong> new requests this month.</li>
+    </ul>
+  </LegalSection>
+
+  <LegalSection id="different" title="What makes it different">
+    <ul>
+      <li>KPIs that pull from several boards at once.</li>
+      <li>Goals where lower is better, like costs.</li>
+      <li>Date filters that include when an item was created.</li>
+      <li>A “How it's calculated” view, so anyone can see where a number comes from.</li>
+    </ul>
+  </LegalSection>
+
+  <LegalSection id="data" title="Your data stays in monday.com">
+    <p>
+      KPI Builder reads your board data in your browser and only saves the widget's setup and one
+      number per KPI per day. The AI never sees item names or cell values. The
+      <a href="/apps/kpi-builder/privacy">privacy policy</a> has the details.
+    </p>
+  </LegalSection>
+
+  <LegalSection id="plans" title="Plans">
+    <p>
+      Start free with one KPI per widget. Pro and Business give you up to four KPIs per widget, plus
+      gauges, goals, trends and more AI. See <a href="/apps/kpi-builder/how-to-use#plans">what each
+      plan includes</a>, and the <a href="/apps/kpi-builder/how-to-use">how-to guide</a> to get
+      started.
+    </p>
+    <p>Questions or feedback? Email <a href={`mailto:${email}`}>{email}</a>.</p>
+  </LegalSection>
+</AppLegalLayout>
+
+<style>
+  .overview-lead {
+    max-width: 60ch;
+    margin-bottom: 2.5rem;
+    font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+    line-height: 1.5;
+    color: var(--fg);
+  }
+</style>
